@@ -27,3 +27,14 @@ npm run dev
 ```sh
 npm run build
 ```
+
+
+pip install django
+
+pip install djangorestframework
+
+pip install djangorestframework-simplejwt
+
+pip install pillow
+
+pip install django-cors-headers

@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import SignupView from '@/views/SignupView.vue'
 import SigninView from "@/views/SigninView.vue";
-// import FeedView from "@/views/FeedView.vue";
-// import MessagesView from "@/views/MessagesView.vue";
-// import SearchView from "@/views/SearchView.vue";
+import BasketView from "@/views/BasketView.vue";
+import BooksView from "@/views/BooksView.vue";
+import FavouriteView from "@/views/FavouriteView.vue";
+import OrderView from "@/views/OrdersView.vue";
+import ProfileView from "@/views/ProfileView.vue";
 
 
 
@@ -20,21 +22,31 @@ const router = createRouter({
       name: 'signin',
       component: SigninView
     },
-    // {
-    //   path: '/feed',
-    //   name: 'feed',
-    //   component: FeedView
-    // },
-    // {
-    //   path: '/messages',
-    //   name: 'messages',
-    //   component: MessagesView
-    // },
-    // {
-    //   path: '/search',
-    //   name: 'search',
-    //   component: SearchView
-    // },
+    {
+      path: '/basket',
+      name: 'basket',
+      component: BasketView
+    },
+    {
+      path: '/books',
+      name: 'books',
+      component: BooksView
+    },
+    {
+      path: '/favourite',
+      name: 'favourite',
+      component: FavouriteView
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: OrderView
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfileView
+    },
   ]
 })
 

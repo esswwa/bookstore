@@ -45,7 +45,7 @@
                     </template>
 
                     <div>
-                        <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">Зарегистрироваться</button>
+                        <button class="py-4 px-6 bg-blue-400 text-white rounded-lg">Зарегистрироваться</button>
                     </div>
                 </form>
             </div>
@@ -55,13 +55,13 @@
 
 <script>
 import axios from 'axios'
-import {useToastStore} from "@/stores/toast";
+import { useToastStore } from "@/stores/toast.js";
 
 export default {
   setup() {
     const toastStore = useToastStore()
 
-    return{toastStore}
+    return { toastStore }
   },
 
   data() {
@@ -103,14 +103,16 @@ export default {
                     .post('/api/signup/', this.form)
                     .then(response => {
                         if (response.data.message === 'success') {
-                            this.toastStore.showToast(5000, 'The user is registered. Please activate your account by clicking your email link.', 'bg-emerald-500')
+
+                            this.toastStore.showToast(5000, 'The user is registered. Please activate your account by clicking your email link.', 'bg-red-500')
 
                             this.form.email = ''
                             this.form.name = ''
                             this.form.password1 = ''
                             this.form.password2 = ''
+                            console.log("dasdas123", response.data.message)
                         } else {
-                           const data = JSON.parse(response.data.message)
+                            const data = JSON.parse(response.data.message)
                             for (const key in data){
                                 this.errors.push(data[key][0].message)
                             }
