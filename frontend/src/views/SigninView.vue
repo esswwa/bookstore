@@ -34,7 +34,7 @@
                     </template>
 
                     <div>
-                        <button class="py-4 px-6 bg-purple-600 text-white rounded-lg">Авторизоваться</button>
+                        <button class="py-4 px-6 bg-blue-400 text-white rounded-lg">Авторизоваться</button>
                     </div>
                 </form>
             </div>

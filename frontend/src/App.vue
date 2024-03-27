@@ -4,7 +4,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between">
                 <div class="menu-left">
-                    <a href="#" class="text-xl">Messanger</a>
+                    <a href="#" class="text-xl">Магазин книг "Читай-Летай"</a>
                 </div>
 
 <!--                <div class="menu-center flex space-x-12">-->
@@ -41,7 +41,7 @@
                   </template>
                   <template  v-else>
                     <RouterLink to="/signin" class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg">Войти</RouterLink>
-                    <RouterLink to="/signup" class="py-4 px-6 bg-purple-600 text-white rounded-lg">Зарегистрироваться</RouterLink>
+                    <RouterLink to="/signup" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Зарегистрироваться</RouterLink>
                   </template>
                 </div>
             </div>
