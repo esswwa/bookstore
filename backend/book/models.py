@@ -29,7 +29,7 @@ class Book(models.Model):
     status = models.TextField(blank=True, null=False)
     name = models.TextField(blank=True, null=False)
     type_cover = models.TextField(blank=True, null=True)
-    date_of_create = models.IntegerField(default=0)
+    date_of_create = models.IntegerField(default=0, null=True)
     isbn = models.TextField(blank=True, null=False)
     count_of_pages = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
