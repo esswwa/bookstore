@@ -1,254 +1,3 @@
-<!--<template>-->
-<!--    <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">-->
-<!--        <div class="main-center col-span-3 space-y-4">-->
-
-<!--          <div class="bg-blue-500 text-white py-4 px-6 text-center">-->
-<!--              <h1 class="text-4xl font-bold">ЛУЧШИЕ ИЗ ЛУЧШИХ</h1>-->
-<!--          </div>-->
-
-<!--          <div-->
-<!--                class="p-4 bg-white border border-gray-200 rounded-lg"-->
-<!--                v-for="book in books"-->
-<!--                :key="book.id">-->
-<!--                <div class="max-w-sm w-full lg:max-w-full lg:flex">-->
-<!--                    <div class="h-48 lg:h-auto lg:w-0 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">-->
-<!--                      </div>-->
-<!--                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">-->
-<!--                              <div class="mb-8">-->
-<!--                                <p class="text-sm text-gray-600 flex items-center">-->
-<!--                                  <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">-->
-<!--                                    <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />-->
-<!--                                  </svg>-->
-<!--                                  Жанр-->
-<!--                                </p>-->
-<!--                                <div class="text-gray-900 font-bold text-xl mb-2">{{book.name}}</div>-->
-<!--                                <p class="text-gray-700 text-base">{{book.description}}</p>-->
-<!--                              </div>-->
-<!--                              <div class="flex items-center">-->
-<!--                                <div class="text-sm">-->
-<!--                                  <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>-->
-<!--                                  <p class="text-gray-600">{{book.rating}}</p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                  </div>-->
-<!--            </div>-->
-
-<!--                    <div class="bg-blue-500 text-white py-4 px-6 text-center">-->
-<!--              <h1 class="text-4xl font-bold">НОВИНКИ В ЛИТЕРАТУРЕ</h1>-->
-<!--          </div>-->
-
-<!--          <div-->
-<!--                class="p-4 bg-white border border-gray-200 rounded-lg"-->
-<!--                v-for="book in books"-->
-<!--                :key="book.id">-->
-<!--                <div class="max-w-sm w-full lg:max-w-full lg:flex">-->
-<!--                    <div class="h-48 lg:h-auto lg:w-0 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">-->
-<!--                      </div>-->
-<!--                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">-->
-<!--                              <div class="mb-8">-->
-<!--                                <p class="text-sm text-gray-600 flex items-center">-->
-<!--                                  <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">-->
-<!--                                    <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />-->
-<!--                                  </svg>-->
-<!--                                  Жанр-->
-<!--                                </p>-->
-<!--                                <div class="text-gray-900 font-bold text-xl mb-2">{{book.name}}</div>-->
-<!--                                <p class="text-gray-700 text-base">{{book.description}}</p>-->
-<!--                              </div>-->
-<!--                              <div class="flex items-center">-->
-<!--                                <div class="text-sm">-->
-<!--                                  <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>-->
-<!--                                  <p class="text-gray-600">{{book.rating}}</p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                  </div>-->
-<!--            </div>-->
-
-<!--                    <div class="bg-blue-500 text-white py-4 px-6 text-center">-->
-<!--              <h1 class="text-4xl font-bold">САМЫЕ ПОПУЛЯРНЫЕ КНИГИ 2024 ГОДА</h1>-->
-<!--          </div>-->
-
-<!--          <div-->
-<!--                class="p-4 bg-white border border-gray-200 rounded-lg"-->
-<!--                v-for="book in books"-->
-<!--                :key="book.id">-->
-<!--                <div class="max-w-sm w-full lg:max-w-full lg:flex">-->
-<!--                    <div class="h-48 lg:h-auto lg:w-0 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">-->
-<!--                      </div>-->
-<!--                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">-->
-<!--                              <div class="mb-8">-->
-<!--                                <p class="text-sm text-gray-600 flex items-center">-->
-<!--                                  <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">-->
-<!--                                    <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />-->
-<!--                                  </svg>-->
-<!--                                  Жанр-->
-<!--                                </p>-->
-<!--                                <div class="text-gray-900 font-bold text-xl mb-2">{{book.name}}</div>-->
-<!--                                <p class="text-gray-700 text-base">{{book.description}}</p>-->
-<!--                              </div>-->
-<!--                              <div class="flex items-center">-->
-<!--                                <div class="text-sm">-->
-<!--                                  <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>-->
-<!--                                  <p class="text-gray-600">{{book.rating}}</p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                  </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-
-<!--<div class="swiper-container">-->
-<!--    <div class="swiper-wrapper">-->
-<!--        &lt;!&ndash; Используйте v-for для создания слайдов &ndash;&gt;-->
-<!--        <div-->
-<!--            class="swiper-slide p-4 bg-white border border-gray-200 rounded-lg"-->
-<!--            v-for="(book, index) in books"-->
-<!--            :key="book.id"-->
-<!--            :class="{ 'swiper-slide-hidden': index !== 0 }"-->
-<!--        >-->
-<!--            &lt;!&ndash; Ваш контент книги &ndash;&gt;-->
-<!--            <div class="max-w-sm w-full lg:max-w-full lg:flex">-->
-<!--                    <div class="h-48 lg:h-auto lg:w-24 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">-->
-<!--                      </div>-->
-<!--                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">-->
-<!--                              <div class="mb-8">-->
-<!--                                <p class="text-sm text-gray-600 flex items-center">-->
-<!--                                  <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">-->
-<!--                                    <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />-->
-<!--                                  </svg>-->
-<!--                                  Жанр-->
-<!--                                </p>-->
-<!--                                <div class="text-gray-900 font-bold text-xl mb-2">{{book.name}}</div>-->
-<!--                                <p class="text-gray-700 text-base">{{book.description}}</p>-->
-<!--                              </div>-->
-<!--                              <div class="flex items-center">-->
-<!--                                <div class="text-sm">-->
-<!--                                  <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>-->
-<!--                                  <p class="text-gray-600">{{book.rating}}</p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                  </div>-->
-
-<!--   &lt;!&ndash; Добавьте навигацию для слайдера &ndash;&gt;-->
-<!--    <div class="swiper-button-next"></div>-->
-<!--    <div class="swiper-button-prev"></div>-->
-<!--        </div>-->
-
-
-<!--    </div>-->
-<!--</div>-->
-
-<!--</template>-->
-<!--<script>-->
-<!--import axios from 'axios'-->
-<!--import Swiper from 'swiper';-->
-<!--import 'swiper/swiper-bundle.css';-->
-<!--export default {-->
-<!--    name: 'BookView',-->
-
-
-<!--    data() {-->
-<!--        return {-->
-<!--            books: {-->
-<!--                id: null-->
-<!--            },-->
-<!--            body: ''-->
-<!--        }-->
-<!--    },-->
-
-<!--    created() {-->
-<!--        this.getBook()-->
-<!--    },-->
-<!--    mounted() {-->
-<!--          const mySwiper = new Swiper('.swiper-container', {-->
-<!--            slidesPerView: 'auto',-->
-<!--            spaceBetween: 20,-->
-<!--            centeredSlides: true,-->
-<!--            navigation: {-->
-<!--              nextEl: '.swiper-button-next',-->
-<!--              prevEl: '.swiper-button-prev',-->
-<!--            },-->
-<!--          });-->
-<!--    },-->
-<!--    methods: {-->
-<!--        getBook() {-->
-<!--            axios-->
-<!--                .get(`/api/book/`)-->
-<!--                .then(response => {-->
-<!--                    console.log('data', response.data.books)-->
-
-<!--                    this.books = response.data.books-->
-<!--                })-->
-<!--                .catch(error => {-->
-<!--                    console.log('error', error)-->
-<!--                })-->
-<!--        },-->
-<!--       getBestBooks() {-->
-<!--            axios-->
-<!--                .get(`/api/book/books_the_best/`)-->
-<!--                .then(response => {-->
-<!--                    console.log('data', response.data.books)-->
-
-<!--                    this.books_the_best = response.data.books_the_best-->
-<!--                })-->
-<!--                .catch(error => {-->
-<!--                    console.log('error', error)-->
-<!--                })-->
-<!--        },-->
-<!--       getNewBooks() {-->
-<!--            axios-->
-<!--                .get(`/api/book/books_new_items/`)-->
-<!--                .then(response => {-->
-<!--                    console.log('data', response.data.books)-->
-
-<!--                    this.books_new_items = response.data.books_new_items-->
-<!--                })-->
-<!--                .catch(error => {-->
-<!--                    console.log('error', error)-->
-<!--                })-->
-<!--        },-->
-<!--       getPopularBook() {-->
-<!--            axios-->
-<!--                .get(`/api/book/books_popular/`)-->
-<!--                .then(response => {-->
-<!--                    console.log('data', response.data.books)-->
-
-<!--                    this.books_popular = response.data.books_popular-->
-<!--                })-->
-<!--                .catch(error => {-->
-<!--                    console.log('error', error)-->
-<!--                })-->
-<!--        },-->
-
-<!--        // submitForm() {-->
-<!--        //     console.log('submitForm', this.body)-->
-<!--        //-->
-<!--        //     axios-->
-<!--        //         .post(`/api/books/${this.$route.params.id}/comment/`, {-->
-<!--        //             'body': this.body-->
-<!--        //         })-->
-<!--        //         .then(response => {-->
-<!--        //             console.log('data', response.data)-->
-<!--        //-->
-<!--        //             this.book.comments.push(response.data)-->
-<!--        //             this.book.comments_count += 1-->
-<!--        //             this.body = ''-->
-<!--        //         })-->
-<!--        //         .catch(error => {-->
-<!--        //             console.log('error', error)-->
-<!--        //         })-->
-<!--        // }-->
-<!--    }-->
-<!--}-->
-<!--</script>-->
-
-
-
 <template>
     <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
         <div class="main-center col-span-3 space-y-4">
@@ -262,7 +11,7 @@
         :spaceBetween="30"
         :centeredSlides="true"
         :autoplay="{
-          delay: 2500,
+          delay: 5000,
           disableOnInteraction: false,
         }"
         :pagination="{
@@ -271,7 +20,7 @@
         :navigation="true"
         :modules="modules"
         @autoplayTimeLeft="onAutoplayTimeLeft"
-        class="mySwiper"
+        class="mySwiper m-4"
       >
         <swiper-slide v-for="book in books"
                 :key="book.id">
@@ -289,15 +38,16 @@
                                     <div class="text-gray-900 font-bold text-xl mb-2">{{book.name}}</div>
                                     <p class="text-gray-700 text-base">{{book.description}}</p>
                                   </div>
-                                  <div class="flex items-center">
+                                  <div class="flex items-start">
                                     <div class="text-sm">
+                                      <p class="text-gray-900 leading-none">{{ book.author }}</p>
                                       <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                       <p class="text-gray-600">{{book.rating}}</p>
+                                      <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
                                     </div>
                                 </div>
                             </div>
 
-        <button @click="goToBook(book.id)">Перейти</button>
                       </div>
         </swiper-slide>
         <template #container-end>
@@ -323,7 +73,7 @@
     :spaceBetween="30"
     :centeredSlides="true"
     :autoplay="{
-      delay: 2500,
+      delay: 5000,
       disableOnInteraction: false,
     }"
     :pagination="{
@@ -332,10 +82,11 @@
     :navigation="true"
     :modules="modules"
     @autoplayTimeLeft="onAutoplayTimeLeft"
-    class="mySwiper"
+    class="mySwiper m-4"
   >
     <swiper-slide v-for="book in books"
-            :key="book.id">            <div class="max-w-sm w-full lg:max-w-full lg:flex">
+            :key="book.id">
+      <div class="max-w-sm w-full lg:max-w-full lg:flex">
                     <div class="h-48 lg:h-auto lg:w-24 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">
                       </div>
                           <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
@@ -351,13 +102,14 @@
                               </div>
                               <div class="flex items-center">
                                 <div class="text-sm">
+                                      <p class="text-gray-900 leading-none">{{ book.author }}</p>
                                   <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                   <p class="text-gray-600">{{book.rating}}</p>
+                                  <button @click="goToBook1(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
                                 </div>
                             </div>
                         </div>
 
-                    <button @click="goToBook1(book.id)">Перейти</button>
                   </div>
 
     </swiper-slide>
@@ -383,7 +135,7 @@
     :spaceBetween="30"
     :centeredSlides="true"
     :autoplay="{
-      delay: 2500,
+      delay: 5000,
       disableOnInteraction: false,
     }"
     :pagination="{
@@ -393,7 +145,7 @@
     :modules="modules"
     @autoplayTimeLeft="onAutoplayTimeLeft"
     @slideChange="onSlideChange"
-    class="mySwiper"
+    class="mySwiper m-4"
   >
     <swiper-slide v-for="book in books" :key="book.id">
       <div class="max-w-sm w-full lg:max-w-full lg:flex">
@@ -412,13 +164,13 @@
                               </div>
                               <div class="flex items-center">
                                 <div class="text-sm">
+                                  <p class="text-gray-900 leading-none">{{ book.author }}</p>
                                   <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                   <p class="text-gray-600">{{book.rating}}</p>
+                                  <button @click="goToBook2(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
                                 </div>
                             </div>
                         </div>
-
-        <button @click="goToBook2(book.id)">Перейти</button>
       </div>
     </swiper-slide>
     <template #container-end>

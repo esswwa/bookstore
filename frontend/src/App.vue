@@ -4,7 +4,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between">
                 <div class="menu-left">
-                    <a href="#" class="text-xl">Магазин книг "Читай-Летай"</a>
+                    <a href="/books" class="text-xl">Магазин книг "Читай-Летай"</a>
                 </div>
 
                 <div class="menu-center flex space-x-12" v-if="userStore.user.isAuthenticated">
