@@ -20,10 +20,11 @@ def book_list(request):
     #     user_ids.append(user.id)
 
     # books = Book.objects.exclude(status="В наличии")
-    books = Book.objects.filter(status="В наличии")
-    # author = books.values('author')
+
+
+
+    books = Book.objects.all()
     serializer = BookSerializer(books, many=True)
-    # serializer2 = AuthorSerializer(author, many=True)
 
     return JsonResponse({'books': serializer.data}, safe=False)
 
