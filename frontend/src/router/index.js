@@ -43,7 +43,7 @@ const router = createRouter({
       component: OrderView
     },
     {
-      path: '/profile',
+      path: '/profile/:id',
       name: 'profile',
       component: ProfileView
     },

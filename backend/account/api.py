@@ -2,7 +2,9 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 from .forms import SignupForm
+from .models import User
 
+from .serializers import UserSerializer
 @api_view(['GET'])
 def me(request):
 	return JsonResponse({
@@ -34,5 +36,17 @@ def signup(request):
 	print(message)
 	return JsonResponse({'message': message})
 
+@api_view(['GET'])
+def profile(request, id):
+    user = User.objects.get(pk=id)
+    # requests = []
+	#
+    # if user == request.user:
+    #     requests = requests.data
 
+
+    return JsonResponse({
+        'user': UserSerializer(user).data,
+        # 'requests': requests
+    }, safe=False)
 #46.42

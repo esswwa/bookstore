@@ -85,6 +85,7 @@ export default {
                        axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
                     })
                     .catch(error => {
+                        this.errors.push('The user does not exist or the password is incorrect')
                         console.log('error', error)
                     })
             }
@@ -94,7 +95,7 @@ export default {
                       .then(response => {
                          this.userStore.setUserInfo(response.data)
 
-                         this.$router.push('/feed')
+                         this.$router.push('/books')
                       })
                       .catch(error => {
                           console.log('error', error)
