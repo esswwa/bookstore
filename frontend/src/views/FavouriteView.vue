@@ -20,7 +20,7 @@
                                   <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                   <p class="text-gray-600">{{book.rating}}</p>
                                   <div>
-<!--                                        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>-->
+                                        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
 <!--                                        <button @click="addBookToFavourite(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>-->
                                   </div>
                                 </div>
@@ -54,6 +54,10 @@ export default {
         this.getFavourite()
     },
     methods:{
+        goToBook(bookId) {
+          this.$router.push({ path: '/book/' + bookId + '/'});
+          console.log("Переход к книге с ID:", bookId);
+    },
                getFavourite() {
                  console.log("ASDAS", this.userStore.user.id)
                       axios
