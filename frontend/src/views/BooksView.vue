@@ -250,8 +250,6 @@ export default {
         goToBook(bookId) {
           console.log("Переход к книге с ID:", bookId);
     },
-              goToBook1(bookId) {
-          console.log("Переход к книге с ID:", bookId);
     },
       addBookToFavourite(bookId){
           axios.post('/api/favourite/add_to_favourite/',{
