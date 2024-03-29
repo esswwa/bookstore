@@ -27,7 +27,7 @@
           <div class="max-w-sm w-full lg:max-w-full lg:flex">
                         <div class="h-48 lg:h-auto lg:w-24 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">
                           </div>
-                              <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                              <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r m-2 p-8 flex flex-col justify-between leading-normal">
                                   <div class="mb-8">
                                     <p class="text-sm text-gray-600 flex items-center">
                                       <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -43,7 +43,10 @@
                                       <p class="text-gray-900 leading-none">{{ book.author }}</p>
                                       <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                       <p class="text-gray-600">{{book.rating}}</p>
-                                      <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+                                      <div>
+                                        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+                                        <button @click="goToBook(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
+                                      </div>
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +92,7 @@
       <div class="max-w-sm w-full lg:max-w-full lg:flex">
                     <div class="h-48 lg:h-auto lg:w-24 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">
                       </div>
-                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r  m-2 p-8 flex flex-col justify-between leading-normal">
                               <div class="mb-8">
                                 <p class="text-sm text-gray-600 flex items-center">
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -105,7 +108,10 @@
                                       <p class="text-gray-900 leading-none">{{ book.author }}</p>
                                   <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                   <p class="text-gray-600">{{book.rating}}</p>
-                                  <button @click="goToBook1(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+                                  <div>
+                                        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+                                        <button @click="goToBook(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
+                                      </div>
                                 </div>
                             </div>
                         </div>
@@ -144,14 +150,13 @@
     :navigation="true"
     :modules="modules"
     @autoplayTimeLeft="onAutoplayTimeLeft"
-    @slideChange="onSlideChange"
     class="mySwiper m-4"
   >
     <swiper-slide v-for="book in books" :key="book.id">
       <div class="max-w-sm w-full lg:max-w-full lg:flex">
                     <div class="h-48 lg:h-auto lg:w-24 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">
                       </div>
-                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r m-2 p-8 flex flex-col justify-between leading-normal">
                               <div class="mb-8">
                                 <p class="text-sm text-gray-600 flex items-center">
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -167,7 +172,10 @@
                                   <p class="text-gray-900 leading-none">{{ book.author }}</p>
                                   <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                   <p class="text-gray-600">{{book.rating}}</p>
-                                  <button @click="goToBook2(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+                                  <div>
+                                        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+                                        <button @click="goToBook(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
+                                  </div>
                                 </div>
                             </div>
                         </div>
@@ -187,9 +195,6 @@
 
 </template>
 
-<style>
-
-</style>
 <script>
 
 import { ref } from 'vue';
@@ -245,9 +250,6 @@ export default {
           console.log("Переход к книге с ID:", bookId);
     },
               goToBook1(bookId) {
-          console.log("Переход к книге с ID:", bookId);
-    },
-              goToBook2(bookId) {
           console.log("Переход к книге с ID:", bookId);
     },
         getBook() {
