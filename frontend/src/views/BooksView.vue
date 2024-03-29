@@ -9,7 +9,7 @@
     <swiper
         v-if="books.length > 0"
         :spaceBetween="30"
-        :centeredSlides="true"
+        :slidesPerView="3"
         :autoplay="{
           delay: 5000,
           disableOnInteraction: false,
@@ -73,8 +73,8 @@
     </div>
 <swiper
     v-if="books.length > 0"
-    :spaceBetween="30"
-    :centeredSlides="true"
+        :spaceBetween="30"
+        :slidesPerView="3"
     :autoplay="{
       delay: 5000,
       disableOnInteraction: false,
@@ -138,8 +138,8 @@
     </div>
 <swiper
     v-if="books.length > 0"
-    :spaceBetween="30"
-    :centeredSlides="true"
+        :spaceBetween="30"
+        :slidesPerView="3"
     :autoplay="{
       delay: 5000,
       disableOnInteraction: false,
