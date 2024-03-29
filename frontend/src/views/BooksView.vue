@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
+    <div class="max-w-7xl mx-auto">
         <div class="main-center col-span-3 space-y-4">
           <div class="bg-blue-500 text-white py-4 px-6 text-center">
               <h1 class="text-4xl font-bold">ЛУЧШИЕ ИЗ ЛУЧШИХ</h1>
@@ -63,7 +63,7 @@
         </template>
       </swiper>
 
-    <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
+    <div class="max-w-7xl mx-auto">
         <div class="main-center col-span-3 space-y-4">
 
           <div class="bg-blue-500 text-white py-4 px-6 text-center">
@@ -128,7 +128,7 @@
       </div>
     </template>
   </swiper>
-            <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
+            <div class="max-w-7xl mx-auto">
         <div class="main-center col-span-3 space-y-4">
 
           <div class="bg-blue-500 text-white py-4 px-6 text-center">
