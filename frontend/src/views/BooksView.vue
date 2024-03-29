@@ -45,7 +45,7 @@
                                       <p class="text-gray-600">{{book.rating}}</p>
                                       <div>
                                         <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
-                                        <button @click="goToBook(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
+                                        <button @click="addBookToFavourite(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
                                       </div>
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@
                                   <p class="text-gray-600">{{book.rating}}</p>
                                   <div>
                                         <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
-                                        <button @click="goToBook(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
+                                        <button @click="addBookToFavourite(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
                                       </div>
                                 </div>
                             </div>
@@ -174,7 +174,7 @@
                                   <p class="text-gray-600">{{book.rating}}</p>
                                   <div>
                                         <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
-                                        <button @click="goToBook(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
+                                        <button @click="addBookToFavourite(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
                                   </div>
                                 </div>
                             </div>
@@ -253,6 +253,24 @@ export default {
               goToBook1(bookId) {
           console.log("Переход к книге с ID:", bookId);
     },
+      addBookToFavourite(bookId){
+          axios.post('/api/favourite/add_to_favourite/',{
+                "book_id": bookId,
+                "user_id": localStorage.getItem('user.id')
+              })
+              .then(response => {
+                console.log("book_id", response.data.book_id)
+                console.log("user_id", response.data.user_id)
+                console.log("message", response.data.message)
+                console.log("fav", response.data.favourite)
+
+              })
+              .catch(error => {
+                console.log("error", error)
+
+              })
+
+      },
         getBook() {
             axios
                 .get(`/api/book/`)

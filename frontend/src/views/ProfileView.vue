@@ -27,19 +27,19 @@
 <!--                    >-->
 <!--                        Send direct message-->
 <!--                    </button>-->
-
                     <RouterLink
                         class="inline-block mr-2 py-4 px-3 bg-purple-600 text-xs text-white rounded-lg"
                         to="/profile/edit"
-                        v-if="userStore.user.id === user.id"
+                        v-if="userStore.user.id === this.user.id"
                     >
+
                         Edit profile
                     </RouterLink>
 
                     <button
                         class="inline-block py-4 px-3 bg-red-600 text-xs text-white rounded-lg"
                         @click="logout"
-                        v-if="userStore.user.id === user.id"
+                        v-if="userStore.user.id === this.user.id"
                     >
                         Log out
                     </button>
@@ -131,17 +131,25 @@ export default {
         this.getUser()
     },
 
-    // watch: {
-    //     '$route.params.id': {
-    //         handler: function() {
-    //             this.getFeed()
-    //         },
-    //         deep: true,
-    //         immediate: true
-    //     }
-    // },
-
     methods: {
+              getUser() {
+            axios
+                .get(`/api/profile/${this.$route.params.id}/`)
+                .then(response => {
+                    console.log('data', response.data)
+                    this.user = response.data.user
+                })
+                .catch(error => {
+                    console.log('error', error)
+                })
+        },
+        logout() {
+            console.log('Log out')
+
+            this.userStore.removeToken()
+
+            this.$router.push('/signin')
+        }
         // deletePost(id) {
         //     this.posts = this.posts.filter(post => post.id !== id)
         // },
@@ -194,24 +202,7 @@ export default {
         //             console.log('error', error)
         //         })
         // },
-        getUser() {
-            axios
-                .get(`/api/profile/${this.$route.params.id}/`)
-                .then(response => {
-                    console.log('data', response.data)
-                    this.user = response.data.user
-                })
-                .catch(error => {
-                    console.log('error', error)
-                })
-        },
-        logout() {
-            console.log('Log out')
 
-            this.userStore.removeToken()
-
-            this.$router.push('/signin')
-        }
     }
 }
 </script>

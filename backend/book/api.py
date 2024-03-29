@@ -1,9 +1,10 @@
 from django.db.models import Q
 from django.http import JsonResponse
-
+import uuid
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 from account.models import User
+from favourite.models import Favourite
 from account.serializers import (UserSerializer)
 
 
@@ -14,15 +15,6 @@ from .serializers import BookSerializer, AuthorSerializer
 
 @api_view(['GET'])
 def book_list(request):
-    # user_ids = [request.user.id]
-    #
-    # for user in request.user.friends.all():
-    #     user_ids.append(user.id)
-
-    # books = Book.objects.exclude(status="В наличии")
-
-
-
     books = Book.objects.all()
     serializer = BookSerializer(books, many=True)
 
@@ -72,3 +64,4 @@ def books_popular(request):
     # serializer2 = AuthorSerializer(author, many=True)
 
     return JsonResponse({'books_popular': serializer.data}, safe=False)
+

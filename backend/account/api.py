@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from .forms import SignupForm
 from .models import User
 
+
 from .serializers import UserSerializer
 @api_view(['GET'])
 def me(request):
@@ -38,15 +39,7 @@ def signup(request):
 
 @api_view(['GET'])
 def profile(request, id):
-    user = User.objects.get(pk=id)
-    # requests = []
-	#
-    # if user == request.user:
-    #     requests = requests.data
-
+    user = User.objects.get(id=id)
 
     return JsonResponse({
-        'user': UserSerializer(user).data,
-        # 'requests': requests
-    }, safe=False)
-#46.42
+        'user': UserSerializer(user).data}, safe=False)
