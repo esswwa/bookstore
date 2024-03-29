@@ -248,8 +248,8 @@ export default {
     },
     methods: {
         goToBook(bookId) {
+          this.$router.push({ path: '/book/' + bookId + '/'});
           console.log("Переход к книге с ID:", bookId);
-    },
     },
       addBookToFavourite(bookId){
           axios.post('/api/favourite/add_to_favourite/',{
@@ -318,24 +318,6 @@ export default {
                 })
         },
 
-        // submitForm() {
-        //     console.log('submitForm', this.body)
-        //
-        //     axios
-        //         .post(`/api/books/${this.$route.params.id}/comment/`, {
-        //             'body': this.body
-        //         })
-        //         .then(response => {
-        //             console.log('data', response.data)
-        //
-        //             this.book.comments.push(response.data)
-        //             this.book.comments_count += 1
-        //             this.body = ''
-        //         })
-        //         .catch(error => {
-        //             console.log('error', error)
-        //         })
-        // }
     }
 }
 </script>

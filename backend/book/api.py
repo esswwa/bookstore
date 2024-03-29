@@ -20,12 +20,13 @@ def book_list(request):
 
     return JsonResponse({'books': serializer.data}, safe=False)
 
-@api_view(['POST'])
-def get_book(request):
-    books = Book.objects.all()
-    serializer = BookSerializer(books, many=True)
+@api_view(['GET'])
+def get_book(request, id):
+    books = Book.objects.get(id=id)
+    print(books)
+    serializer = BookSerializer(books, many=False)
 
-    return JsonResponse({'books': serializer.data}, safe=False)
+    return JsonResponse({'book': serializer.data}, safe=False)
 
 @api_view(['GET'])
 def books_the_best(request):

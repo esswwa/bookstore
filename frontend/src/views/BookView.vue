@@ -30,4 +30,41 @@
 
 <script>
 
+import axios from 'axios'
+import {useUserStore} from "@/stores/user.js";
+export default {
+    name: 'FavouriteView',
+    setup(){
+       const userStore = useUserStore()
+       return{
+         userStore
+       }
+     },
+    data() {
+        return {
+            book: {
+                id: null
+            },
+            body: ''
+        }
+    },
+    created() {
+        this.getBook()
+    },
+    methods:{
+               getBook() {
+                console.log("id", this.$route.params.id)
+                      axios
+                          .get(`/api/book/${this.$route.params.id}/`)
+                          .then(response => {
+                              console.log('data', response.data.book)
+                              this.book = response.data.book
+                          })
+                          .catch(error => {
+                              console.log('error', error)
+                          })
+
+              },
+    }
+  }
 </script>
