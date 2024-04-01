@@ -65,7 +65,7 @@ export default {
       favourite: [],
       favourites: [],
       total: 0, // Устанавливаем начальное значение total
-      perPage: 3,
+      perPage: 9,
       currentPage: 1
     };
   },

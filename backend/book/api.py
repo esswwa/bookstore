@@ -80,9 +80,9 @@ def get_pagination(request, page):
 
     count = books.count()
 
-    start_index = (page - 1) * 3
+    start_index = (page - 1) * 9
 
-    end_index = start_index + 3
+    end_index = start_index + 9
 
     books = books[start_index:end_index]
 
