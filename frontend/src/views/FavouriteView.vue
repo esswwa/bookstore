@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap">
   <div v-for="book in books" :key="book.id" v-if="books.length > 0" class="w-1/3 p-2">
-    <div class="max-w-sm rounded overflow-hidden shadow-lg">
+    <div class="max-w-sm rounded overflow-hidden bg-white shadow-lg">
 
       <div class="px-6 py-4">
          <p class="text-sm text-gray-600 flex items-center">
