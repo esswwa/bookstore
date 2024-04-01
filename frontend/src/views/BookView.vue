@@ -17,14 +17,13 @@
       </div>
 
       <div class="px-6 py-4" >
-        <button @click="goToBook(book.id)" class="py-4 px-6 mr-2 bg-blue-400 text-white rounded-lg">Перейти</button>
-                                           <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" class="py-4 px-6 text-black rounded-lg border border-blue-400">
+                                                <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" title="Удалить из избранных" class="py-4 px-6 text-black rounded-lg border border-blue-400">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="#60a5fa" stroke="isCurrent" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                                             </svg>
                                           </button>
 
-                                        <button v-else @click="addBookToFavourite(book.id)" class="py-4 px-6 text-white rounded-lg border border-blue-400">
+                                        <button v-else @click="addBookToFavourite(book.id)" class="py-4 px-6 text-white rounded-lg border border-blue-400" title="Добавить в избранные">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                                             </svg>
