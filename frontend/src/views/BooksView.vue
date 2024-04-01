@@ -24,35 +24,37 @@
       >
         <swiper-slide v-for="book in books"
                 :key="book.id">
-          <div class="max-w-sm w-full lg:max-w-full lg:flex">
-                        <div class="h-48 lg:h-auto lg:w-24 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">
-                          </div>
-                              <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r m-2 p-8 flex flex-col justify-between leading-normal">
-                                  <div class="mb-8">
-                                    <p class="text-sm text-gray-600 flex items-center">
-                                      <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                        <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
-                                      </svg>
-                                      Жанр
-                                    </p>
-                                    <div class="text-gray-900 font-bold text-xl mb-2">{{book.name}}</div>
-                                    <p class="text-gray-700 text-base">{{book.description}}</p>
-                                  </div>
-                                  <div class="flex items-start">
-                                    <div class="text-sm">
-                                      <p class="text-gray-900 leading-none">{{ book.author }}</p>
-                                      <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
-                                      <p class="text-gray-600">{{book.rating}}</p>
-                                       <div class="px-6 py-4" >
+<div class="max-w-sm w-full lg:max-w-full lg:flex">
+                    <div class="h-48 lg:h-auto lg:w-24 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">
+                      </div>
+                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r m-2 p-8 flex flex-col justify-between leading-normal">
+                              <div class="mb-8">
+                                <p class="text-sm text-gray-600 flex items-center">
+                                  <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+                                  </svg>
+                                  {{book.additional_genre.text_genre.text}}
+                                </p>
+                                <div class="text-gray-900 font-bold text-xl mb-2">{{book.name}}</div>
+                                <p class="text-gray-700 text-base">{{book.description}}</p>
+                              </div>
+                              <div class="flex items-center">
+                                <div class="text-sm">
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">Автор: {{ book.author.text }}</span>
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">Издательство: {{ book.publishing_house.text }}</span>
+                                <div class="px-6 py-4">
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">Цена: {{ book.cost_per_one }}₽</span>
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 ml-2">Рейтинг: {{book.rating}}</span>
+                                </div>
+                                        <div class="px-6 py-4" >
                                           <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
                                           <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" class="py-4 px-6 m-2 bg-blue-400 text-white rounded-lg">Удалить из избранных</button>
                                           <button v-else  @click="addBookToFavourite(book.id)" class="py-4 px-6 bg-blue-400 m-2 text-white rounded-lg">Добавить в избранное</button>
-                                       </div>
-                                    </div>
+                                        </div>
                                 </div>
                             </div>
-
-                      </div>
+                        </div>
+      </div>
         </swiper-slide>
         <template #container-end>
           <div class="autoplay-progress">
@@ -90,25 +92,28 @@
   >
     <swiper-slide v-for="book in books"
             :key="book.id">
-      <div class="max-w-sm w-full lg:max-w-full lg:flex">
+<div class="max-w-sm w-full lg:max-w-full lg:flex">
                     <div class="h-48 lg:h-auto lg:w-24 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">
                       </div>
-                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r  m-2 p-8 flex flex-col justify-between leading-normal">
+                          <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r m-2 p-8 flex flex-col justify-between leading-normal">
                               <div class="mb-8">
                                 <p class="text-sm text-gray-600 flex items-center">
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                                   </svg>
-                                  Жанр
+                                  {{book.additional_genre.text_genre.text}}
                                 </p>
                                 <div class="text-gray-900 font-bold text-xl mb-2">{{book.name}}</div>
                                 <p class="text-gray-700 text-base">{{book.description}}</p>
                               </div>
                               <div class="flex items-center">
                                 <div class="text-sm">
-                                      <p class="text-gray-900 leading-none">{{ book.author }}</p>
-                                  <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
-                                  <p class="text-gray-600">{{book.rating}}</p>
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">Автор: {{ book.author.text }}</span>
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">Издательство: {{ book.publishing_house.text }}</span>
+                                <div class="px-6 py-4">
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">Цена: {{ book.cost_per_one }}₽</span>
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 ml-2">Рейтинг: {{book.rating}}</span>
+                                </div>
                                         <div class="px-6 py-4" >
                                           <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
                                           <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" class="py-4 px-6 m-2 bg-blue-400 text-white rounded-lg">Удалить из избранных</button>
@@ -117,8 +122,7 @@
                                 </div>
                             </div>
                         </div>
-
-                  </div>
+      </div>
 
     </swiper-slide>
     <template #container-end>
@@ -155,7 +159,7 @@
     class="mySwiper m-4"
   >
     <swiper-slide v-for="book in books" :key="book.id">
-      <div class="max-w-sm w-full lg:max-w-full lg:flex">
+ <div class="max-w-sm w-full lg:max-w-full lg:flex">
                     <div class="h-48 lg:h-auto lg:w-24 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Woman holding a mug">
                       </div>
                           <div class="border-r border-b border-l border-gray-400 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r m-2 p-8 flex flex-col justify-between leading-normal">
@@ -164,16 +168,19 @@
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                                   </svg>
-                                  Жанр
+                                  {{book.additional_genre.text_genre.text}}
                                 </p>
                                 <div class="text-gray-900 font-bold text-xl mb-2">{{book.name}}</div>
                                 <p class="text-gray-700 text-base">{{book.description}}</p>
                               </div>
                               <div class="flex items-center">
                                 <div class="text-sm">
-                                  <p class="text-gray-900 leading-none">{{ book.author }}</p>
-                                  <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
-                                  <p class="text-gray-600">{{book.rating}}</p>
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">Автор: {{ book.author.text }}</span>
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">Издательство: {{ book.publishing_house.text }}</span>
+                                <div class="px-6 py-4">
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">Цена: {{ book.cost_per_one }}₽</span>
+                                              <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 ml-2">Рейтинг: {{book.rating}}</span>
+                                </div>
                                         <div class="px-6 py-4" >
                                           <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
                                           <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" class="py-4 px-6 m-2 bg-blue-400 text-white rounded-lg">Удалить из избранных</button>
