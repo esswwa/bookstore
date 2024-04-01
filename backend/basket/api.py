@@ -27,20 +27,19 @@ def get_basket(request):
 		if i.user.id == request.user.id:
 			basket = i
 	basket_additionals = BasketAdditional.objects.filter(basket=basket.id)
-	basket_ids = [fav for fav in basket_additionals]
-	# Преобразуем book_ids в список числовых значений
-	book_ids = [book_id.book for book_id in basket_ids]
+	all_price = 0
+	for price in basket_additionals.values_list('all_price', flat=True):
+		all_price += price
+
+	book_ids = [book_id.book_id for book_id in basket_additionals]
 	book_ids = [int(book_id) for book_id in book_ids]
-
-
 	# Получаем книги, соответствующие этим book_id
 	books = Book.objects.filter(id__in=book_ids)
-
 	serializer = BookSerializer(books, many=True)
 	serializer_basket = BasketSerializer(basket, many=False)
 	serializer_basket_additional = BasketAdditionalSerializer(basket_additionals, many=True)
 
-	return JsonResponse({"books": serializer.data, "basket": serializer_basket.data, "basket_additionals": serializer_basket_additional.data})
+	return JsonResponse({"books": serializer.data, "basket": serializer_basket.data, "basket_additionals": serializer_basket_additional.data, 'all_price': all_price})
 
 
 
