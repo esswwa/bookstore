@@ -1,12 +1,15 @@
 from django.db.models import Q
 from django.http import JsonResponse
 import uuid
+
+from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from django.http import JsonResponse
 from django.core import serializers
 from account.models import User
 from favourite.models import Favourite
 from account.serializers import (UserSerializer)
+from rest_framework.response import Response
 
 from .models import Favourite
 from book.models import Book
@@ -40,19 +43,36 @@ def add_to_favourite(request):
     user = User.objects.get(id=user_id)
 
     if book and user:
-        favourite = Favourite.objects.create(book_id=book.id, user_id=user.id)
-        message = 'success'
+        if Favourite.objects.filter(book_id=book_id, user_id=user_id).first() is None:
+            favourite = Favourite.objects.create(book_id=book.id, user_id=user.id)
+            message = 'success'
 
-        # Удаляем последний элемент из favorite
-        if Favourite.objects.filter(user_id=user.id).count() > 1:
-            last_favourite = Favourite.objects.filter(user_id=user.id).order_by('-id').first()
-            last_favourite.delete()
+            # Удаляем последний элемент из favorite
+            if Favourite.objects.filter(user_id=user.id).count() > 1:
+                last_favourite = Favourite.objects.filter(user_id=user.id).order_by('-id').first()
+                last_favourite.delete()
 
-            # Сохраняем изменения
-            favourite.save()
+                # Сохраняем изменения
+                favourite.save()
 
-        return JsonResponse({'message': message, "favourite": serializers.serialize('json', [favourite,])})
+            return JsonResponse({'message': message, "favourite": serializers.serialize('json', [favourite,])})
 
     if message != 'success':
         message = 'error'
         return JsonResponse({'message': message})
+
+
+@api_view(['POST'])
+def delete_favourite(request):
+    data = request.data
+    book_id = data['book']
+    user_id = data['user']
+
+
+    favourite = Favourite.objects.filter(book_id=book_id, user_id=user_id).first()
+    print(user_id)
+    if favourite:
+        favourite.delete()
+        return Response({'message': 'Favourite deleted successfully'}, status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'Favourite not found'}, status=status.HTTP_404_NOT_FOUND)

@@ -20,8 +20,7 @@
                                   <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                   <p class="text-gray-600">{{book.rating}}</p>
                                   <div>
-                                        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
-<!--                                        <button @click="addBookToFavourite(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>-->
+                                        <button @click="deleteFavourite(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Удалить из избранных</button>
                                   </div>
                                 </div>
                             </div>
@@ -66,6 +65,18 @@ export default {
                               console.log('data', response.data.favourites)
 
                               this.books = response.data.favourites
+                          })
+                          .catch(error => {
+                              console.log('error', error)
+                          })
+
+              },
+                     deleteFavourite(bookId) {
+
+                      axios
+                          .post(`/api/favourite/delete_favourite/`, {"user": this.userStore.user.id, "book": bookId})
+                          .then(response => {
+                              console.log("message", response.data.message);
                           })
                           .catch(error => {
                               console.log('error', error)
