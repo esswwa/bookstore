@@ -43,47 +43,111 @@ def get_basket(request):
 
 
 
+# @api_view(['POST'])
+# def add_to_basket(request):
+# 	data = request.data
+# 	book_id = data['book']
+# 	user_id = data['user']
+# 	basket = Basket
+# 	basket_additional = BasketAdditional
+# 	book = Book
+#
+# 	for i in Basket.objects.all():
+# 		if i.user.id == user_id:
+# 			basket = i
+#
+# 	for i in BasketAdditional.objects.all():
+# 		if i.basket.id == basket.id and i.book.id == book_id:
+# 			basket_additional = i
+#
+# 	for i in Book.objects.all():
+# 		if i.id == book_id:
+# 			book = i
+#
+# 	if basket_additional:
+# 		print(basket_additional.id)
+# 		count_value = getattr(basket_additional, 'count')
+# 		print(count_value)
+# 		basket_additional.count = int(count_value) + 1
+#
+# 		all_price = book.cost_per_one * basket_additional.count
+# 		if all_price is None:
+# 			all_price = 0
+#
+# 		if book.cost_per_one is not None:
+#
+# 			basket_additional.all_price = all_price
+#
+# 			print(basket_additional.count)
+# 			print(book.cost_per_one)
+# 			print(all_price)
+# 			print(basket_additional.all_price)
+# 			basket_additional.save()
+# 			return Response({'message': 'Basket added successfully'}, status=status.HTTP_200_OK)
+# 		else:
+# 			return Response({'message': 'Book cost is not set'}, status=status.HTTP_400_BAD_REQUEST)
+# 	else:
+# 		return Response({'message': 'Basket not found'}, status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['POST'])
 def add_to_basket(request):
-    data = request.data
-    book_id = data['book_id']
-    user_id = data['user_id']
-    message = 'error'
+	data = request.data
+	book_id = data['book']
+	user_id = data['user']
+	basket = Basket.objects.get(id=user_id)
 
-    book = Book.objects.get(id=book_id)
-    user = User.objects.get(id=user_id)
+	basket_additional = BasketAdditional.objects.get(basket=basket.id, book=book_id)
 
-    if book and user:
-        if Favourite.objects.filter(book_id=book_id, user_id=user_id).first() is None:
-            favourite = Favourite.objects.create(book_id=book.id, user_id=user.id)
-            message = 'success'
+	book = Book.objects.get(id=book_id)
 
-            # Удаляем последний элемент из favorite
-            if Favourite.objects.filter(user_id=user.id).count() > 1:
-                last_favourite = Favourite.objects.filter(user_id=user.id).order_by('-id').first()
-                last_favourite.delete()
+	if basket_additional:
+		count_value = getattr(basket_additional, 'count')
+		basket_additional.count = int(count_value) + 1
 
-                # Сохраняем изменения
-                favourite.save()
+		all_price = book.cost_per_one * basket_additional.count
+		if all_price is None:
+			all_price = 0
 
-            return JsonResponse({'message': message, "favourite": serializers.serialize('json', [favourite,])})
+		if book.cost_per_one is not None:
 
-    if message != 'success':
-        message = 'error'
-        return JsonResponse({'message': message})
-
-
-@api_view(['POST'])
-def delete_basket(request):
-    data = request.data
-    book_id = data['book']
-    user_id = data['user']
+			basket_additional.all_price = all_price
+			basket_additional.save()
+			return Response({'message': 'Basket added successfully'}, status=status.HTTP_200_OK)
+		else:
+			return Response({'message': 'Book cost is not set'}, status=status.HTTP_400_BAD_REQUEST)
+	else:
+		return Response({'message': 'Basket not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-    favourite = Favourite.objects.filter(book_id=book_id, user_id=user_id).first()
-    print(user_id)
-    if favourite:
-        favourite.delete()
-        return Response({'message': 'Favourite deleted successfully'}, status=status.HTTP_200_OK)
-    else:
-        return Response({'message': 'Favourite not found'}, status=status.HTTP_404_NOT_FOUND)
+#
+# @api_view(['POST'])
+# def delete_basket(request):
+#     data = request.data
+#     book_id = data['book']
+#     user_id = data['user']
+#
+#
+#     favourite = Favourite.objects.filter(book_id=book_id, user_id=user_id).first()
+#     print(user_id)
+#     if favourite:
+#         favourite.delete()
+#         return Response({'message': 'Favourite deleted successfully'}, status=status.HTTP_200_OK)
+#     else:
+#         return Response({'message': 'Favourite not found'}, status=status.HTTP_404_NOT_FOUND)
+#
+#
+# @api_view(['POST'])
+# def delete_one_more(request):
+#     data = request.data
+#     book_id = data['book']
+#     user_id = data['user']
+#
+#
+#     favourite = Favourite.objects.filter(book_id=book_id, user_id=user_id).first()
+#     print(user_id)
+#     if favourite:
+#         favourite.delete()
+#         return Response({'message': 'Favourite deleted successfully'}, status=status.HTTP_200_OK)
+#     else:
+#         return Response({'message': 'Favourite not found'}, status=status.HTTP_404_NOT_FOUND)
+#
