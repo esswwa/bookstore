@@ -10,12 +10,17 @@
         <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ book.genre }}</span>
         <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">{{ book.rating }}</span>
       </div>
-      <div class="px-6 py-4">
-        <button @click="goToBook(book.id)" class="py-2 px-4 bg-blue-500 text-white rounded-lg">Перейти</button>
+
+      <div class="px-6 py-4" >
+        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+        <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" class="py-4 px-6 m-2 bg-blue-400 text-white rounded-lg">Удалить из избранных</button>
+        <button v-else  @click="addBookToFavourite(book.id)" class="py-4 px-6 bg-blue-400 m-2 text-white rounded-lg">Добавить в избранное</button>
       </div>
+
     </div>
   </div>
 </div>
+<!--        {{favourites[0]}}-->
 
 <VuePagination
         :total="total"
@@ -31,6 +36,7 @@
 import axios from 'axios';
 import { useUserStore } from "@/stores/user.js";
 export default {
+
   props: {
     initialTotal: {
       type: Number,
@@ -40,14 +46,18 @@ export default {
   data() {
     return {
       books: [],
+      favourite: [],
+      favourites: [],
       total: 0, // Устанавливаем начальное значение total
       perPage: 3,
       currentPage: 1
     };
   },
   created() {
+    this.userStore = useUserStore()
     this.total = this.initialTotal; // Устанавливаем total после получения данных
     this.getBook();
+    this.getFavourite();
   },
   methods: {
     getBook() {
@@ -71,7 +81,53 @@ export default {
       this.$router.push({ path: '/book/' + bookId + '/' });
       console.log("Переход к книге с ID:", bookId);
     },
+    getFavourite() {
+                 console.log("ASDAS", this.userStore.user.id)
+                      axios
+                          .post(`/api/favourite/`, {"user": this.userStore.user.id})
+                          .then(response => {
+                              console.log('data', response.data.favourites)
+
+                              this.favourite = response.data.favourites
+                            this.favourites = this.favourite.map(item => item.id)
+                            console.log("favourites", this.favourites)
+                          })
+                          .catch(error => {
+                              console.log('error', error)
+                          })
+
+              },
+               addBookToFavourite(bookId){
+          axios.post('/api/favourite/add_to_favourite/',{
+                "book_id": bookId,
+                "user_id": localStorage.getItem('user.id')
+              })
+              .then(response => {
+                console.log("book_id", response.data.book_id)
+                console.log("user_id", response.data.user_id)
+                console.log("message", response.data.message)
+                console.log("fav", response.data.favourite)
+               this.getFavourite()
+
+              })
+              .catch(error => {
+                console.log("error", error)
+
+              }) },
+  deleteFavourite(bookId) {
+
+       axios
+           .post(`/api/favourite/delete_favourite/`, {"user": this.userStore.user.id, "book": bookId})
+           .then(response => {
+               console.log("message", response.data.message);
+               this.getFavourite()
+           })
+           .catch(error => {
+               console.log('error', error)
+           }) },
+
   },
+
   watch: {
     '$route': function(newRoute, oldRoute) {
       if (this.$route.params.page) {

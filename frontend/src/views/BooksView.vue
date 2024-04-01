@@ -43,10 +43,11 @@
                                       <p class="text-gray-900 leading-none">{{ book.author }}</p>
                                       <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                       <p class="text-gray-600">{{book.rating}}</p>
-                                      <div>
-                                        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
-                                        <button @click="addBookToFavourite(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
-                                      </div>
+                                       <div class="px-6 py-4" >
+                                          <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+                                          <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" class="py-4 px-6 m-2 bg-blue-400 text-white rounded-lg">Удалить из избранных</button>
+                                          <button v-else  @click="addBookToFavourite(book.id)" class="py-4 px-6 bg-blue-400 m-2 text-white rounded-lg">Добавить в избранное</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -108,10 +109,11 @@
                                       <p class="text-gray-900 leading-none">{{ book.author }}</p>
                                   <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                   <p class="text-gray-600">{{book.rating}}</p>
-                                  <div>
-                                        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
-                                        <button @click="addBookToFavourite(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
-                                      </div>
+                                        <div class="px-6 py-4" >
+                                          <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+                                          <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" class="py-4 px-6 m-2 bg-blue-400 text-white rounded-lg">Удалить из избранных</button>
+                                          <button v-else  @click="addBookToFavourite(book.id)" class="py-4 px-6 bg-blue-400 m-2 text-white rounded-lg">Добавить в избранное</button>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -172,10 +174,11 @@
                                   <p class="text-gray-900 leading-none">{{ book.author }}</p>
                                   <p class="text-gray-900 leading-none">{{ book.cost_per_one }}₽</p>
                                   <p class="text-gray-600">{{book.rating}}</p>
-                                  <div>
-                                        <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
-                                        <button @click="addBookToFavourite(book.id)" class="py-4 m-4 px-6 bg-blue-400 text-white rounded-lg">Добавить в избранное</button>
-                                  </div>
+                                        <div class="px-6 py-4" >
+                                          <button @click="goToBook(book.id)" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
+                                          <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" class="py-4 px-6 m-2 bg-blue-400 text-white rounded-lg">Удалить из избранных</button>
+                                          <button v-else  @click="addBookToFavourite(book.id)" class="py-4 px-6 bg-blue-400 m-2 text-white rounded-lg">Добавить в избранное</button>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -200,6 +203,7 @@
 import { ref } from 'vue';
 import axios from 'axios'
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import { useUserStore } from "@/stores/user.js";
 
   // Import Swiper styles
   import 'swiper/css';
@@ -239,36 +243,22 @@ export default {
             books: {
                 id: null
             },
+            favourite: [],
+            favourites: [],
             body: ''
         }
     },
 
     created() {
-        this.getBook()
+    this.userStore = useUserStore()
+        this.getBook();
+        this.getFavourite();
     },
     methods: {
         goToBook(bookId) {
           this.$router.push({ path: '/book/' + bookId + '/'});
           console.log("Переход к книге с ID:", bookId);
-    },
-      addBookToFavourite(bookId){
-          axios.post('/api/favourite/add_to_favourite/',{
-                "book_id": bookId,
-                "user_id": localStorage.getItem('user.id')
-              })
-              .then(response => {
-                console.log("book_id", response.data.book_id)
-                console.log("user_id", response.data.user_id)
-                console.log("message", response.data.message)
-                console.log("fav", response.data.favourite)
-
-              })
-              .catch(error => {
-                console.log("error", error)
-
-              })
-
-      },
+        },
         getBook() {
             axios
                 .get(`/api/book/`)
@@ -317,6 +307,50 @@ export default {
                     console.log('error', error)
                 })
         },
+    getFavourite() {
+                 console.log("ASDAS", this.userStore.user.id)
+                      axios
+                          .post(`/api/favourite/`, {"user": this.userStore.user.id})
+                          .then(response => {
+                              console.log('data', response.data.favourites)
+
+                              this.favourite = response.data.favourites
+                            this.favourites = this.favourite.map(item => item.id)
+                            console.log("favourites", this.favourites)
+                          })
+                          .catch(error => {
+                              console.log('error', error)
+                          })
+
+              },
+               addBookToFavourite(bookId){
+          axios.post('/api/favourite/add_to_favourite/',{
+                "book_id": bookId,
+                "user_id": localStorage.getItem('user.id')
+              })
+              .then(response => {
+                console.log("book_id", response.data.book_id)
+                console.log("user_id", response.data.user_id)
+                console.log("message", response.data.message)
+                console.log("fav", response.data.favourite)
+               this.getFavourite()
+
+              })
+              .catch(error => {
+                console.log("error", error)
+
+              }) },
+  deleteFavourite(bookId) {
+
+       axios
+           .post(`/api/favourite/delete_favourite/`, {"user": this.userStore.user.id, "book": bookId})
+           .then(response => {
+               console.log("message", response.data.message);
+               this.getFavourite()
+           })
+           .catch(error => {
+               console.log('error', error)
+           }) },
 
     }
 }
