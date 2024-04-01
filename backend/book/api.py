@@ -73,3 +73,24 @@ def books_popular(request):
 
     return JsonResponse({'books_popular': serializer.data}, safe=False)
 
+
+@api_view(['GET'])
+def get_pagination(request, page):
+    books = Book.objects.filter(status="В наличии")
+
+    count = books.count()
+
+    start_index = (page - 1) * 3
+
+    end_index = start_index + 3
+
+    books = books[start_index:end_index]
+
+    serializer = BookSerializer(books, many=True)
+
+    return JsonResponse({'books': serializer.data, 'count': count}, safe=False)
+
+
+# @api_view(['POST'])
+# def get_pagination(request):
+#
