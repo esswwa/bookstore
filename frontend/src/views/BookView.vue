@@ -52,8 +52,8 @@
       </div>
       <div class="flex flex-row items-center">
         <div v-if="check === false" class="flex flex-col items-center">
-          <input class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="text" placeholder="Введите отзыв">
-          <input class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="text" placeholder="Введите рейтинг">
+          <input v-model="review" class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="text" placeholder="Введите отзыв">
+          <input v-model="rating" class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="number" min="0" max="5" placeholder="Введите рейтинг">
 
           <button @click="addReview(book.id)" class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg" title="Добавить отзыв">
             Добавить отзыв
@@ -234,7 +234,7 @@ export default {
       },
       addReview(bookId){
                  axios.
-                     post('/api/review/add_review', {
+                     post('/api/review/add_review/', {
                        'user': this.userStore.user.id,
                         'book': bookId,
                         'review': this.review,

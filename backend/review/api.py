@@ -36,16 +36,18 @@ def get_review(request, id):
 
 @api_view(['POST'])
 def add_review(request):
-	user = request.data.user
-	book = request.data.book
-	user = User.objects.get(id=user.id)
+	print(request.data)
+	user = request.data['user']
+	book = request.data['book']
+	user = User.objects.get(id=user)
 	book = Book.objects.get(id=book)
 	review = Review.objects.filter(book=book, user=user).first()
-	if review is None:
-		review = Review.objects.create(book=book, user=user, rating=request.data.rating, review=request.data.review)
-		last_review = Review.objects.filter(user=user).order_by('-id').first()
-		last_review.delete()
-		review.save()
-		return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
+	if request.data['review'] != '' and int(request.data['rating']) > 0 and int(request.data['rating']) <= 5:
+		if review is None:
+			review = Review.objects.create(book=book, user=user, rating=request.data['rating'], review=request.data['review'])
+			last_review = Review.objects.filter(user=user).order_by('-id').first()
+			last_review.delete()
+			review.save()
+			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
 	else:
 		return Response({'message': 'Order is not added'}, status=status.HTTP_400_BAD_REQUEST)
