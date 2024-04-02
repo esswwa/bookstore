@@ -22,10 +22,30 @@ from book.serializers import BookSerializer, AuthorSerializer
 from .serializers import ReviewSerializer
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def get_review(request, id):
-	print(id)
+	user = request.user
+	user = User.objects.get(id=user.id)
+	review_check = Review.objects.filter(book=id, user=user).first()
+	check = False
+	if review_check:
+		check = True
 	review = Review.objects.filter(book=id)
 	review = ReviewSerializer(review, many=True).data
-	return JsonResponse({"reviews": review})
+	return JsonResponse({"reviews": review, "check": check, })
 
+@api_view(['POST'])
+def add_review(request):
+	user = request.data.user
+	book = request.data.book
+	user = User.objects.get(id=user.id)
+	book = Book.objects.get(id=book)
+	review = Review.objects.filter(book=book, user=user).first()
+	if review is None:
+		review = Review.objects.create(book=book, user=user, rating=request.data.rating, review=request.data.review)
+		last_review = Review.objects.filter(user=user).order_by('-id').first()
+		last_review.delete()
+		review.save()
+		return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
+	else:
+		return Response({'message': 'Order is not added'}, status=status.HTTP_400_BAD_REQUEST)

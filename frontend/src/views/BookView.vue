@@ -48,10 +48,22 @@
 
       <div class="px-6 py-4 flex flex-col items-center">
         <div class="font-bold text-xl mb-2">Отзывы</div>
+                <span class="inline-block px-3 py-1 text-sm font-semibold text-gray-700 ml-2">Рейтинг: {{book.rating}}</span>
       </div>
       <div class="flex flex-row items-center">
-        <span class="inline-block px-3 py-1 text-sm font-semibold text-gray-700 ml-2">Рейтинг: {{book.rating}}</span>
+        <div v-if="check === false" class="flex flex-col items-center">
+          <input class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="text" placeholder="Введите отзыв">
+          <input class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="text" placeholder="Введите рейтинг">
+
+          <button @click="addReview(book.id)" class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg" title="Добавить отзыв">
+            Добавить отзыв
+          </button>
+
+        </div >
+
       </div>
+
+
 
   <div class="flex flex-col">
               <div v-for="review1 in reviews" :key="review1.id" class="p-2">
@@ -97,7 +109,9 @@ export default {
       favourites: [],
             basket: [],
             baskets: [],
-            body: ''
+          check: false,
+          review: '',
+          rating: 0,
         }
     },
     created() {
@@ -208,13 +222,31 @@ export default {
                        }) },
       getReview() {
         axios
-            .get(`/api/review/${this.$route.params.id}/`)
+            .post(`/api/review/${this.$route.params.id}/`, {
+              'user': this.userStore.user.id
+            })
             .then(response => {
               this.reviews = response.data.reviews
+              this.check = response.data.check
 
             })
 
       },
+      addReview(bookId){
+                 axios.
+                     post('/api/review/add_review', {
+                       'user': this.userStore.user.id,
+                        'book': bookId,
+                        'review': this.review,
+                        'rating': this.rating
+                 })
+                     .then(response => {
+                       this.getReview()
+                     })
+                     .catch(error=>{
+                       console.log('error', error)
+                     })
+      }
     }
   }
 </script>

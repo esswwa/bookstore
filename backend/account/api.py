@@ -6,6 +6,9 @@ from .models import User
 
 
 from .serializers import UserSerializer
+from basket.models import Basket
+
+
 @api_view(['GET'])
 def me(request):
 	return JsonResponse({
@@ -31,6 +34,7 @@ def signup(request):
 
 	if form.is_valid():
 		form.save()
+		basket = Basket.objects.create(user=User.objects.get(email=form.cleaned_data['email']))
 	else:
 		message = form.errors.as_json()
 
