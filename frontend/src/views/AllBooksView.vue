@@ -77,9 +77,9 @@ export default {
       favourites: [],
       total: 0, // Устанавливаем начальное значение total
       perPage: 9,
-            basket: [],
-            baskets: [],
-      currentPage: 1
+      currentPage: 1,
+      basket: [],
+      baskets: [],
     };
   },
   created() {
