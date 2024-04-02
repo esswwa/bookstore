@@ -23,17 +23,26 @@ from .serializers import ReviewSerializer
 
 
 @api_view(['POST'])
-def get_review(request, id):
+def get_review(request, id, page):
 	user = request.user
 	user = User.objects.get(id=user.id)
 	review_check = Review.objects.filter(book=id, user=user).first()
 	check = False
 	if review_check:
 		check = True
-	review = Review.objects.filter(book=id)
-	review = ReviewSerializer(review, many=True).data
-	return JsonResponse({"reviews": review, "check": check, })
 
+	review = Review.objects.filter(book=id)
+	if review:
+		count = review.count()
+		start_index = (page - 1) * 5
+		end_index = start_index + 5
+
+		review = review[start_index:end_index]
+
+		review = ReviewSerializer(review, many=True).data
+		return JsonResponse({"reviews": review, "check": check, 'count': count})
+	else:
+		return Response({'message': 'Reviews doesnt have in db'}, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['POST'])
 def add_review(request):
 	print(request.data)
@@ -42,7 +51,7 @@ def add_review(request):
 	user = User.objects.get(id=user)
 	book = Book.objects.get(id=book)
 	review = Review.objects.filter(book=book, user=user).first()
-	if request.data['review'] != '' and int(request.data['rating']) > 0 and int(request.data['rating']) <= 5:
+	if request.data['review'] != '' and int(request.data['rating']) >= 0 and int(request.data['rating']) <= 5:
 		if review is None:
 			review = Review.objects.create(book=book, user=user, rating=request.data['rating'], review=request.data['review'])
 			last_review = Review.objects.filter(user=user).order_by('-id').first()

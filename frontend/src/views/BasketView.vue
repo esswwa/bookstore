@@ -100,7 +100,7 @@ export default {
     },
     methods:{
         goToBook(bookId) {
-          this.$router.push({ path: '/book/' + bookId + '/'});
+      this.$router.push({ path: `/book/${bookId}/1/` });
           console.log("Переход к книге с ID:", bookId);
     },
                getBasket() {

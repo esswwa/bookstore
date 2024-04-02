@@ -47,7 +47,6 @@
     </div>
   </div>
 </div>
-<!--        {{favourites[0]}}-->
 
 <VuePagination
         :total="total"
@@ -108,7 +107,7 @@ export default {
       this.$router.push({ path: `/all_books/${page}/` });
     },
     goToBook(bookId) {
-      this.$router.push({ path: '/book/' + bookId + '/' });
+      this.$router.push({ path: `/book/${bookId}/1/` });
       console.log("Переход к книге с ID:", bookId);
     },
     getFavourite() {
@@ -196,7 +195,8 @@ export default {
                        })
                        .catch(error => {
                            console.log('error', error)
-                       }) },
+                       })
+              },
   },
 
   watch: {

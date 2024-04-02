@@ -1,7 +1,7 @@
 <template>
 <div class="max-w-7xl mx-auto rounded overflow-hidden bg-white shadow-lg flex flex-col items-center w-1/3 p-2">
 
-      <div class="px-6 py-4 flex flex-col items-center">
+      <div class="px-6 py-4 flex flex-col items-center" v-if="book != null">
          <p class="text-sm text-gray-600 flex items-center">
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
@@ -84,6 +84,11 @@
 
     </div>
 
+  <VuePagination
+        :total="total"
+      v-model:value="currentPage"
+      :perPage="perPage"
+      @set="changePage" />
 </template>
 
 
@@ -93,7 +98,13 @@ import axios from 'axios'
 import {useUserStore} from "@/stores/user.js";
 export default {
     name: 'FavouriteView',
-    setup(){
+  props: {
+    initialTotal: {
+      type: Number,
+      required: true
+    }
+  },
+  setup(){
        const userStore = useUserStore()
        return{
          userStore
@@ -104,6 +115,9 @@ export default {
             book: {
                 id: null
             },
+          total: 0, // Устанавливаем начальное значение total
+          perPage: 5,
+          currentPage: 1,
       favourite: [],
           reviews: [],
       favourites: [],
@@ -112,10 +126,12 @@ export default {
           check: false,
           review: '',
           rating: 0,
+
         }
     },
     created() {
-        this.getBook();
+    this.total = this.initialTotal;
+    this.getBook();
     this.getFavourite();
     this.getBasket();
     this.getReview();
@@ -221,13 +237,16 @@ export default {
                            console.log('error', error)
                        }) },
       getReview() {
+                 console.log('id', this.$route.params.id)
+                 console.log('page', this.$route.params.page)
         axios
-            .post(`/api/review/${this.$route.params.id}/`, {
+            .post(`/api/review/${this.$route.params.id}/${this.$route.params.page}/`, {
               'user': this.userStore.user.id
             })
             .then(response => {
               this.reviews = response.data.reviews
               this.check = response.data.check
+              this.total = response.data.count;
 
             })
 
@@ -246,7 +265,19 @@ export default {
                      .catch(error=>{
                        console.log('error', error)
                      })
-      }
-    }
+      },
+        changePage(page) {
+          this.$router.push({ path: `/book/${this.book.id}/${page}/` });
+        },
+
+    },
+   watch: {
+          '$route': function(newRoute, oldRoute) {
+            if (this.$route.params.page) {
+              this.getReview();
+              console.log('change_page')
+            }
+          },
+        },
   }
 </script>

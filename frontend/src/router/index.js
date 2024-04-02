@@ -55,7 +55,7 @@ const router = createRouter({
       component: AllBooksView
     },
     {
-      path: '/book/:id',
+      path: '/book/:id/:page/',
       name: 'book',
       component: BookView
     },
