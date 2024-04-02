@@ -415,7 +415,7 @@ export default {
 
           },
                addBookToBasket(bookId){
-          axios.post('/api/favourite/add_to_basket/',{ "book_id": bookId, "user_id": localStorage.getItem('user.id') })
+          axios.post('/api/basket/add_to_basket/',{ "book": bookId, "user": localStorage.getItem('user.id') })
               .then(response => {
                 console.log("book_id", response.data.book_id)
                 console.log("user_id", response.data.user_id)

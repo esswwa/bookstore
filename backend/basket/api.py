@@ -41,54 +41,6 @@ def get_basket(request):
 
 	return JsonResponse({"books": serializer.data, "basket": serializer_basket.data, "basket_additionals": serializer_basket_additional.data, 'all_price': all_price})
 
-
-
-# @api_view(['POST'])
-# def add_to_basket(request):
-# 	data = request.data
-# 	book_id = data['book']
-# 	user_id = data['user']
-# 	basket = Basket
-# 	basket_additional = BasketAdditional
-# 	book = Book
-#
-# 	for i in Basket.objects.all():
-# 		if i.user.id == user_id:
-# 			basket = i
-#
-# 	for i in BasketAdditional.objects.all():
-# 		if i.basket.id == basket.id and i.book.id == book_id:
-# 			basket_additional = i
-#
-# 	for i in Book.objects.all():
-# 		if i.id == book_id:
-# 			book = i
-#
-# 	if basket_additional:
-# 		print(basket_additional.id)
-# 		count_value = getattr(basket_additional, 'count')
-# 		print(count_value)
-# 		basket_additional.count = int(count_value) + 1
-#
-# 		all_price = book.cost_per_one * basket_additional.count
-# 		if all_price is None:
-# 			all_price = 0
-#
-# 		if book.cost_per_one is not None:
-#
-# 			basket_additional.all_price = all_price
-#
-# 			print(basket_additional.count)
-# 			print(book.cost_per_one)
-# 			print(all_price)
-# 			print(basket_additional.all_price)
-# 			basket_additional.save()
-# 			return Response({'message': 'Basket added successfully'}, status=status.HTTP_200_OK)
-# 		else:
-# 			return Response({'message': 'Book cost is not set'}, status=status.HTTP_400_BAD_REQUEST)
-# 	else:
-# 		return Response({'message': 'Basket not found'}, status=status.HTTP_404_NOT_FOUND)
-
 @api_view(['POST'])
 def add_to_basket(request):
 	data = request.data
@@ -96,7 +48,7 @@ def add_to_basket(request):
 	user_id = data['user']
 	basket = Basket.objects.get(id=user_id)
 
-	basket_additional = BasketAdditional.objects.get(basket=basket.id, book=book_id)
+	basket_additional = BasketAdditional.objects.filter(basket=basket.id, book=book_id).first()
 
 	book = Book.objects.get(id=book_id)
 
@@ -116,7 +68,19 @@ def add_to_basket(request):
 		else:
 			return Response({'message': 'Book cost is not set'}, status=status.HTTP_400_BAD_REQUEST)
 	else:
-		return Response({'message': 'Basket not found'}, status=status.HTTP_404_NOT_FOUND)
+		basket_additional1 = BasketAdditional.objects.create(basket=basket, book=book, count=1, all_price=book.cost_per_one)
+		message = 'success'
+
+		# Удаляем последний элемент из favorite
+		if BasketAdditional.objects.filter(basket=basket.id, book=book_id).count() > 1:
+			last_basket = BasketAdditional.objects.filter(basket=basket.id, book=book_id).order_by('-id').first()
+			last_basket.delete()
+
+			# Сохраняем изменения
+			basket_additional1.save()
+
+		return JsonResponse({'message': message, "basket_additional": serializers.serialize('json', [basket_additional1, ])})
+
 
 
 #
