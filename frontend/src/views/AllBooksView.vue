@@ -1,7 +1,16 @@
 <template>
+    <div class="w-1/4 p-2">
+    <!-- Панель сортировки -->
+    <select v-model="sortOrder" class="w-full bg-white shadow-md rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-400">
+      <option value="name">По названию</option>
+      <option value="author">По автору</option>
+      <option value="rating">По рейтингу</option>
+    </select>
+    </div>
+
 <div class="flex flex-wrap">
   <div v-for="book in books" :key="book.id" v-if="books.length > 0" class="w-1/3 p-2">
-    <div class="max-w-sm rounded overflow-hidden bg-white shadow-lg">
+    <div class="max-w-s rounded overflow-hidden bg-white shadow-lg">
 
       <div class="px-6 py-4">
          <p class="text-sm text-gray-600 flex items-center">

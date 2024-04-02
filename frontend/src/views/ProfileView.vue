@@ -1,6 +1,6 @@
 <template>
-     <div class="p-4 m-4 mx-auto grid grid-cols-4 gap-4">
-        <div class="main-left col-span-1">
+     <div class="p-4 m-4 mx-auto grid grid-cols-4 gap-4 flex items-center">
+        <div class="main-center">
             <div class="p-4 bg-white border border-gray-200 rounded-lg">
                     <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}">
                       <img src="https://i.pravatar.cc/40?img=70" class="w-16 rounded-full">

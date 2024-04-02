@@ -1,5 +1,5 @@
 <template>
-  <div class="flex ">
+  <div class="flex items-center">
     <div class="">
       <div class="flex flex-col max-w-sm rounded-lg p-4 overflow-hidden bg-white shadow-lg">
         Общая стоимость всей корзины:
@@ -50,6 +50,11 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                 </svg>
            </button>
+      </div>
+    </div>
+    <div v-else>
+      <div class="card rounded mt-4 p-8 overflow-hidden bg-white shadow-lg">
+           <a href="http://localhost:5173/books/" class="hover:underline text-gray-900 text-xl mb-2">Ваша корзина пуста, самое время это исправить!</a>
       </div>
     </div>
   </div>
@@ -170,6 +175,7 @@ export default {
                           .then(response => {
 
                             this.getBasket()
+                            this.$router.push({ path: `/profile/${this.userStore.user.id}/` });
 
                           })
                           .catch(error => {
