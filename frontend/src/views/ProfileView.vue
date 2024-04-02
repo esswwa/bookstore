@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 m-4 mx-auto grid grid-cols-4 gap-4">
+     <div class="p-4 m-4 mx-auto grid grid-cols-4 gap-4">
         <div class="main-left col-span-1">
             <div class="p-4 bg-white border border-gray-200 rounded-lg">
                     <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}">
@@ -10,20 +10,20 @@
                         class="inline-block mr-2 py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
                         to="/profile/edit"
                         v-if="userStore.user.id == user.id">
-                        Edit profile
+                        Редактировать профиль
                     </RouterLink>
 
                     <button
                         class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
                         @click="logout"
                         v-if="userStore.user.id == user.id">
-                        Log out
+                        Выйти из аккаунта
                     </button>
                 </div>
             </div>
         </div>
 
-    <div class="p-4 m-4 bg-white border border-gray-200 text-center rounded-lg">
+    <div class=" p-4 m-4 bg-white border border-gray-200 text-center rounded-lg">
 
     <fwb-tabs v-model="activeTab" class="p-5">
         <fwb-tab name="first" v-if="activeOrders.length > 0" title="Активные заказы" >
@@ -105,6 +105,7 @@
 
 
 
+
 </template>
 
 <script>
@@ -156,6 +157,7 @@ export default {
                 .then(response => {
                     console.log('data', response.data)
                     this.user = response.data.user
+                  console.log('data_user', this.user)
                 })
                 .catch(error => {
                     console.log('error', error)
