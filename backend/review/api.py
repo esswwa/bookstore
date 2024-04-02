@@ -45,7 +45,6 @@ def get_review(request, id, page):
 		return Response({'message': 'Reviews doesnt have in db'}, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['POST'])
 def add_review(request):
-	print(request.data)
 	user = request.data['user']
 	book = request.data['book']
 	user = User.objects.get(id=user)
