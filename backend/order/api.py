@@ -20,27 +20,23 @@ from django.core.serializers import serialize
 from book.serializers import BookSerializer, AuthorSerializer
 
 from .serializers import OrderSerializer, AddressSerializer
-#
-# @api_view(['POST'])
-# def get_order(request):
-# 	basket = Basket
-# 	for i in Basket.objects.all():
-# 		if i.user.id == request.user.id:
-# 			basket = i
-# 	basket_additionals = BasketAdditional.objects.filter(basket=basket.id)
-# 	all_price = 0
-# 	for price in basket_additionals.values_list('all_price', flat=True):
-# 		all_price += price
-#
-# 	book_ids = [book_id.book_id for book_id in basket_additionals]
-# 	book_ids = [int(book_id) for book_id in book_ids]
-# 	# Получаем книги, соответствующие этим book_id
-# 	books = Book.objects.filter(id__in=book_ids)
-# 	serializer = BookSerializer(books, many=True)
-# 	serializer_basket = BasketSerializer(basket, many=False)
-# 	serializer_basket_additional = BasketAdditionalSerializer(basket_additionals, many=True)
-#
-# 	return JsonResponse({"books": serializer.data, "basket": serializer_basket.data, "basket_additionals": serializer_basket_additional.data, 'all_price': all_price})
+
+@api_view(['POST'])
+def get_order(request):
+
+	user = request.user
+
+	order_active = Order.objects.filter(Q(user=user) & (Q(status='В пути') | Q(status='Оформлен') | Q(status='В пункте выдачи')))
+
+	order_canceled = Order.objects.filter(user=user, status='Отменен')
+
+	order_archive = Order.objects.filter(user=user, status='Завершен')
+
+	order_active = OrderSerializer(order_active, many=True)
+	order_canceled = OrderSerializer(order_canceled, many=True)
+	order_archive = OrderSerializer(order_archive, many=True)
+
+	return JsonResponse({"activeOrders": order_active.data, "canceledOrders": order_canceled.data, "archiveOrders": order_archive.data})
 
 
 @api_view(['GET'])
