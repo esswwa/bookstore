@@ -50,12 +50,21 @@ def add_review(request):
 	user = User.objects.get(id=user)
 	book = Book.objects.get(id=book)
 	review = Review.objects.filter(book=book, user=user).first()
+	rating = 0
 	if request.data['review'] != '' and int(request.data['rating']) >= 0 and int(request.data['rating']) <= 5:
 		if review is None:
 			review = Review.objects.create(book=book, user=user, rating=request.data['rating'], review=request.data['review'])
 			last_review = Review.objects.filter(user=user).order_by('-id').first()
 			last_review.delete()
 			review.save()
+			review2 = Review.objects.filter(book=book)
+			if review2.count() > 1:
+				for i in Review.objects.filter(book=book):
+					rating += i.rating
+				book.rating = rating / review2.count()
+			else:
+				book.rating = review.rating
+			book.save()
 			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
 	else:
 		return Response({'message': 'Order is not added'}, status=status.HTTP_400_BAD_REQUEST)

@@ -261,6 +261,7 @@ export default {
                  })
                      .then(response => {
                        this.getReview()
+                       this.getBook()
                      })
                      .catch(error=>{
                        console.log('error', error)
