@@ -81,37 +81,43 @@ def add_to_basket(request):
 
 		return JsonResponse({'message': message, "basket_additional": serializers.serialize('json', [basket_additional1, ])})
 
+@api_view(['POST'])
+def delete_one_more(request):
+	data = request.data
+	book_id = data['book']
+	user_id = data['user']
+	basket = Basket.objects.get(id=user_id)
+	book = Book.objects.get(id=book_id)
 
 
-#
-# @api_view(['POST'])
-# def delete_basket(request):
-#     data = request.data
-#     book_id = data['book']
-#     user_id = data['user']
-#
-#
-#     favourite = Favourite.objects.filter(book_id=book_id, user_id=user_id).first()
-#     print(user_id)
-#     if favourite:
-#         favourite.delete()
-#         return Response({'message': 'Favourite deleted successfully'}, status=status.HTTP_200_OK)
-#     else:
-#         return Response({'message': 'Favourite not found'}, status=status.HTTP_404_NOT_FOUND)
-#
-#
-# @api_view(['POST'])
-# def delete_one_more(request):
-#     data = request.data
-#     book_id = data['book']
-#     user_id = data['user']
-#
-#
-#     favourite = Favourite.objects.filter(book_id=book_id, user_id=user_id).first()
-#     print(user_id)
-#     if favourite:
-#         favourite.delete()
-#         return Response({'message': 'Favourite deleted successfully'}, status=status.HTTP_200_OK)
-#     else:
-#         return Response({'message': 'Favourite not found'}, status=status.HTTP_404_NOT_FOUND)
-#
+	basket_additional = BasketAdditional.objects.filter(basket=basket.id, book=book.id).first()
+
+	if basket_additional:
+		if basket_additional.count >= 2:
+			basket_additional.count -= 1
+			basket_additional.all_price = book.cost_per_one * basket_additional.count
+			basket_additional.save()
+			return Response({'message': 'Basket_additional count - 1 successfully'}, status=status.HTTP_200_OK)
+		else:
+			basket_additional.delete()
+			return Response({'message': 'Basket_additional deleted successfully'}, status=status.HTTP_200_OK)
+	else:
+		return Response({'message': 'Basket_additional not deleted'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+def delete_basket(request):
+	data = request.data
+	book_id = data['book']
+	user_id = data['user']
+	basket = Basket.objects.get(id=user_id)
+	book = Book.objects.get(id=book_id)
+
+	basket_additional = BasketAdditional.objects.filter(basket=basket.id, book=book.id).first()
+
+	if basket_additional:
+		basket_additional.delete()
+		return Response({'message': 'Basket_additional deleted successfully'}, status=status.HTTP_200_OK)
+	else:
+		return Response({'message': 'Basket_additional not deleted'}, status=status.HTTP_404_NOT_FOUND)
+
+
