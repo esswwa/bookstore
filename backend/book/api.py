@@ -1,16 +1,11 @@
-from django.db.models import Q
 from django.http import JsonResponse
-import uuid
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 from account.models import User
-from favourite.models import Favourite
 from account.serializers import (UserSerializer)
 
-
-from .forms import BookForm
-from .models import Book, Author, Published, AdditionalGenre, Genre
-from .serializers import BookSerializer, AuthorSerializer
+from .models import Book
+from .serializers import BookSerializer
 
 
 @api_view(['GET'])
@@ -89,8 +84,3 @@ def get_pagination(request, page):
     serializer = BookSerializer(books, many=True)
 
     return JsonResponse({'books': serializer.data, 'count': count}, safe=False)
-
-
-# @api_view(['POST'])
-# def get_pagination(request):
-#

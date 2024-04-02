@@ -1,20 +1,13 @@
-from django.db.models import Q
-from django.http import JsonResponse
-import uuid
-
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from django.http import JsonResponse
 from django.core import serializers
 from account.models import User
 from favourite.models import Favourite
-from account.serializers import (UserSerializer)
 from rest_framework.response import Response
 
 from .models import Favourite
 from book.models import Book
-import logging
-from django.core.serializers import serialize
 from book.serializers import BookSerializer, AuthorSerializer
 
 @api_view(['POST'])
