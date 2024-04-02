@@ -14,6 +14,11 @@ import AllBooksView from "@/views/AllBooksView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+      {
+      path: '/',
+      name: '',
+      component: BooksView
+    },
     {
       path: '/signup',
       name: 'signup',

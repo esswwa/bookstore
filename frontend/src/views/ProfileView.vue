@@ -2,8 +2,10 @@
     <div class="p-4 m-4 mx-auto grid grid-cols-4 gap-4">
         <div class="main-left col-span-1">
             <div class="p-4 bg-white border border-gray-200 rounded-lg">
-
-                <p class="p-4"><strong>{{ user.name }}</strong></p>
+                    <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}">
+                      <img src="https://i.pravatar.cc/40?img=70" class="w-16 rounded-full">
+                      <p class="p-4"><strong>{{ user.name }}</strong></p>
+                    </RouterLink>
                     <RouterLink
                         class="inline-block mr-2 py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
                         to="/profile/edit"
