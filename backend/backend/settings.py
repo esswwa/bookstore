@@ -32,7 +32,7 @@ WEBSITE_URL = 'http://127.0.0.1:8000'
 
 # Application definition
 
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -162,3 +162,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = "chitay.letay@mail.ru"
+EMAIL_HOST_PASSWORD = "Qazwsxedc123*"
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = True

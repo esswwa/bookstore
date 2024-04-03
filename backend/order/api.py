@@ -5,10 +5,11 @@ from django.http import JsonResponse
 from account.models import User
 from basket.models import BasketAdditional
 from rest_framework.response import Response
-
+from django.conf import settings
 from .models import Order, Address
 
 from .serializers import OrderSerializer, AddressSerializer
+from django.core.mail import EmailMultiAlternatives
 
 @api_view(['POST'])
 def get_order(request):
@@ -58,6 +59,27 @@ def add_order(request):
 			last_order.delete()
 			order.save()
 
+			# subject, from_email, to = "hello", "chitay.letay@mail.ru", "zoom.light@yandex.ru"
+			# text_content = "This is an important message."
+			# html_content = "<p>This is an <strong>important</strong> message.</p>"
+			# msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+			# msg.attach_alternative(html_content, "text/html")
+			#
+			# # Set the email host user and password
+			# msg.connection['username'] = settings.EMAIL_HOST_USER
+			# msg.connection['password'] = settings.EMAIL_HOST_PASSWORD
+			# msg.send()
+
+			from django.core.mail import send_mail
+
+			response = send_mail(
+				"Subject here213213213",
+				"Here is the message.dsfdsfdsfsdfdsfdsfdsfds",
+				settings.EMAIL_HOST_USER,
+				["zoom.light@yandex.ru"],
+				fail_silently=False,
+			)
+			print(response)
 			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
 		else:
 			return Response({'message': 'Order is not addes'}, status=status.HTTP_400_BAD_REQUEST)
