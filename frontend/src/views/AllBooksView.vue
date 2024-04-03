@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto">
+  <div class="container mx-auto" >
     <div class="flex justify-center">
       <button
         @click="isOpen = true"
@@ -15,7 +15,7 @@
 
       <div
         v-show="isOpen"
-        class="
+        class="overflow-hidden
           absolute
           inset-0
           flex
@@ -51,11 +51,11 @@
               </select>
 
 
-    <div class="card flex justify-center">
+    <div class="card flex p-6">
         <div class="flex flex-col gap-3">
             <div v-for="genre of genres" :key="genre.id" class="flex items-center">
                 <Checkbox v-model="selectedGenres" :inputId="genre.id" name="genre" :value="genre.text" />
-                <label :for="genre.id">{{ genre.text }}</label>
+                <label class="p-2" :for="genre.id">{{ genre.text }}</label>
             </div>
         </div>
     </div>
