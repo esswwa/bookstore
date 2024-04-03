@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from django.conf import settings
 from .models import Order, Address, OrderHelper
 
-from .serializers import OrderSerializer, AddressSerializer
+from .serializers import OrderSerializer, AddressSerializer, HelperOrderSerializer
 from django.core.mail import EmailMultiAlternatives
 
 from book.serializers import BookSerializer
@@ -95,6 +95,20 @@ def add_helper_order(request):
 			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
 		else:
 			return Response({'message': 'Order is not addes'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_helper_order(request, id):
+
+	user = User.objects.get(id=id)
+
+	orders = Order.objects.filter(user=user)
+
+	order_active = OrderHelper.objects.filter(order__in=orders)
+
+	print(order_active)
+	order_active = HelperOrderSerializer(order_active, many=True)
+	return JsonResponse({"activeOrders": order_active.data})
 
 
 # @api_view(['POST'])
