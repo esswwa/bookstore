@@ -26,7 +26,7 @@
       >
         <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
           <div class="flex items-center justify-between">
-            <h3 class="text-2xl">Сортировка и фльтрация книг</h3>
+            <h3 class="text-2xl">Сортировка и фильтрация книг</h3>
             <svg
               @click="isOpen = false"
               xmlns="http://www.w3.org/2000/svg"
@@ -45,8 +45,8 @@
           </div>
           <div class="mt-4">
               <select v-model="sortOrder" class="flex flex-col max-w-sm rounded-lg py-4 m-4 p-4 overflow-hidden bg-gray-200 shadow-lg focus:outline-none focus:shadow-outline">
-                <option value="withoutSoredOrder">Без сортировки</option>
-                <option value="price">По цене</option>
+                <option value="Без сортировки">Без сортировки</option>
+                <option value="cost_per_one">По цене</option>
                 <option value="rating">По рейтингу</option>
               </select>
 
@@ -54,7 +54,7 @@
     <div class="card flex p-6">
         <div class="flex flex-col gap-3">
             <div v-for="genre of genres" :key="genre.id" class="flex items-center">
-                <Checkbox v-model="selectedGenres" :inputId="genre.id" name="genre" :value="genre.text" />
+                <Checkbox v-model="selectedGenres" :inputId="genre.id" name="genre" :value="genre.id" />
                 <label class="p-2" :for="genre.id">{{ genre.text }}</label>
             </div>
         </div>
@@ -123,9 +123,16 @@
 
     </div>
   </div>
+  <div v-else class="flex flex-col items-center p-6">
+    Книги с необходимыми вам параметрами отсутствуют
+    <button @click="resetFilters()" class="py-4 px-6 m-4 bg-blue-400 text-white rounded-lg" title="Сбросить фильтры">
+        Сбросить фильтры
+    </button>
+  </div>
 </div>
 
 <VuePagination
+    v-if="books.length > 0"
         :total="total"
       v-model:value="currentPage"
       :perPage="perPage"
@@ -157,7 +164,7 @@ export default {
       currentPage: 1,
       basket: [],
       baskets: [],
-      sortOrder: 1,
+      sortOrder: 'Без сортировки',
       isOpen: false,
       pizza: null,
       genres: [],
@@ -177,7 +184,7 @@ export default {
     getBook() {
       if (this.$route.params.page) {
         axios
-          .get(`/api/book/get_pagination/${this.$route.params.page}/`)
+          .post(`/api/book/get_pagination/${this.$route.params.page}/`, {'selected_genres': this.selectedGenres, 'sort_order': this.sortOrder})
           .then(response => {
             console.log('data', response.data.books);
             this.books = response.data.books;
@@ -291,7 +298,15 @@ export default {
     },
     saveOptions(){
       console.log('selected', this.selectedGenres)
+        this.getBook();
+      this.isOpen = false
     },
+    resetFilters(){
+      this.selectedGenres = null;
+      this.sortOrder = 'Без сортировки'
+
+      this.getBook();
+    }
   },
 
   watch: {

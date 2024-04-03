@@ -85,6 +85,8 @@
     </div>
 
   <VuePagination
+
+    v-if="reviews.length > 0"
         :total="total"
       v-model:value="currentPage"
       :perPage="perPage"

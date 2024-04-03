@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from account.models import User
 from account.serializers import (UserSerializer)
 
-from .models import Book, Genre
+from .models import Book, Genre, AdditionalGenre
 from .serializers import BookSerializer, GenreSerializer
 
 
@@ -69,15 +69,24 @@ def books_popular(request):
     return JsonResponse({'books_popular': serializer.data}, safe=False)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def get_pagination(request, page):
-    books = Book.objects.filter(status="В наличии")
-
-    count = books.count()
-
-    start_index = (page - 1) * 9
-
-    end_index = start_index + 9
+    if request.data['selected_genres']:
+        genres = Genre.objects.filter(id__in=request.data['selected_genres'])
+        genre_additionals = AdditionalGenre.objects.filter(text_genre_id__in=genres)
+        books = Book.objects.filter(status="В наличии", additional_genre__in=genre_additionals)
+        count = books.count()
+        start_index = (page - 1) * 9
+        end_index = start_index + 9
+        if request.data['sort_order'] != 'Без сортировки':
+            books = books.order_by('-'+request.data['sort_order'])
+    else:
+        books = Book.objects.filter(status="В наличии")
+        if request.data['sort_order'] != 'Без сортировки':
+            books = books.order_by('-' + request.data['sort_order'])
+        count = books.count()
+        start_index = (page - 1) * 9
+        end_index = start_index + 9
 
     books = books[start_index:end_index]
 
