@@ -67,7 +67,11 @@
                         {{order.status}}, {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}
                      </p>
                     <div class="font-bold text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
-
+                    <button
+                        class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
+                        @click="checkCompositionOrder(order.id)">
+                        Посмотреть состав заказа
+                    </button>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                     <p class="text-gray-700 text-base">Заказ был получен: {{new Date(order.date_of_receiving).getDay()}}.{{new Date(order.date_of_receiving).getMonth()}}.{{new Date(order.date_of_receiving).getFullYear()}}</p>
                       <button
@@ -95,6 +99,11 @@
                         {{order.status}}, {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}
                      </p>
                     <div class="font-bold text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
+                      <button
+                        class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
+                        @click="checkCompositionOrder(order.id)">
+                        Посмотреть состав заказа
+                    </button>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                   </div>
                 </div>
@@ -123,7 +132,7 @@ import { ref } from 'vue'
 import { FwbTab, FwbTabs } from 'flowbite-vue'
 
 export default {
-    name: 'FeedView',
+    name: 'ProfileView',
   components: {
     FwbTab,
     FwbTabs
@@ -139,7 +148,6 @@ export default {
     },
     data() {
         return {
-            posts: [],
             user: {
                 id: ''
             },
@@ -147,7 +155,6 @@ export default {
             canceledOrders:[],
             archiveOrders: [],
             helperOrders: [],
-            can_send_friendship_request: null,
             activeTab: ref('first')
         }
     },
@@ -155,7 +162,6 @@ export default {
     mounted() {
         this.getUser();
         this.getOrder();
-        this.getHelperOrder();
     },
 
     methods: {
@@ -183,16 +189,6 @@ export default {
               console.log('canceledOrders', this.canceledOrders)
               console.log('archiveOrders', this.archiveOrders)
         });
-      },
-      getHelperOrder(){
-                axios.get(`/api/order/get_helper_order/${this.$route.params.id}/`)
-                    .then(response => {
-                      this.helperOrders = response.data.activeOrders
-                      console.log('helperOrders', this.helperOrders)
-                    })
-                    .catch(error => {
-                      console.log('error', error)
-                    })
       },
       checkCompositionOrder(orderId){
             this.$router.push(`/composition_order/${orderId}/`)
