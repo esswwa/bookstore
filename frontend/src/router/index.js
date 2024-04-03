@@ -8,6 +8,7 @@ import OrdersView from "@/views/OrdersView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import BookView from "@/views/BookView.vue";
 import AllBooksView from "@/views/AllBooksView.vue";
+import CompositionOrderView from "@/views/CompositionOrderView.vue";
 
 
 
@@ -63,6 +64,11 @@ const router = createRouter({
       path: '/profile/:id',
       name: 'profile',
       component: ProfileView
+    },
+    {
+      path: '/composition_order/:id',
+      name: 'composition_order',
+      component: CompositionOrderView
     },
   ]
 })

@@ -91,22 +91,15 @@ def add_helper_order(request):
 			last_order_helper = OrderHelper.objects.filter(order=order, book=basket_additional['book']).order_by('-id').first()
 			last_order_helper.delete()
 			order_helper.save()
-
-			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
-		else:
-			return Response({'message': 'Order is not addes'}, status=status.HTTP_400_BAD_REQUEST)
+	return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
-def get_helper_order(request, id):
 
-	user = User.objects.get(id=id)
-
-	orders = Order.objects.filter(user=user)
-
-	order_active = OrderHelper.objects.filter(order__in=orders)
-
-	print(order_active)
+@api_view(['POST'])
+def get_helper_order(request):
+	data = request.data
+	order = Order.objects.filter(id=data['order'])
+	order_active = OrderHelper.objects.filter(order__in=order)
 	order_active = HelperOrderSerializer(order_active, many=True)
 	return JsonResponse({"activeOrders": order_active.data})
 
