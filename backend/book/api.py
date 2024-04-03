@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from account.models import User
 from account.serializers import (UserSerializer)
 
-from .models import Book
-from .serializers import BookSerializer
+from .models import Book, Genre
+from .serializers import BookSerializer, GenreSerializer
 
 
 @api_view(['GET'])
@@ -84,3 +84,13 @@ def get_pagination(request, page):
     serializer = BookSerializer(books, many=True)
 
     return JsonResponse({'books': serializer.data, 'count': count}, safe=False)
+
+
+@api_view(['GET'])
+def get_genres(request):
+
+    genres = Genre.objects.all()
+
+    serializer = GenreSerializer(genres, many=True).data
+
+    return JsonResponse({'genres': serializer}, safe=False)

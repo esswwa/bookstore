@@ -10,4 +10,6 @@ urlpatterns = [
     path('books_new_items/', api.books_new_items, name='books_new_items'),
     path('get_pagination/<int:page>/', api.get_pagination, name='get_pagination'),
     path('books_popular/', api.books_popular, name='books_popular'),
+    path('get_genres/', api.get_genres, name='get_genres'),
+
 ]
