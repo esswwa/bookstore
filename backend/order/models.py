@@ -3,6 +3,7 @@ from django.db import models
 
 from account.models import User
 from basket.models import Basket
+from book.models import Book
 
 
 class Address(models.Model):
@@ -19,4 +20,12 @@ class Order(models.Model):
     address = models.ForeignKey(Address, on_delete=models.DO_NOTHING)
     date_delivered = models.DateTimeField(null=True, blank=True)
     date_of_receiving = models.DateTimeField(null=True, blank=True)
+    all_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+class OrderHelper(models.Model):
+    id = models.IntegerField(primary_key=True, editable=False)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    count = models.IntegerField(default=0)
     all_price = models.DecimalField(max_digits=10, decimal_places=2)

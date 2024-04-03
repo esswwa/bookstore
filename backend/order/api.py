@@ -6,10 +6,15 @@ from account.models import User
 from basket.models import BasketAdditional
 from rest_framework.response import Response
 from django.conf import settings
-from .models import Order, Address
+from .models import Order, Address, OrderHelper
 
 from .serializers import OrderSerializer, AddressSerializer
 from django.core.mail import EmailMultiAlternatives
+
+from book.serializers import BookSerializer
+
+from book.models import Book
+
 
 @api_view(['POST'])
 def get_order(request):
@@ -47,41 +52,105 @@ def add_order(request):
 	all_price = data['all_price']
 	user = User.objects.get(id=user_id)
 	address = Address.objects.get(id=data['selected_item'])
-
 	basket_additionals = BasketAdditional.objects.filter(id=basket_additionals).first()
-	print(basket_additionals)
 	if basket_additionals:
 		order = Order.objects.create(basket=basket_additionals.basket, user=user, status='Оформлен', address=address,all_price=all_price)
 		if order:
 			basket_additionals = BasketAdditional.objects.filter(basket=basket_additionals.basket)
+			basket_additionals_list = []
+			for basket_additional in basket_additionals:
+				basket_additionals_list.append({'book': basket_additional.book.id, 'count': basket_additional.count,
+												'all_price': basket_additional.all_price})
 			basket_additionals.delete()
 			last_order = Order.objects.filter(user=user).order_by('-id').first()
 			last_order.delete()
 			order.save()
+			order = Order.objects.all().order_by('-id')[0]
+			print(order)
 
-			# subject, from_email, to = "hello", "chitay.letay@mail.ru", "zoom.light@yandex.ru"
-			# text_content = "This is an important message."
-			# html_content = "<p>This is an <strong>important</strong> message.</p>"
-			# msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-			# msg.attach_alternative(html_content, "text/html")
-			#
-			# # Set the email host user and password
-			# msg.connection['username'] = settings.EMAIL_HOST_USER
-			# msg.connection['password'] = settings.EMAIL_HOST_PASSWORD
-			# msg.send()
-
-			from django.core.mail import send_mail
-
-			response = send_mail(
-				"Subject here213213213",
-				"Here is the message.dsfdsfdsfsdfdsfdsfdsfds",
-				settings.EMAIL_HOST_USER,
-				["zoom.light@yandex.ru"],
-				fail_silently=False,
-			)
-			print(response)
-			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
+			order = OrderSerializer(order, many=False).data
+			return Response({'message': 'Order added successfully', 'basket_additionals_list': basket_additionals_list, 'order': order}, status=status.HTTP_200_OK)
 		else:
 			return Response({'message': 'Order is not addes'}, status=status.HTTP_400_BAD_REQUEST)
 	else:
 		return JsonResponse({'message': 'Error basket is empty'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def add_helper_order(request):
+	data = request.data
+	basket_additionals_list = data['basket_additionals_list']
+	for basket_additional in basket_additionals_list:
+		basket_additional['book'] = Book.objects.get(id=basket_additional['book'])
+	order = data['order']
+	order = Order.objects.get(id=order['id'])
+	print(basket_additionals_list)
+	for basket_additional in basket_additionals_list:
+		order_helper = OrderHelper.objects.create(order=order, book=basket_additional['book'], count=basket_additional['count'], all_price=basket_additional['all_price'])
+		if order_helper:
+			last_order_helper = OrderHelper.objects.filter(order=order, book=basket_additional['book']).order_by('-id').first()
+			last_order_helper.delete()
+			order_helper.save()
+
+			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
+		else:
+			return Response({'message': 'Order is not addes'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(['POST'])
+# def add_order(request):
+# 	data = request.data
+# 	basket_additionals = data['basket_additionals']
+# 	user_id = data['user']
+# 	all_price = data['all_price']
+# 	user = User.objects.get(id=user_id)
+# 	address = Address.objects.get(id=data['selected_item'])
+#
+# 	basket_additionals = BasketAdditional.objects.filter(id=basket_additionals).first()
+# 	print(basket_additionals)
+# 	if basket_additionals:
+# 		order = Order.objects.create(basket=basket_additionals.basket, user=user, status='Оформлен', address=address,all_price=all_price)
+# 		if order:
+# 			basket_additionals = BasketAdditional.objects.filter(basket=basket_additionals.basket)
+# 			last_order = Order.objects.filter(user=user).order_by('-id').first()
+# 			last_order.delete()
+#
+# 			order_helpers = []
+# 			for basket_additional in basket_additionals:
+# 				order_helper = OrderHelper.objects.create(order=order, book=basket_additional.book, count=basket_additional.count, all_price=basket_additional.all_price)
+# 				order_helpers.append(order_helper)
+# 				last_order_helper = OrderHelper.objects.filter(user=user, book=basket_additional.book, count=basket_additional.count).order_by('-id').first()
+# 				last_order_helper.delete()
+#
+# 			for order_helper in order_helpers:
+# 				order_helper.save()
+#
+# 			basket_additionals.delete()
+# 			order.save()
+#
+# 			# subject, from_email, to = "hello", "chitay.letay@mail.ru", "zoom.light@yandex.ru"
+# 			# text_content = "This is an important message."
+# 			# html_content = "<p>This is an <strong>important</strong> message.</p>"
+# 			# msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+# 			# msg.attach_alternative(html_content, "text/html")
+# 			#
+# 			# # Set the email host user and password
+# 			# msg.connection['username'] = settings.EMAIL_HOST_USER
+# 			# msg.connection['password'] = settings.EMAIL_HOST_PASSWORD
+# 			# msg.send()
+#
+# 			# from django.core.mail import send_mail
+# 			#
+# 			# response = send_mail(
+# 			# 	"Subject here213213213",
+# 			# 	"Here is the message.dsfdsfdsfsdfdsfdsfdsfds",
+# 			# 	settings.EMAIL_HOST_USER,
+# 			# 	["zoom.light@yandex.ru"],
+# 			# 	fail_silently=False,
+# 			# )
+# 			# print(response)
+# 			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
+# 		else:
+# 			return Response({'message': 'Order is not addes'}, status=status.HTTP_400_BAD_REQUEST)
+# 	else:
+# 		return JsonResponse({'message': 'Error basket is empty'}, status=status.HTTP_400_BAD_REQUEST)

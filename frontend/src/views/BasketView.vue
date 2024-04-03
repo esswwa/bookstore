@@ -168,7 +168,19 @@ export default {
                 console.log('error', error)
               })
       },
-          goToOrder(){
+      goToOrderHelper(basket_additionals_list, order){
+          axios.post('/api/order/add_helper_order/', {
+            'basket_additionals_list': basket_additionals_list,
+            'order': order
+          })
+              .then(response => {
+
+              })
+          .catch(error => {
+                              console.log('error', error)
+                          })
+      },
+          goToOrder( ){
           console.log('selected_item', this.selectedItem)
                         axios
                           .post(`/api/order/add_order/`, {"user": this.userStore.user.id, "basket_additionals": this.basket_additionals[0].id, "all_price": this.all_price, 'selected_item': this.selectedItem})
@@ -176,7 +188,7 @@ export default {
 
                             this.getBasket()
                             this.$router.push({ path: `/profile/${this.userStore.user.id}/` });
-
+                            this.goToOrderHelper(response.data.basket_additionals_list, response.data.order)
                           })
                           .catch(error => {
                               console.log('error', error)
