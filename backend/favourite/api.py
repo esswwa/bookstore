@@ -69,3 +69,24 @@ def delete_favourite(request):
         return Response({'message': 'Favourite deleted successfully'}, status=status.HTTP_200_OK)
     else:
         return Response({'message': 'Favourite not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def get_pagination(request, page):
+    favourite = Favourite.objects.filter(user_id=request.user)
+    book_ids = [fav.book_id for fav in favourite]  # Получаем все book_id из объектов Favourite
+
+    # Преобразуем book_ids в список числовых значений
+    book_ids = [int(book_id) for book_id in book_ids]
+
+    # Получаем книги, соответствующие этим book_id
+    books = Book.objects.filter(id__in=book_ids)
+
+    count = books.count()
+    start_index = (page - 1) * 6
+    end_index = start_index + 6
+
+    books = books[start_index:end_index]
+
+    serializer = BookSerializer(books, many=True)
+    return JsonResponse({"books": serializer.data, 'count': count})

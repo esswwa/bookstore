@@ -45,7 +45,20 @@
 
     </div>
   </div>
+    <div v-else>
+      <div class="card rounded mt-4 p-8 overflow-hidden bg-white shadow-lg">
+           <a href="http://localhost:5173/books/" class="hover:underline text-gray-900 text-xl mb-2">Ваша избранные пусты, самое время это исправить!</a>
+      </div>
+    </div>
 </div>
+
+  <VuePagination
+    v-if="books.length > 0"
+        :total="total"
+      v-model:value="currentPage"
+      :perPage="perPage"
+      @set="changePage" />
+
 </template>
 
 <script>
@@ -60,11 +73,20 @@ export default {
          userStore
        }
      },
+  props: {
+    initialTotal: {
+      type: Number,
+      required: true
+    },
+  },
     data() {
         return {
             books: {
                 id: null
             },
+            total: 0, // Устанавливаем начальное значение total
+            perPage: 6,
+            currentPage: 1,
             basket: [],
             baskets: [],
             body: ''
@@ -72,6 +94,7 @@ export default {
     },
     created() {
         this.getFavourite();
+    this.total = this.initialTotal;
     this.getBasket();
     },
     methods:{
@@ -79,14 +102,36 @@ export default {
       this.$router.push({ path: `/book/${bookId}/1/` });
           console.log("Переход к книге с ID:", bookId);
     },
+
+
+
+
+       // getFavourite() {
+       //           console.log("ASDAS", this.userStore.user.id)
+       //                axios
+       //                    .post(`/api/favourite/`, {"user": this.userStore.user.id})
+       //                    .then(response => {
+       //                        console.log('data', response.data.favourites)
+       //
+       //                        this.books = response.data.favourites
+       //                    })
+       //                    .catch(error => {
+       //                        console.log('error', error)
+       //                    })
+       //
+       //        },
+
+
+
                getFavourite() {
                  console.log("ASDAS", this.userStore.user.id)
                       axios
-                          .post(`/api/favourite/`, {"user": this.userStore.user.id})
+                          .post(`/api/favourite/get_pagination/${this.$route.params.page}/`, {"user": this.userStore.user.id})
                           .then(response => {
                               console.log('data', response.data.favourites)
 
-                              this.books = response.data.favourites
+                              this.books = response.data.books
+                              this.total = response.data.count;
                           })
                           .catch(error => {
                               console.log('error', error)
@@ -148,6 +193,17 @@ export default {
                        .catch(error => {
                            console.log('error', error)
                        }) },
-    }
+                changePage(page) {
+                this.$router.push({ path: `/favourite/${page}/` });
+              },
+    },
+
+  watch: {
+    '$route': function(newRoute, oldRoute) {
+      if (this.$route.params.page) {
+        this.getFavourite();
+      }
+    },
+  },
   }
 </script>

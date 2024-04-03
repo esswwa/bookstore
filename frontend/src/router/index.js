@@ -41,7 +41,7 @@ const router = createRouter({
       component: BooksView
     },
     {
-      path: '/favourite',
+      path: '/favourite/:page',
       name: 'favourite',
       component: FavouriteView
     },
