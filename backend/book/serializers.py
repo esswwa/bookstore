@@ -29,5 +29,5 @@ class BookSerializer(serializers.ModelSerializer):
     publishing_house = PublishSerializer()
     class Meta:
         model = Book
-        fields = ('id', 'description', 'status', 'name', 'type_cover', 'date_of_create', 'isbn', 'count_of_pages', 'rating', 'age_restrictions', 'weight', 'cost_per_one', 'size', 'additional_genre', 'publishing_house', 'author')
+        fields = ('id', 'description', 'status', 'name', 'type_cover', 'date_of_create', 'isbn', 'count_of_pages', 'rating', 'count_rating', 'age_restrictions', 'weight', 'cost_per_one', 'size', 'additional_genre', 'publishing_house', 'author')
 

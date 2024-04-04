@@ -53,6 +53,7 @@ def add_review(request):
 				book.rating = rating / review2.count()
 			else:
 				book.rating = review.rating
+			book.count_rating += 1
 			book.save()
 			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
 	else:

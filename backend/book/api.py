@@ -18,6 +18,7 @@ def book_list(request):
 @api_view(['GET'])
 def get_book(request, id):
     books = Book.objects.get(id=id)
+
     print(books)
     serializer = BookSerializer(books, many=False)
 

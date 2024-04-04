@@ -33,6 +33,7 @@ class Book(models.Model):
     isbn = models.TextField(blank=True, null=False)
     count_of_pages = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
+    count_rating = models.IntegerField(default=0, null=True)
     age_restrictions = models.TextField(blank=True, null=True)
     weight = models.IntegerField(default=0)
     cost_per_one = models.DecimalField(max_digits=10, decimal_places=2)
