@@ -77,12 +77,6 @@ export default {
          userStore
        }
      },
-  props: {
-    initialTotal: {
-      type: Number,
-      required: true
-    },
-  },
     data() {
         return {
             books: {
@@ -98,7 +92,6 @@ export default {
     },
     created() {
         this.getFavourite();
-    this.total = this.initialTotal;
     this.getBasket();
     },
     methods:{

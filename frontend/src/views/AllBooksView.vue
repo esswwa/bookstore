@@ -59,7 +59,7 @@
               </select>
 
 
-    <div class="card flex p-6">
+    <div class="card flex p-6" v-if="genres.length > 0">
         <div class="flex flex-col gap-3">
             <div v-for="genre of genres" :key="genre.id" class="flex items-center">
                 <Checkbox v-model="selectedGenres" :inputId="genre.id" name="genre" :value="genre.id" />
@@ -67,8 +67,6 @@
             </div>
         </div>
     </div>
-
-
             <button
               @click="isOpen = false"
               class="px-6 py-2 text-blue-800 border border-blue-600 rounded"
@@ -160,13 +158,6 @@ import {SwiperSlide} from "swiper/vue";
 
 export default {
   components: {SwiperSlide},
-
-  props: {
-    initialTotal: {
-      type: Number,
-      required: true
-    },
-  },
   data() {
     return {
       books: [],
@@ -186,8 +177,7 @@ export default {
     };
   },
   created() {
-    this.userStore = useUserStore()
-    this.total = this.initialTotal; // Устанавливаем total после получения данных
+    this.userStore = useUserStore() // Устанавливаем total после получения данных
     this.getBook();
     this.getFavourite();
         this.getBasket();

@@ -100,12 +100,6 @@ import axios from 'axios'
 import {useUserStore} from "@/stores/user.js";
 export default {
     name: 'FavouriteView',
-  props: {
-    initialTotal: {
-      type: Number,
-      required: true
-    }
-  },
   setup(){
        const userStore = useUserStore()
        return{
@@ -132,7 +126,6 @@ export default {
         }
     },
     created() {
-    this.total = this.initialTotal;
     this.getBook();
     this.getFavourite();
     this.getBasket();

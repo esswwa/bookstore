@@ -10,6 +10,7 @@
         v-if="books.length > 0"
         :spaceBetween="30"
         :slidesPerView="5"
+        :pauseOnMouseEnter="true"
         :autoplay="{
           delay: 3000,
           disableOnInteraction: false,
@@ -64,14 +65,6 @@
                     </div>
             </div>
         </swiper-slide>
-        <template #container-end>
-          <div class="autoplay-progress">
-            <svg viewBox="0 0 48 48" ref="progressCircle">
-              <circle cx="24" cy="24" r="20"></circle>
-            </svg>
-            <span ref="progressContent"></span>
-          </div>
-        </template>
       </swiper>
 
 
@@ -87,6 +80,7 @@
         v-if="books.length > 0"
         :spaceBetween="30"
         :slidesPerView="5"
+        :pauseOnMouseEnter="true"
         :autoplay="{
           delay: 3000,
           disableOnInteraction: false,
@@ -141,14 +135,6 @@
                     </div>
             </div>
         </swiper-slide>
-        <template #container-end>
-          <div class="autoplay-progress">
-            <svg viewBox="0 0 48 48" ref="progressCircle">
-              <circle cx="24" cy="24" r="20"></circle>
-            </svg>
-            <span ref="progressContent"></span>
-          </div>
-        </template>
       </swiper>
 
 
@@ -163,6 +149,7 @@
     <swiper
         v-if="books.length > 0"
         :spaceBetween="30"
+        :pauseOnMouseEnter="true"
         :slidesPerView="5"
         :autoplay="{
           delay: 3000,
@@ -279,8 +266,7 @@ export default {
             favourite: [],
             favourites: [],
             basket: [],
-            baskets: [],
-            body: ''
+            baskets: []
         }
     },
 
