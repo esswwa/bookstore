@@ -76,8 +76,8 @@ def get_pagination(request, page):
         genre_additionals = AdditionalGenre.objects.filter(text_genre_id__in=genres)
         books = Book.objects.filter(status="В наличии", additional_genre__in=genre_additionals)
         count = books.count()
-        start_index = (page - 1) * 9
-        end_index = start_index + 9
+        start_index = (page - 1) * 10
+        end_index = start_index + 10
         if request.data['sort_order'] != 'Без сортировки':
             books = books.order_by('-'+request.data['sort_order'])
     else:
@@ -85,8 +85,8 @@ def get_pagination(request, page):
         if request.data['sort_order'] != 'Без сортировки':
             books = books.order_by('-' + request.data['sort_order'])
         count = books.count()
-        start_index = (page - 1) * 9
-        end_index = start_index + 9
+        start_index = (page - 1) * 10
+        end_index = start_index + 10
 
     books = books[start_index:end_index]
 
