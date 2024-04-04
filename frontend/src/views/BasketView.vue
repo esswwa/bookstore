@@ -20,7 +20,7 @@
   <div class="flex flex-col">
     <div v-for="book in books" :key="book.id" v-if="books.length > 0">
       <div class="card rounded mt-4 p-4 overflow-hidden bg-white shadow-lg">
-        <div class="card-content">
+        <div @click="goToBook(book.id)" class="hover:bg-gray-100 duration-200 cursor-pointer rounded-lg card-content">
           <div class="px-6 py-4">
             <p class="text-sm text-gray-600 flex items-center">
               <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -32,21 +32,19 @@
             <p class="text-gray-700 text-base">{{ book.description }}</p>
           </div>
           <div class="px-6 py-4">
-            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">Цена: {{ book.cost_per_one }}₽</span>
+            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">Цена: {{ book.cost_per_one }} ₽</span>
             <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 ml-2">Рейтинг: {{book.rating}}</span>
           </div>
         </div>
-        <div class="card-footer px-6">
-          <button @click="goToBook(book.id)" class="card-button py-4 px-6 bg-blue-400 text-white rounded-lg">Перейти</button>
-        </div>
-            <button @click="addOneMore(book.id)" title="Добавить еще одну штуку" class="py-4 m-6 px-6 text-black rounded-lg border border-black">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+
+            <button @click="addOneMore(book.id)" title="Добавить еще одну штуку" class="py-4 px-6 rounded-lg hover:bg-gray-100 hover:rounded-full duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
             </button>
               {{count}}
-           <button @click="deleteOneMore(book.id)" class="py-4 px-6 text-black rounded-lg  border border-black" title="Уменьшить количество или полностью удалить из корзины">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+           <button @click="deleteOneMore(book.id)" class="py-4 px-6 rounded-lg hover:bg-gray-100 hover:rounded-full duration-200" title="Уменьшить количество или полностью удалить из корзины">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                 </svg>
            </button>
@@ -64,8 +62,9 @@
       <div class="card ml-4 mt-4 p-4 overflow-hidden bg-white shadow-lg">
         <div class="card-content">
           <div class="px-6 py-4 mt-4">
-            <div class="font-bold text-xl mb-2">Количество: {{ additional.count }}</div>
-            <div class="font-bold text-xl mb-2">Цена за книги: {{ additional.all_price }}</div>
+            <div class="font-bold text-xl mb-2">{{ additional.book.name }}</div>
+            <div class="text-xl mb-2">Количество: {{ additional.count }}</div>
+            <div class="text-xl mb-2">Цена за все книги: {{ additional.all_price }} ₽</div>
           </div>
         </div>
       </div>
