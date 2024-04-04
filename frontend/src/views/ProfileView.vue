@@ -6,19 +6,79 @@
                       <img src="https://i.pravatar.cc/40?img=70" class="w-16 rounded-full">
                       <p class="p-4"><strong>{{ user.name }}</strong></p>
                     </RouterLink>
-                    <RouterLink
-                        class="inline-block mr-2 py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
-                        to="/profile/edit"
-                        v-if="userStore.user.id == user.id">
-                        Редактировать профиль
-                    </RouterLink>
-
                     <button
                         class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
                         @click="logout"
                         v-if="userStore.user.id == user.id">
                         Выйти из аккаунта
                     </button>
+<!--              <div class="container mt-2" >-->
+<!--    <div class="flex">-->
+<!--      <button-->
+<!--        @click="isOpen = true"-->
+<!--        class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"-->
+<!--        type="button"-->
+<!--        title="Редактировать профиль"-->
+<!--      >Редактировать профиль</button>-->
+
+<!--      <div-->
+<!--        v-show="isOpen"-->
+<!--        class="overflow-hidden-->
+<!--          absolute-->
+<!--          inset-0-->
+<!--          flex-->
+<!--          items-center-->
+<!--          justify-center-->
+<!--          bg-gray-700 bg-opacity-50-->
+<!--        "-->
+<!--      >-->
+<!--        <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">-->
+<!--          <div class="flex items-center justify-between">-->
+<!--            <h3 class="text-2xl">Редактирование профиля</h3>-->
+<!--            <svg-->
+<!--              @click="isOpen = false"-->
+<!--              xmlns="http://www.w3.org/2000/svg"-->
+<!--              class="w-8 ml-4 h-8 text-red-900 cursor-pointer"-->
+<!--              fill="none"-->
+<!--              viewBox="0 0 24 24"-->
+<!--              stroke="currentColor"-->
+<!--            >-->
+<!--              <path-->
+<!--                stroke-linecap="round"-->
+<!--                stroke-linejoin="round"-->
+<!--                stroke-width="2"-->
+<!--                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"-->
+<!--              />-->
+<!--            </svg>-->
+<!--          </div>-->
+<!--          <div class="mt-4">-->
+
+
+<!--                    <div>-->
+<!--                        <label>Пароль</label><br>-->
+<!--                        <input type="password" v-model="password1" value="password1" placeholder="Введите ваш новый пароль" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">-->
+<!--                    </div>-->
+
+<!--                    <div>-->
+<!--                        <label>Подтвердите пароль</label><br>-->
+<!--                        <input type="password" v-model="password2" value="password2" placeholder="Введите ваш новый пароль еще раз" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">-->
+<!--                    </div>-->
+
+
+<!--            <button-->
+<!--              @click="isOpen = false"-->
+<!--              class="px-6 py-2 mt-2 text-blue-800 border border-blue-600 rounded"-->
+<!--            >-->
+<!--              Отменить-->
+<!--            </button>-->
+<!--            <button @click="editProfile()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded">-->
+<!--              Сохранить-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
                 </div>
             </div>
         </div>
@@ -151,6 +211,10 @@ export default {
             user: {
                 id: ''
             },
+      isOpen: false,
+          password1: null,
+          password2: null,
+          email: null,
             activeOrders: [],
             canceledOrders:[],
             archiveOrders: [],
@@ -171,6 +235,9 @@ export default {
                 .then(response => {
                     console.log('data', response.data)
                     this.user = response.data.user
+                  this.email = response.data.user.email
+                  this.password1 = this.user.password1
+                  this.password2 = this.user.password2
                   console.log('data_user', this.user)
                 })
                 .catch(error => {
@@ -199,7 +266,18 @@ export default {
             this.userStore.removeToken()
 
             this.$router.push('/signin')
-        }
+        },
+      // editProfile(){
+      //           axios.
+      //                 post('/api/edit_profile/', {'user': this.userStore.user.id, 'password1': this.password1, 'password2': this.password2, 'email': this.email})
+      //               .then(response => {
+      //
+      //                   this.getUser()
+      //               })
+      //               .catch(error => {
+      //                 console.log('error', error)
+      //               })
+      // }
     }
 }
 </script>

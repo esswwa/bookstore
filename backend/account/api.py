@@ -1,7 +1,9 @@
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.response import Response
 
-from .forms import SignupForm
+from .forms import SignupForm, EditForm
 from .models import User
 
 
@@ -47,3 +49,23 @@ def profile(request, id):
 
     return JsonResponse({
         'user': UserSerializer(user).data}, safe=False)
+
+# @api_view(['POST'])
+# def edit_profile(request):
+# 	data = request.data
+# 	user = request.data['user']
+#
+# 	user1 = User.objects.get(id=user)
+# 	form = EditForm({
+# 		'email': data.get('email'),
+# 		'password1': data.get('password1'),
+# 		'password2': data.get('password2'),
+# 	})
+#
+# 	if form.is_valid():
+# 		form.save()
+# 		return Response({'message': 'Edit profile successfully'}, status=status.HTTP_200_OK)
+# 	else:
+# 		message = form.errors.as_json()
+# 		print(message)
+# 		return JsonResponse({'message': message})
