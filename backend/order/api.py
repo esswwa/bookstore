@@ -69,7 +69,7 @@ def add_order(request):
 			print(order)
 
 			order = OrderSerializer(order, many=False).data
-			return Response({'message': 'Order added successfully', 'basket_additionals_list': basket_additionals_list, 'order': order}, status=status.HTTP_200_OK)
+			return Response({'message': 'Order added successfully', 'basket_additionals_list': basket_additionals_list, 'order': order, 'address': address.text}, status=status.HTTP_200_OK)
 		else:
 			return Response({'message': 'Order is not addes'}, status=status.HTTP_400_BAD_REQUEST)
 	else:

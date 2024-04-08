@@ -27,7 +27,7 @@ class BookSerializer(serializers.ModelSerializer):
     author = AuthorSerializer()
     additional_genre = AdditionalGenreSerializer()
     publishing_house = PublishSerializer()
-    genre=GenreSerializer
+    genre = GenreSerializer()
     class Meta:
         model = Book
         fields = ('id', 'description', 'status', 'name', 'type_cover', 'date_of_create', 'isbn', 'count_of_pages', 'rating', 'count_rating', 'age_restrictions', 'weight', 'count_on_stock', 'cost_per_one', 'size', 'genre', 'additional_genre', 'publishing_house', 'author')

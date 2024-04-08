@@ -1,9 +1,12 @@
 <template>
-  <div class="flex items-center">
+  <div v-if="showCard === false">
+
+
+  <div class="flex items-center" >
     <div class="">
       <div class="flex flex-col max-w-sm rounded-lg p-4 overflow-hidden bg-white shadow-lg">
         Общая стоимость всей корзины:
-      {{ all_price }}
+      {{ all_price }} ₽
       </div>
     </div>
     <div>
@@ -79,7 +82,28 @@
     </div>
   </div>
 </div>
+  </div>
+<div v-else>
+  <div class="card rounded mt-4 p-4 overflow-hidden bg-white shadow-lg">
+    <div class="container mx-auto p-5 flex flex-col items-center">
 
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="green" class="w-20 h-20">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+      </svg>
+
+      <h1 class="text-4xl text-center text-gray-800">Спасибо за заказ!</h1>
+      <p class="text-xl text-center text-gray-600">Номер вашего заказа: {{orderId}}</p>
+      <p class="text-xl text-center text-gray-600">Заказ будет доставлен в пункт выдачи: {{addressOrder}}</p>
+      <p class="text-xl text-center text-gray-600">Общая стоимость вашего заказа: {{all_price}} ₽</p>
+      <div class="flex justify-center mt-5">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <a :href="`http://localhost:5173/profile/${this.userStore.user.id}/`"
+             class="text-white no-underline">Перейти на страницу заказов</a>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -102,6 +126,9 @@ export default {
           basket_additionals:[],
           all_price: 0,
           address: [],
+          orderId: 0,
+          addressOrder: '',
+          showCard: false,
           selectedItem: null,
             body: ''
         }
@@ -192,9 +219,9 @@ export default {
                         axios
                           .post(`/api/order/add_order/`, {"user": this.userStore.user.id, "basket_additionals": this.basket_additionals[0].id, "all_price": this.all_price, 'selected_item': this.selectedItem})
                           .then(response => {
-
-                            this.getBasket()
-                            this.$router.push({ path: `/profile/${this.userStore.user.id}/` });
+                            this.showCard = true
+                            this.orderId = response.data.order.id
+                            this.addressOrder = response.data.address
                             this.goToOrderHelper(response.data.basket_additionals_list, response.data.order)
                           })
                           .catch(error => {
