@@ -26,47 +26,37 @@ def get_book(request, id):
 
 @api_view(['GET'])
 def books_the_best(request):
-    # user_ids = [request.user.id]
-    #
-    # for user in request.user.friends.all():
-    #     user_ids.append(user.id)
+    # можно посмотреть количество рейтинга у книг, сравнить с
+    # другими, затем смотреть, чтобы рейтинг был выше 4.6, и можно еще добавить
+    # сравнение, чтобы у пользователей было много рецензий и все они были разными
+    # и так вывести топ 10 лучших
 
-    # books = Book.objects.exclude(status="В наличии")
+
+
     books = Book.objects.filter(status="В наличии")
-    # author = books.values('author')
     serializer = BookSerializer(books, many=True)
-    # serializer2 = AuthorSerializer(author, many=True)
-
     return JsonResponse({'books_the_best': serializer.data}, safe=False)
 
 @api_view(['GET'])
 def books_new_items(request):
-    # user_ids = [request.user.id]
-    #
-    # for user in request.user.friends.all():
-    #     user_ids.append(user.id)
+    # можно искать новые книги, которые были выпущены в течении 3-х месяцев
+    # но от авторов или издательств, у которых общая сумма рейтинга их книг
+    # составляла хороший рейтинг и при этом было по 0 рецензий на данную книгу
 
-    # books = Book.objects.exclude(status="В наличии")
+
     books = Book.objects.filter(status="В наличии")
-    # author = books.values('author')
     serializer = BookSerializer(books, many=True)
-    # serializer2 = AuthorSerializer(author, many=True)
 
     return JsonResponse({'books_new_items': serializer.data}, safe=False)
 
 @api_view(['GET'])
 def books_popular(request):
-    # user_ids = [request.user.id]
-    #
-    # for user in request.user.friends.all():
-    #     user_ids.append(user.id)
-
-    # books = Book.objects.exclude(status="В наличии")
+    # можно посмотреть количество рейтинга у книг, сравнить с
+    # другими, затем смотреть, чтобы рейтинг был выше 4.6, и можно еще добавить
+    # сравнение, чтобы у пользователей было много рецензий и все они были разными
+    # и так вывести топ 10 лучших, но все это с фильтром 2024 года
     books = Book.objects.filter(status="В наличии")
-    # author = books.values('author')
     serializer = BookSerializer(books, many=True)
-    # serializer2 = AuthorSerializer(author, many=True)
-
     return JsonResponse({'books_popular': serializer.data}, safe=False)
 
 

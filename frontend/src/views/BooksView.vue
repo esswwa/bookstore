@@ -318,7 +318,7 @@ export default {
                 .then(response => {
                     console.log('data', response.data.books)
 
-                    this.books = response.data.books
+                    this.books = response.data.books.slice(0, 10)
                 })
                 .catch(error => {
                     console.log('error', error)
