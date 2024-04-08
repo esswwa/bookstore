@@ -16,8 +16,8 @@
     <fwb-tabs v-model="activeTab" class="p-5">
         <fwb-tab name="first" v-if="activeOrders.length > 0" title="Активные заказы" >
           <div class="flex flex-wrap">
-              <div v-for="order in activeOrders" :key="order.id" class="w-1/3 p-2">
-                <div @click="checkCompositionOrder(order.id)" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
+              <div v-for="order in activeOrders" :key="order.id" class="w-1/4 p-2">
+                <div @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <div class="px-6 py-4">
                      <p class="text-sm text-gray-600 flex items-center">
                         <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -40,8 +40,8 @@
         </fwb-tab>
         <fwb-tab name="second" v-if="archiveOrders.length > 0" title="Архив заказов">
            <div class="flex flex-wrap">
-              <div v-for="order in archiveOrders" :key="order.id" class="w-1/3 p-2">
-                <div @click="checkCompositionOrder(order.id)" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
+              <div v-for="order in archiveOrders" :key="order.id" class="w-1/4 p-2">
+                <div @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <div class="px-6 py-4">
                      <p class="text-sm text-gray-600 flex items-center">
                         <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -68,8 +68,8 @@
         </fwb-tab>
         <fwb-tab name="third" v-if="canceledOrders.length > 0" title="Отмененные заказы">
             <div class="flex flex-wrap">
-              <div v-for="order in canceledOrders" :key="order.id" class="w-1/3 p-2">
-                <div @click="checkCompositionOrder(order.id)" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
+              <div v-for="order in canceledOrders" :key="order.id" class="w-1/4 p-2">
+                <div @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <div class="px-6 py-4">
                      <p class="text-sm text-gray-600 flex items-center">
                         <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
