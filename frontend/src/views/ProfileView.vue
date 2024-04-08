@@ -6,12 +6,6 @@
                       <img src="https://i.pravatar.cc/40?img=70" class="w-16 rounded-full">
                       <p class="p-4"><strong>{{ user.name }}</strong></p>
                     </RouterLink>
-                    <button
-                        class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
-                        @click="logout"
-                        v-if="userStore.user.id == user.id">
-                        Выйти из аккаунта
-                    </button>
 <!--              <div class="container mt-2" >-->
 <!--    <div class="flex">-->
 <!--      <button-->

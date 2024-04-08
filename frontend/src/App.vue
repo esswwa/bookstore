@@ -43,11 +43,13 @@
                 </div>
 
                 <div class="menu-right">
-                  <template  v-if="userStore.user.isAuthenticated">
-                    <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}" title="Профиль">
-                      <img src="https://i.pravatar.cc/40?img=70" class="w-12 rounded-full">
-                    </RouterLink>
-                  </template>
+<!--                  <template  v-if="userStore.user.isAuthenticated">-->
+<!--                    <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}" title="Профиль">-->
+<!--                      <img src="https://i.pravatar.cc/40?img=70" class="w-12 rounded-full">-->
+<!--                    </RouterLink>-->
+<!--                  </template>-->
+
+                   <div class="box" v-if="userStore.user.isAuthenticated" @contextmenu="onContextMenu($event)"><img src="https://i.pravatar.cc/40?img=70" class="w-12 rounded-full"></div>
                   <template  v-else>
                     <RouterLink to="/signin" class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg">Войти</RouterLink>
                     <RouterLink to="/signup" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Зарегистрироваться</RouterLink>
@@ -167,6 +169,43 @@ export default {
   components: {
     Toast
   },
+  methods: {
+    onContextMenu(e) {
+    //prevent the browser's default menu
+    e.preventDefault();
+    //show our menu
+    this.$contextmenu({
+      x: e.x,
+      y: e.y,
+      items: [
+        {
+          label: "Перейти в профиль",
+          onClick: () => {
+            this.$router.push(`/profile/${this.userStore.user.id}/`)
+          }
+        },
+        {
+          label: "Действия по профилю",
+          children: [
+            { label: "Выйти из аккаунта",
+          onClick: () => {
+            this.logout()
+          } },
+          ]
+        },
+      ]
+    });
+  },
+          logout() {
+            console.log('Log out')
+
+            this.userStore.removeToken()
+
+            this.$router.push('/signin')
+            this.window.reload()
+        },
+  },
+
   beforeCreate() {
     this.userStore.initStore()
 

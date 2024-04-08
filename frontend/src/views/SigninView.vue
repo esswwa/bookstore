@@ -81,8 +81,8 @@ export default {
                     .post('/api/signin/', this.form)
                     .then(response => {
                        this.userStore.setToken(response.data)
-
                        axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
+
                     })
                     .catch(error => {
                         this.errors.push('The user does not exist or the password is incorrect')
@@ -94,8 +94,8 @@ export default {
                       .get('/api/me/')
                       .then(response => {
                          this.userStore.setUserInfo(response.data)
-
                          this.$router.push('/books')
+                          this.window.reload()
                       })
                       .catch(error => {
                           console.log('error', error)
