@@ -26,10 +26,10 @@
               <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
               </svg>
-              {{book.additional_genre.text_genre.text}}, {{book.author.text}}
+              {{book.author.text}}
             </p>
-            <div class="font-bold text-xl mb-2">{{ book.name }}</div>
-            <p class="text-gray-700 text-base">{{ book.description }}</p>
+            <div class="font-bold text-xl mb-2">{{book.name.slice(0,50) + (book.name.length > 50 ? '...' : '')}}</div>
+            <p class="text-gray-700 text-base">{{ book.description.slice(0, 100) + (book.name.length > 100 ? '...' : '') }}</p>
           </div>
           <div class="px-6 py-4">
             <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">Цена: {{ book.cost_per_one }} ₽</span>
@@ -73,7 +73,7 @@
       <div class="card ml-4 mt-4 p-4 overflow-hidden bg-white shadow-lg">
         <div class="card-content">
           <div class="px-6 py-4 mt-4">
-            <div class="font-bold text-xl mb-2">{{ additional.book.name }}</div>
+            <div class="font-bold text-xl mb-2">{{additional.book.name.slice(0,30) + (additional.book.name.length > 30 ? '...' : '')}}</div>
             <div class="text-xl mb-2">Количество: {{ additional.count }}</div>
             <div class="text-xl mb-2">Цена за все книги: {{ additional.all_price }} ₽</div>
           </div>
