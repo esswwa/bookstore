@@ -29,7 +29,7 @@
               {{book.author.text}}
             </p>
             <div class="font-bold text-xl mb-2">{{book.name.slice(0,50) + (book.name.length > 50 ? '...' : '')}}</div>
-            <p class="text-gray-700 text-base">{{ book.description.slice(0, 100) + (book.name.length > 100 ? '...' : '') }}</p>
+            <p class="text-gray-700 text-base">{{ book.description.slice(0, 200) + (book.name.length > 200 ? '...' : '') }}</p>
           </div>
           <div class="px-6 py-4">
             <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">Цена: {{ book.cost_per_one }} ₽</span>
@@ -48,36 +48,33 @@
                                           <a :href="`http://localhost:5173/book/${book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">{{book.count_rating}} отзывов</a>
                                       </div>
                                   </div>
-            <button @click="addOneMore(book.id)" title="Добавить еще одну штуку" class="py-4 px-6 rounded-lg hover:bg-gray-100 hover:rounded-full duration-200">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-            </button>
-              {{count}}
-           <button @click="deleteOneMore(book.id)" class="py-4 px-6 rounded-lg hover:bg-gray-100 hover:rounded-full duration-200" title="Уменьшить количество или полностью удалить из корзины">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
-                </svg>
-           </button>
+         <div v-for="additional in basket_additionals" :key="additional.id" v-if="basket_additionals.length > 0" >
+
+           <div v-if="additional.book.id === book.id" class="flex items-center text-center">
+                  <button @click="addOneMore(book.id)" title="Добавить еще одну штуку" class="py-4 px-6 rounded-lg hover:bg-gray-100 hover:rounded-full duration-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                </button>
+                  <div>{{additional.count}}</div>
+
+               <button @click="deleteOneMore(book.id)" class="py-4 px-6 rounded-lg hover:bg-gray-100 hover:rounded-full duration-200" title="Уменьшить количество или полностью удалить из корзины">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                    </svg>
+               </button>
+
+               <div class="text-xl mb-2">Цена за все книги: {{ additional.all_price }} ₽</div>
+
+           </div>
+
+        </div>
+
       </div>
     </div>
     <div v-else>
       <div class="card rounded mt-4 p-8 overflow-hidden bg-white shadow-lg">
            <a href="http://localhost:5173/books/" class="hover:underline text-gray-900 text-xl mb-2">Ваша корзина пуста, самое время это исправить!</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex flex-col">
-    <div v-for="additional in basket_additionals" :key="additional.id" v-if="basket_additionals.length > 0">
-      <div class="card ml-4 mt-4 p-4 overflow-hidden bg-white shadow-lg">
-        <div class="card-content">
-          <div class="px-6 py-4 mt-4">
-            <div class="font-bold text-xl mb-2">{{additional.book.name.slice(0,30) + (additional.book.name.length > 30 ? '...' : '')}}</div>
-            <div class="text-xl mb-2">Количество: {{ additional.count }}</div>
-            <div class="text-xl mb-2">Цена за все книги: {{ additional.all_price }} ₽</div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
