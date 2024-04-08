@@ -49,7 +49,10 @@
 <!--                    </RouterLink>-->
 <!--                  </template>-->
 
-                   <div class="box" v-if="userStore.user.isAuthenticated" @contextmenu="onContextMenu($event)"><img src="https://i.pravatar.cc/40?img=70" class="w-12 rounded-full"></div>
+                   <div class="box" v-if="userStore.user.isAuthenticated" @contextmenu="onContextMenu($event)">
+                     <img src="https://i.pravatar.cc/40?img=70" class="w-12 rounded-full">
+                     {{userStore.user.name}}
+                   </div>
                   <template  v-else>
                     <RouterLink to="/signin" class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg">Войти</RouterLink>
                     <RouterLink to="/signup" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Зарегистрироваться</RouterLink>
@@ -198,9 +201,7 @@ export default {
   },
           logout() {
             console.log('Log out')
-
             this.userStore.removeToken()
-
             this.$router.push('/signin')
             this.window.reload()
         },

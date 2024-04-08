@@ -1,13 +1,15 @@
 <template>
      <div class="p-4 m-4 mx-auto grid grid-cols-4 gap-4 flex items-center">
         <div class="main-center">
-            <div class="p-4 bg-white border border-gray-200 rounded-lg">
-                      <img src="https://i.pravatar.cc/40?img=70" class="w-16 rounded-full">
-                      <p class="p-4"><strong>{{ user.name }}</strong></p>
-
-                </div>
+            <div class="p-4 bg-white border border-gray-200 rounded-lg flex flex-col items-center">
+              <div class="flex items-center">
+                  <img src="https://i.pravatar.cc/40?img=70" class="w-16 rounded-full">
+                  <p class="p-4"><strong>{{ user.name }}</strong></p>
+              </div>
+              <p class="p-4">{{ user.email }}</p>
             </div>
         </div>
+     </div>
 
     <div class=" p-4 m-4 bg-white border border-gray-200 text-center rounded-lg">
 
