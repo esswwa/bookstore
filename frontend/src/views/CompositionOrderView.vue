@@ -1,11 +1,36 @@
 <template>
+
+<!--  -->
+
+
+<div class="flex">
+  <div class="max-w-s rounded-2xl overflow-hidden bg-white shadow-lg m-2 min-w-max" v-if="order">
+          <div class="text-gray-900 font-medium text-xl mb-2">
+              <div class="px-6 py-4">
+                     <p class="text-sm text-gray-600 flex items-center">
+                        <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                          <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+                        </svg>
+                       <div class="inline-block bg-red-200 px-3 py-1 rounded-full" v-if="order.status ==='Оформлен'">{{order.status}}</div>
+                       <div class="inline-block bg-yellow-200 px-3 py-1 rounded-full" v-else-if="order.status ==='В пути'">{{order.status}}</div>
+                       <div class="inline-block bg-green-200 px-3 py-1 rounded-full" v-else>{{order.status}}</div>
+                     </p>
+                    <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
+                    <p class="text-gray-700 text-base" v-if="order.status === 'В пункте выдачи'">Дата прибытия в пункт выдачи: {{new Date(order.date_delivered).getDay()}}.{{new Date(order.date_delivered).getMonth()}}.{{new Date(order.date_delivered).getFullYear()}}</p>
+                    <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
+                    <div v-if="order.status === 'В пункте выдачи'" class="m-4 whitespace-normal text-m text-gray-900 flex justify-center text-center items-center">
+                      Ваш заказ прибыл в пункт выдачи,<br>
+                      если вы не заберете заказ в течении<br>
+                      2-х недель, то он будет отменен!<br>
+                      Спасибо за покупку!
+                    </div>
+                  </div>
+          </div>
+  </div>
   <div class="flex flex-wrap">
-                     <div v-for="helperOrder in helperOrders" :key="helperOrder.id" class="w-1/5 p-2">
-
-
-
-                           <div class="max-w-s rounded-2xl overflow-hidden bg-white shadow-lg text-center">
-
+                     <div v-for="helperOrder in helperOrders" :key="helperOrder.id" class="w-1/3 p-2 min-w-max">
+                           <div class="max-w-s rounded-2xl overflow-hidden bg-white shadow-lg text-center min-w-max">
   <div class="flex justify-center text-center">
                     <div class="h-48 lg:h-auto lg: flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Перейти на книгу">
                           <div class="bg-white rounded-lg m-2 p-8 flex flex-col justify-between leading-normal">
@@ -48,6 +73,7 @@
 </div>
 
   </div>
+  </div>
 </template>
 
 <script>
@@ -74,15 +100,27 @@ export default {
     },
     data() {
         return {
+            order: null,
             helperOrders: [],
         }
     },
 
     mounted() {
+        this.getOrder();
         this.getHelperOrder();
     },
 
     methods: {
+      getOrder(){
+        axios
+            .post('/api/order/get_order_only/', {'order': this.$route.params.id})
+            .then(response => {
+                  this.order = response.data.order
+            })
+            .catch(error => {
+                      console.log('error', error)
+                    })
+      },
       getHelperOrder(){
                 axios.post(`/api/order/get_helper_order/`, {'order': this.$route.params.id})
                     .then(response => {

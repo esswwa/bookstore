@@ -97,8 +97,8 @@
       <p class="text-xl text-center text-gray-600">Общая стоимость вашего заказа: {{all_price}} ₽</p>
       <div class="flex justify-center mt-5">
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          <a :href="`http://localhost:5173/profile/${this.userStore.user.id}/`"
-             class="text-white no-underline">Перейти на страницу заказов</a>
+          <a :href="`http://localhost:5173/composition_order/${orderId}/`"
+             class="text-white no-underline">Перейти на страницу заказа</a>
         </button>
       </div>
     </div>

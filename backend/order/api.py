@@ -103,6 +103,12 @@ def get_helper_order(request):
 	order_active = HelperOrderSerializer(order_active, many=True)
 	return JsonResponse({"activeOrders": order_active.data})
 
+@api_view(['POST'])
+def get_order_only(request):
+	data = request.data
+	order = Order.objects.get(id=data['order'])
+	order_active = OrderSerializer(order, many=False)
+	return JsonResponse({"order": order_active.data})
 
 # @api_view(['POST'])
 # def add_order(request):

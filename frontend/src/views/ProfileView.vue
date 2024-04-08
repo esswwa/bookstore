@@ -2,77 +2,9 @@
      <div class="p-4 m-4 mx-auto grid grid-cols-4 gap-4 flex items-center">
         <div class="main-center">
             <div class="p-4 bg-white border border-gray-200 rounded-lg">
-                    <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}">
                       <img src="https://i.pravatar.cc/40?img=70" class="w-16 rounded-full">
                       <p class="p-4"><strong>{{ user.name }}</strong></p>
-                    </RouterLink>
-<!--              <div class="container mt-2" >-->
-<!--    <div class="flex">-->
-<!--      <button-->
-<!--        @click="isOpen = true"-->
-<!--        class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"-->
-<!--        type="button"-->
-<!--        title="Редактировать профиль"-->
-<!--      >Редактировать профиль</button>-->
 
-<!--      <div-->
-<!--        v-show="isOpen"-->
-<!--        class="overflow-hidden-->
-<!--          absolute-->
-<!--          inset-0-->
-<!--          flex-->
-<!--          items-center-->
-<!--          justify-center-->
-<!--          bg-gray-700 bg-opacity-50-->
-<!--        "-->
-<!--      >-->
-<!--        <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">-->
-<!--          <div class="flex items-center justify-between">-->
-<!--            <h3 class="text-2xl">Редактирование профиля</h3>-->
-<!--            <svg-->
-<!--              @click="isOpen = false"-->
-<!--              xmlns="http://www.w3.org/2000/svg"-->
-<!--              class="w-8 ml-4 h-8 text-red-900 cursor-pointer"-->
-<!--              fill="none"-->
-<!--              viewBox="0 0 24 24"-->
-<!--              stroke="currentColor"-->
-<!--            >-->
-<!--              <path-->
-<!--                stroke-linecap="round"-->
-<!--                stroke-linejoin="round"-->
-<!--                stroke-width="2"-->
-<!--                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"-->
-<!--              />-->
-<!--            </svg>-->
-<!--          </div>-->
-<!--          <div class="mt-4">-->
-
-
-<!--                    <div>-->
-<!--                        <label>Пароль</label><br>-->
-<!--                        <input type="password" v-model="password1" value="password1" placeholder="Введите ваш новый пароль" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">-->
-<!--                    </div>-->
-
-<!--                    <div>-->
-<!--                        <label>Подтвердите пароль</label><br>-->
-<!--                        <input type="password" v-model="password2" value="password2" placeholder="Введите ваш новый пароль еще раз" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">-->
-<!--                    </div>-->
-
-
-<!--            <button-->
-<!--              @click="isOpen = false"-->
-<!--              class="px-6 py-2 mt-2 text-blue-800 border border-blue-600 rounded"-->
-<!--            >-->
-<!--              Отменить-->
-<!--            </button>-->
-<!--            <button @click="editProfile()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded">-->
-<!--              Сохранить-->
-<!--            </button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
                 </div>
             </div>
         </div>
@@ -83,24 +15,19 @@
         <fwb-tab name="first" v-if="activeOrders.length > 0" title="Активные заказы" >
           <div class="flex flex-wrap">
               <div v-for="order in activeOrders" :key="order.id" class="w-1/3 p-2">
-                <div class="max-w-sm rounded overflow-hidden bg-white shadow-lg">
+                <div @click="checkCompositionOrder(order.id)" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <div class="px-6 py-4">
                      <p class="text-sm text-gray-600 flex items-center">
                         <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                           <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                         </svg>
-                        {{order.status}}, {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}
+                       <div class="inline-block bg-red-200 px-3 py-1 rounded-full" v-if="order.status ==='Оформлен'">{{order.status}}</div>
+                       <div class="inline-block bg-yellow-200 px-3 py-1 rounded-full" v-else-if="order.status ==='В пути'">{{order.status}}</div>
+                       <div class="inline-block bg-green-200 px-3 py-1 rounded-full" v-else>{{order.status}}</div>
                      </p>
-                    <div class="font-bold text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
-                      <button
-                        class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
-                        @click="checkCompositionOrder(order.id)">
-                        Посмотреть состав заказа
-                    </button>
+                    <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
-                  </div>
-                  <div class="px-6 py-4" v-if="order.status === 'В пункте выдачи'">
-                    <span class="inline-block px-3 py-1 text-sm font-semibold text-gray-700">Заказ прибыл в пункт выдачи {{ order.date_delivered }} числа, если вы не заберете заказ в течении 2-х недель, то он будет отменен! Спасибо за покупку!</span>
                   </div>
                 </div>
               </div>
@@ -112,21 +39,17 @@
         <fwb-tab name="second" v-if="archiveOrders.length > 0" title="Архив заказов">
            <div class="flex flex-wrap">
               <div v-for="order in archiveOrders" :key="order.id" class="w-1/3 p-2">
-                <div class="max-w-sm rounded overflow-hidden bg-white shadow-lg">
+                <div @click="checkCompositionOrder(order.id)" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <div class="px-6 py-4">
                      <p class="text-sm text-gray-600 flex items-center">
                         <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                           <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                         </svg>
-                        {{order.status}}, {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}
+                        <div class="inline-block bg-green-200 px-3 py-1 rounded-full">{{order.status}}</div>
                      </p>
                     <div class="font-bold text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
-                    <button
-                        class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
-                        @click="checkCompositionOrder(order.id)">
-                        Посмотреть состав заказа
-                    </button>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
                     <p class="text-gray-700 text-base">Заказ был получен: {{new Date(order.date_of_receiving).getDay()}}.{{new Date(order.date_of_receiving).getMonth()}}.{{new Date(order.date_of_receiving).getFullYear()}}</p>
                       <button
                         class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
@@ -144,20 +67,16 @@
         <fwb-tab name="third" v-if="canceledOrders.length > 0" title="Отмененные заказы">
             <div class="flex flex-wrap">
               <div v-for="order in canceledOrders" :key="order.id" class="w-1/3 p-2">
-                <div class="max-w-sm rounded overflow-hidden bg-white shadow-lg">
+                <div @click="checkCompositionOrder(order.id)" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <div class="px-6 py-4">
                      <p class="text-sm text-gray-600 flex items-center">
                         <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                           <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                         </svg>
-                        {{order.status}}, {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}
+                        <div class="inline-block bg-green-200 px-3 py-1 rounded-full">{{order.status}}</div>
                      </p>
                     <div class="font-bold text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
-                      <button
-                        class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
-                        @click="checkCompositionOrder(order.id)">
-                        Посмотреть состав заказа
-                    </button>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                   </div>
                 </div>

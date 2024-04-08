@@ -8,6 +8,7 @@ urlpatterns = [
 	path('get_address/', api.get_address, name='get_address'),
 	path('add_order/', api.add_order, name='add_order'),
 	path('add_helper_order/', api.add_helper_order, name='add_helper_order'),
-	path('get_helper_order/', api.get_helper_order, name='get_helper_order')
+	path('get_helper_order/', api.get_helper_order, name='get_helper_order'),
+	path('get_order_only/', api.get_order_only, name='get_order_only')
 
 ]
