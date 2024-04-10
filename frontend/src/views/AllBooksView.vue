@@ -9,10 +9,10 @@
     </div>
 
   <div class="container" >
-    <button @click="saveOptions()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded">
+    <button @click="saveOptions()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-400 rounded">
          Сохранить
     </button>
-    <button v-if="(selectedGenres != '' && selectedGenres != null) || sortOrder !== 'Без сортировки' || searchInput !== ''" @click="resetFilters()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded" title="Сбросить фильтры">
+    <button v-if="(selectedGenres != '' && selectedGenres != null) || sortOrder !== 'Без сортировки' || searchInput !== ''" @click="resetFilters()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-400 rounded" title="Сбросить фильтры">
         Сбросить сортировку и фильтры
     </button>
 <!--    <div class="">-->
@@ -192,7 +192,7 @@
 
 <VuePagination
     v-if="books.length > 0"
-        :total="total"
+      :total="total"
       v-model:value="currentPage"
       :perPage="perPage"
       @set="changePage" />
