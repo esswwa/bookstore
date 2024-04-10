@@ -32,21 +32,52 @@ def books_the_best(request):
     # и так вывести топ 10 лучших
 
 
+    books = Book.objects.filter(status='В наличии')
+    books_rating = []
+    for book in books:
+        if book.rating >= 4.6:
+            books_rating.append(book)
 
-    books = Book.objects.filter(status="В наличии")
-    serializer = BookSerializer(books, many=True)
-    return JsonResponse({'books_the_best': serializer.data}, safe=False)
+    books_rating.sort(key=lambda x: x.rating, reverse=True)
+    books_rating.sort(key=lambda x: x.count_rating, reverse=True)
+    books_rating = books_rating[:10]
+    serializer = BookSerializer(books_rating, many=True)
+    return JsonResponse({'books_popular': serializer.data}, safe=False)
 
 @api_view(['GET'])
 def books_new_items(request):
+    # task
     # можно искать новые книги, которые были выпущены в течении 3-х месяцев
     # но от авторов или издательств, у которых общая сумма рейтинга их книг
     # составляла хороший рейтинг и при этом было по 0 рецензий на данную книгу
 
 
-    books = Book.objects.filter(status="В наличии")
-    serializer = BookSerializer(books, many=True)
+    books = Book.objects.filter(status='В наличии', date_of_create=2024)
+    books_rating1 = []
+    for book in books:
+        if book.rating == 0:
+            books_rating1.append(book)
+    book_checks = []
+    for book in books_rating1:
+        book_check = Book.objects.filter(author=book.author)
+        book_count = book_check.count()
+        book_rating = 0
+        for book_check_2 in book_check:
+            book_rating += book_check_2.rating
+        books_rating = book_rating / book_count
+        if book_count > 2 and books_rating >= 4.6:
+            book_checks.append(book)
 
+    book_checks.sort(key=lambda x: x.rating, reverse=True)
+    book_checks.sort(key=lambda x: x.count_rating, reverse=True)
+    book_checks = book_checks[:10]
+    if book_checks:
+        serializer = BookSerializer(book_checks, many=True)
+    else:
+        serializer = BookSerializer(books_rating1, many=True)
+
+    print(book_checks)
+    print(books_rating1)
     return JsonResponse({'books_new_items': serializer.data}, safe=False)
 
 @api_view(['GET'])
@@ -55,8 +86,16 @@ def books_popular(request):
     # другими, затем смотреть, чтобы рейтинг был выше 4.6, и можно еще добавить
     # сравнение, чтобы у пользователей было много рецензий и все они были разными
     # и так вывести топ 10 лучших, но все это с фильтром 2024 года
-    books = Book.objects.filter(status="В наличии")
-    serializer = BookSerializer(books, many=True)
+
+    books = Book.objects.filter(status='В наличии', date_of_create=2024)
+    books_rating = []
+    for book in books:
+        if book.rating >= 4.6:
+            books_rating.append(book)
+
+    books_rating.sort(key=lambda x: x.rating, reverse=True)
+    books_rating = books_rating[:10]
+    serializer = BookSerializer(books_rating, many=True)
     return JsonResponse({'books_popular': serializer.data}, safe=False)
 
 

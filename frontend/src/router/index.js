@@ -4,7 +4,6 @@ import SigninView from "@/views/SigninView.vue";
 import BasketView from "@/views/BasketView.vue";
 import BooksView from "@/views/BooksView.vue";
 import FavouriteView from "@/views/FavouriteView.vue";
-import OrdersView from "@/views/OrdersView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import BookView from "@/views/BookView.vue";
 import AllBooksView from "@/views/AllBooksView.vue";
@@ -44,11 +43,6 @@ const router = createRouter({
       path: '/favourite/:page',
       name: 'favourite',
       component: FavouriteView
-    },
-    {
-      path: '/order',
-      name: 'order',
-      component: OrdersView
     },
     {
       path: '/all_books/:page',

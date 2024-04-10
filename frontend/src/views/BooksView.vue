@@ -1,14 +1,14 @@
 <template>
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto" v-if="books_popular_2024.length === 10">
         <div class="main-center col-span-3 space-y-4">
           <div class="text-center mb-2 text-black py-4 px-6">
-              <h1 class="text-4xl font-bold">ЛУЧШИЕ ИЗ ЛУЧШИХ</h1>
+              <h1 class="text-4xl font-bold">САМЫЕ ПОПУЛЯРНЫЕ КНИГИ 2024 ГОДА</h1>
           </div>
         </div>
     </div>
     <swiper
-        v-if="books.length > 0"
-        :spaceBetween="30"
+        v-if="books_popular_2024.length === 10"
+        :spaceBetween="10"
         :slidesPerView="5"
         :pauseOnMouseEnter="true"
         :autoplay="{
@@ -19,7 +19,7 @@
         :modules="modules"
         class="mySwiper"
       >
-        <swiper-slide v-for="book in books"
+        <swiper-slide v-for="book in books_popular_2024"
                 :key="book.id" class="rounded-2xl">
           <div class="flex flex-col">
             <div class="max-w-sm w-full lg:max-w-full lg:flex">
@@ -29,7 +29,7 @@
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                                   </svg>
-                                   {{ book.author.text }}
+                                   {{ book.author.text.split(',')[0] }}
                                 </p>
                                 <img class="p-2" src="https://api.lorem.space/image/book?w=200&h=200" alt="Book cover">
                                 <div class="text-gray-900 font-medium text-xl mb-2">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
@@ -75,20 +75,28 @@
                     </div>
             </div>
         </swiper-slide>
+        <template #container-end>
+          <div class="autoplay-progress">
+            <svg viewBox="0 0 48 48" ref="progressCircle">
+              <circle cx="24" cy="24" r="20"></circle>
+            </svg>
+            <span ref="progressContent"></span>
+          </div>
+        </template>
       </swiper>
 
 
-      <div class="max-w-7xl mx-auto">
+      <div class="max-w-7xl mx-auto" v-if="books_popular.length === 10">
         <div class="main-center col-span-3 space-y-4">
           <div class="text-center m-2  text-black py-4 px-6">
-              <h1 class="text-4xl font-bold">НОВИНКИ В ЛИТЕРАТУРЕ</h1>
+              <h1 class="text-4xl font-bold">ЛУЧШИЕ ИЗ ЛУЧШИХ</h1>
           </div>
         </div>
     </div>
 
     <swiper
-        v-if="books.length > 0"
-        :spaceBetween="30"
+        v-if="books_popular.length === 10"
+        :spaceBetween="10"
         :slidesPerView="5"
         :pauseOnMouseEnter="true"
         :autoplay="{
@@ -96,11 +104,11 @@
           reverseDirection: true,
           disableOnInteraction: false,
         }"
-        @autoplayTimeLeft="onAutoplayTimeLeft"
+        @autoplayTimeLeft="onAutoplayTimeLeft1"
         :modules="modules"
         class="mySwiper"
       >
-        <swiper-slide v-for="book in books"
+        <swiper-slide v-for="book in books_popular"
                 :key="book.id" class="rounded-2xl">
           <div class="flex flex-col">
             <div class="max-w-sm w-full lg:max-w-full lg:flex">
@@ -110,7 +118,7 @@
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                                   </svg>
-                                   {{ book.author.text }}
+                                   {{ book.author.text.split(',')[0] }}
                                 </p>
                                 <img class="p-2" src="https://api.lorem.space/image/book?w=200&h=200" alt="Book cover">
                                 <div class="text-gray-900 font-medium text-xl mb-2">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
@@ -157,31 +165,39 @@
                     </div>
             </div>
         </swiper-slide>
+        <template #container-end>
+          <div class="autoplay-progress">
+            <svg viewBox="0 0 48 48" ref="progressCircle1">
+              <circle cx="24" cy="24" r="20"></circle>
+            </svg>
+            <span ref="progressContent1"></span>
+          </div>
+        </template>
       </swiper>
 
 
-      <div class="max-w-7xl mx-auto">
+      <div class="max-w-7xl mx-auto" v-if="books_new_items.length > 0">
         <div class="main-center col-span-3 space-y-4">
           <div class="text-center m-2 text-black py-4 px-6">
-              <h1 class="text-4xl font-bold">САМЫЕ ПОПУЛЯРНЫЕ КНИГИ 2024 ГОДА</h1>
+              <h1 class="text-4xl font-bold">НОВИНКИ В ЛИТЕРАТУРЕ</h1>
           </div>
         </div>
     </div>
 
     <swiper
-        v-if="books.length > 0"
-        :spaceBetween="30"
+        v-if="books_new_items.length > 0"
+        :spaceBetween="10"
         :pauseOnMouseEnter="true"
         :slidesPerView="5"
         :autoplay="{
           delay: 3000,
           disableOnInteraction: false,
         }"
-        @autoplayTimeLeft="onAutoplayTimeLeft"
+        @autoplayTimeLeft="onAutoplayTimeLeft2"
         :modules="modules"
         class="mySwiper"
       >
-        <swiper-slide v-for="book in books"
+        <swiper-slide v-for="book in books_new_items"
                 :key="book.id" class="rounded-2xl">
           <div class="flex flex-col">
             <div class="max-w-sm w-full lg:max-w-full lg:flex">
@@ -191,7 +207,7 @@
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                                   </svg>
-                                   {{ book.author.text }}
+                                   {{ book.author.text.split(',')[0] }}
                                 </p>
                                 <img class="p-2" src="https://api.lorem.space/image/book?w=200&h=200" alt="Book cover">
                                 <div class="text-gray-900 font-medium text-xl mb-2">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
@@ -238,10 +254,10 @@
         </swiper-slide>
         <template #container-end>
           <div class="autoplay-progress">
-            <svg viewBox="0 0 48 48" ref="progressCircle">
+            <svg viewBox="0 0 48 48" ref="progressCircle2">
               <circle cx="24" cy="24" r="20"></circle>
             </svg>
-            <span ref="progressContent"></span>
+            <span ref="progressContent2"></span>
           </div>
         </template>
       </swiper>
@@ -276,15 +292,33 @@ export default {
  setup() {
       const progressCircle = ref(null);
       const progressContent = ref(null);
+      const progressCircle1 = ref(null);
+      const progressContent1 = ref(null);
+      const progressCircle2 = ref(null);
+      const progressContent2 = ref(null);
 
       const onAutoplayTimeLeft = (s, time, progress) => {
         progressCircle.value.style.setProperty('--progress', 1 - progress);
         progressContent.value.textContent = `${Math.ceil(time / 1000)}s`;
       };
+      const onAutoplayTimeLeft1 = (s, time, progress) => {
+        progressCircle1.value.style.setProperty('--progress', 1 - progress);
+        progressContent1.value.textContent = `${Math.ceil(time / 1000)}s`;
+      };
+      const onAutoplayTimeLeft2 = (s, time, progress) => {
+        progressCircle2.value.style.setProperty('--progress', 1 - progress);
+        progressContent2.value.textContent = `${Math.ceil(time / 1000)}s`;
+      };
       return {
         onAutoplayTimeLeft,
         progressCircle,
         progressContent,
+        onAutoplayTimeLeft1,
+        progressCircle1,
+        progressContent1,
+        onAutoplayTimeLeft2,
+        progressCircle2,
+        progressContent2,
         modules: [Autoplay, Pagination, Navigation],
       };
       },
@@ -294,6 +328,9 @@ export default {
             books: {
                 id: null
             },
+            books_popular: [],
+            books_popular_2024: [],
+            books_new_items: [],
             favourite: [],
             favourites: [],
             basket: [],
@@ -303,7 +340,10 @@ export default {
 
     created() {
     this.userStore = useUserStore()
-        this.getBook();
+        // this.getBook();
+        this.getPopularBook();
+        this.getNewBooks();
+        this.getBestBooks();
         this.getFavourite();
         this.getBasket();
     },
@@ -330,7 +370,7 @@ export default {
                 .then(response => {
                     console.log('data', response.data.books)
 
-                    this.books_the_best = response.data.books_the_best
+                    this.books_popular = response.data.books_popular
                 })
                 .catch(error => {
                     console.log('error', error)
@@ -354,7 +394,7 @@ export default {
                 .then(response => {
                     console.log('data', response.data.books)
 
-                    this.books_popular = response.data.books_popular
+                    this.books_popular_2024 = response.data.books_popular
                 })
                 .catch(error => {
                     console.log('error', error)

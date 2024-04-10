@@ -12,7 +12,6 @@
      </div>
 
     <div class=" p-4 m-4 bg-white border border-gray-200 text-center rounded-lg">
-
     <fwb-tabs v-model="activeTab" class="p-5">
         <fwb-tab name="first" v-if="activeOrders.length > 0" title="Активные заказы" >
           <div class="flex flex-wrap">
