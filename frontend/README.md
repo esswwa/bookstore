@@ -29,12 +29,6 @@ npm run build
 ```
 
 
-pip install django
-
-pip install djangorestframework
-
-pip install djangorestframework-simplejwt
-
-pip install pillow
-
-pip install django-cors-headers
+install node js
+npm i
+pip install -r requirements.txt
