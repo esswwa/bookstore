@@ -19,21 +19,24 @@
                     <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
                     <p class="text-gray-700 text-base" v-if="order.status === 'В пункте выдачи'">Дата прибытия в пункт выдачи: {{new Date(order.date_delivered).getDay()}}.{{new Date(order.date_delivered).getMonth()}}.{{new Date(order.date_delivered).getFullYear()}}</p>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
+                    <button @click="cancelOrder()" v-if="order.status !== 'Отменен' && order.status !== 'Завершен'" class="card-button py-4 px-6 mt-4 bg-blue-400 text-white rounded-lg">Отменить заказ</button>
+
                     <div v-if="order.status === 'В пункте выдачи'" class="m-4 whitespace-normal text-m text-gray-900 flex justify-center text-center items-center">
                       Ваш заказ прибыл в пункт выдачи,<br>
                       если вы не заберете заказ в течении<br>
                       2-х недель, то он будет отменен!<br>
                       Спасибо за покупку!
                     </div>
+                      <button v-if="order.status === 'В пункте выдачи'" @click="applyOrder()" class="card-button py-4 px-6 mt-4 ml-4 bg-blue-400 text-white flex justify-center text-center items-center rounded-lg">Подтвердить получение заказа</button>
                   </div>
           </div>
   </div>
   <div class="flex flex-wrap">
                      <div v-for="helperOrder in helperOrders" :key="helperOrder.id" class="w-1/3 p-2 min-w-max">
                            <div class="max-w-s rounded-2xl overflow-hidden bg-white shadow-lg text-center min-w-max">
-  <div class="flex justify-center text-center">
+                              <div class="flex justify-center text-center">
                     <div class="h-48 lg:h-auto lg: flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Перейти на книгу">
-                          <div class="bg-white rounded-lg m-2 p-8 flex flex-col justify-between leading-normal">
+                          <div @click="goToBook(helperOrder.book.id)" class="hover:bg-gray-100 duration-200 cursor-pointer bg-white rounded-lg m-2 p-8 flex flex-col justify-between leading-normal">
                             <p class="text-sm text-gray-600 flex items-center">
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
@@ -49,7 +52,10 @@
                                         <span class="text-sm mb-2 font-semibold text-gray-700">Цена за все: {{ helperOrder.all_price }}</span>
                                     </div>
 
-                            <div class="flex items-center justify-center text-center mb-4 mt-4">
+
+
+                          </div>
+                      <div class="flex items-center justify-center text-center mb-8 mt-4">
                                           <svg class="w-4 h-4 text-yellow-300 me-1" v-if="helperOrder.book.rating > 0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                               <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                                           </svg>
@@ -61,8 +67,6 @@
                                           <a :href="`http://localhost:5173/book/${helperOrder.book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">{{helperOrder.book.count_rating}} отзывов</a>
                                       </div>
                               </div>
-
-                          </div>
                     </div>
 
 
@@ -121,6 +125,10 @@ export default {
                       console.log('error', error)
                     })
       },
+    goToBook(bookId) {
+      this.$router.push({ path: `/book/${bookId}/1/` });
+      console.log("Переход к книге с ID:", bookId);
+    },
       getHelperOrder(){
                 axios.post(`/api/order/get_helper_order/`, {'order': this.$route.params.id})
                     .then(response => {
@@ -130,7 +138,29 @@ export default {
                     .catch(error => {
                       console.log('error', error)
                     })
-      }
+      },
+      cancelOrder(){
+             axios.post(`/api/order/cancel_order/`, {'order': this.$route.params.id})
+                    .then(response => {
+                      this.helperOrders = response.data.activeOrders
+                      console.log('helperOrders', this.helperOrders)
+                      this.$router.push({ path: `/profile/${this.userStore.id}/` });
+                    })
+                    .catch(error => {
+                      console.log('error', error)
+                    })
+      },
+      applyOrder(){
+             axios.post(`/api/order/apply_order/`, {'order': this.$route.params.id})
+                    .then(response => {
+                      this.helperOrders = response.data.activeOrders
+                      console.log('helperOrders', this.helperOrders)
+                      this.$router.push({ path: `/profile/${this.userStore.id}/` });
+                    })
+                    .catch(error => {
+                      console.log('error', error)
+                    })
+      },
     }
 }
 </script>

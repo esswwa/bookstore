@@ -110,6 +110,28 @@ def get_order_only(request):
 	order_active = OrderSerializer(order, many=False)
 	return JsonResponse({"order": order_active.data})
 
+@api_view(['POST'])
+def cancel_order(request):
+	data = request.data
+	order = Order.objects.get(id=data['order'])
+	order.status = 'Отменен'
+	if order:
+		order.save()
+		return Response({'message': 'Order canceled successfully'}, status=status.HTTP_200_OK)
+	else:
+		return Response({'message': 'Order not canceled successfully'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def apply_order(request):
+	data = request.data
+	order = Order.objects.get(id=data['order'])
+	order.status = 'Завершен'
+	if order:
+		order.save()
+		return Response({'message': 'Order apply successfully'}, status=status.HTTP_200_OK)
+	else:
+		return Response({'message': 'Order not apply successfully'}, status=status.HTTP_400_BAD_REQUEST)
+
 # @api_view(['POST'])
 # def add_order(request):
 # 	data = request.data

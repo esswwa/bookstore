@@ -48,15 +48,10 @@
                         </svg>
                         <div class="inline-block bg-green-200 px-3 py-1 rounded-full">{{order.status}}</div>
                      </p>
-                    <div class="font-bold text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
+                    <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                     <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
                     <p class="text-gray-700 text-base">Заказ был получен: {{new Date(order.date_of_receiving).getDay()}}.{{new Date(order.date_of_receiving).getMonth()}}.{{new Date(order.date_of_receiving).getFullYear()}}</p>
-                      <button
-                        class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg"
-                        @click="logout">
-                        Оставить отзыв
-                    </button>
                   </div>
                 </div>
               </div>
@@ -76,9 +71,10 @@
                         </svg>
                         <div class="inline-block bg-green-200 px-3 py-1 rounded-full">{{order.status}}</div>
                      </p>
-                    <div class="font-bold text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
-                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
+                    <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
+
                   </div>
                 </div>
               </div>
