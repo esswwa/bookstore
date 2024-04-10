@@ -29,6 +29,8 @@ npm run build
 ```
 
 
-install node js
+install node js 20.12.11
+
 npm i
+
 pip install -r requirements.txt
