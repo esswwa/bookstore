@@ -95,6 +95,9 @@
           <button @click="addReview(book.id)" class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg" title="Добавить отзыв">
             Добавить отзыв
           </button>
+          <div v-if="showReview === true">
+                Заполните отзыв и указывайте корректный рейтинг
+          </div>
 
         </div >
 
@@ -153,6 +156,7 @@ export default {
           total: 0, // Устанавливаем начальное значение total
           perPage: 5,
           currentPage: 1,
+          showReview: false,
       favourite: [],
           reviews: [],
       favourites: [],
@@ -294,10 +298,12 @@ export default {
                         'rating': this.rating
                  })
                      .then(response => {
+                       this.showReview = false
                        this.getReview()
                        this.getBook()
                      })
                      .catch(error=>{
+                       this.showReview = true
                        console.log('error', error)
                      })
       },
