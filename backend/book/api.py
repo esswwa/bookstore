@@ -101,6 +101,7 @@ def books_popular(request):
 
 @api_view(['POST'])
 def get_pagination(request, page):
+    print(request.data['searchInput'] )
     if request.data['selected_genres']:
         genres = Genre.objects.filter(id__in=request.data['selected_genres'])
         genre_additionals = AdditionalGenre.objects.filter(text_genre_id__in=genres)
@@ -108,15 +109,30 @@ def get_pagination(request, page):
         count = books.count()
         start_index = (page - 1) * 12
         end_index = start_index + 12
-        if request.data['sort_order'] != 'Без сортировки':
-            books = books.order_by('-'+request.data['sort_order'])
-    else:
+        if request.data['searchInput'] != '':
+            books = books.filter(name__contains=request.data['searchInput'])
+            count = books.count()
+            start_index = (page - 1) * 12
+            end_index = start_index + 12
+            if request.data['sort_order'] != 'Без сортировки':
+                books = books.order_by('-'+request.data['sort_order'])
+        else:
+            if request.data['sort_order'] != 'Без сортировки':
+                books = books.order_by('-'+request.data['sort_order'])
+    elif request.data['searchInput'] == '':
         books = Book.objects.filter(status="В наличии")
         if request.data['sort_order'] != 'Без сортировки':
             books = books.order_by('-' + request.data['sort_order'])
         count = books.count()
         start_index = (page - 1) * 12
         end_index = start_index + 12
+    else:
+        books = Book.objects.filter(status="В наличии", name__contains=request.data['searchInput'])
+        count = books.count()
+        start_index = (page - 1) * 12
+        end_index = start_index + 12
+        if request.data['sort_order'] != 'Без сортировки':
+            books = books.order_by('-'+request.data['sort_order'])
 
     books = books[start_index:end_index]
 
