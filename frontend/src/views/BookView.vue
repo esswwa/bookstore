@@ -75,9 +75,10 @@
       </div>
 
 
-  <div class="max-w-7xl mx-auto rounded overflow-hidden bg-white shadow-lg mt-4 flex flex-col w-1/3 p-2">
+  <div class="max-w-7xl mx-auto rounded overflow-hidden bg-white shadow-lg mt-4 flex flex-col  w-1/3 p-2">
 
-      <div class="px-6 py-4 flex flex-col items-center">
+    <div class="flex flex-col items-center justify-center text-center" >
+            <div class="px-6 py-4 flex flex-col items-center">
         <div class="font-bold text-xl mb-2">Отзывы</div>
         <span class="inline-block px-3 py-1 text-sm font-semibold text-gray-700 ml-2">Рейтинг: {{book.rating}}</span>
       </div>
@@ -93,6 +94,8 @@
         </div >
 
       </div>
+    </div>
+
 
 
 
