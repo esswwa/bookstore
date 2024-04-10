@@ -205,7 +205,6 @@ export default {
             console.log('Log out')
             this.userStore.removeToken()
             this.$router.push('/signin')
-            this.window.reload()
         },
   },
 

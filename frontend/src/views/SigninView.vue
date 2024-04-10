@@ -95,7 +95,6 @@ export default {
                       .then(response => {
                          this.userStore.setUserInfo(response.data)
                          this.$router.push('/books')
-                          this.window.reload()
                       })
                       .catch(error => {
                           console.log('error', error)
