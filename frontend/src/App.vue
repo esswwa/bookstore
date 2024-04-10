@@ -4,7 +4,9 @@
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between">
                 <div class="menu-left">
-                    <a href="/books" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200">МАГАЗИН КНИГ "ЧИТАЙ-ЛЕТАЙ"</a>
+                    <RouterLink to="/books" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200">
+                            МАГАЗИН КНИГ "ЧИТАЙ-ЛЕТАЙ"
+                    </RouterLink>
                 </div>
 
                 <div class="menu-center flex space-x-12" v-if="userStore.user.isAuthenticated">

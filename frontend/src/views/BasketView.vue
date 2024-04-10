@@ -48,7 +48,9 @@
                                         </svg>
                                           <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white">{{book.rating}}</p>
                                           <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
-                                          <a :href="`http://localhost:5173/book/${book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">{{book.count_rating}} отзывов</a>
+                                          <RouterLink :to="`/book/${book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
+                                                   {{book.count_rating}} отзывов
+                                          </RouterLink>
                                       </div>
                                   </div>
          <div v-for="additional in basket_additionals" :key="additional.id" v-if="basket_additionals.length > 0" >
@@ -77,7 +79,9 @@
     </div>
     <div v-else>
       <div class="card rounded mt-4 p-8 overflow-hidden bg-white shadow-lg">
-           <a href="http://localhost:5173/books/" class="hover:underline text-gray-900 text-xl mb-2">Ваша корзина пуста, самое время это исправить!</a>
+      <RouterLink to="/books/" class="hover:underline text-gray-900 text-xl mb-2">
+           Ваша корзина пуста, самое время это исправить!
+      </RouterLink>
       </div>
     </div>
   </div>
@@ -97,8 +101,9 @@
       <p class="text-xl text-center text-gray-600">Общая стоимость вашего заказа: {{all_price}} ₽</p>
       <div class="flex justify-center mt-5">
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          <a :href="`http://localhost:5173/composition_order/${orderId}/`"
-             class="text-white no-underline">Перейти на страницу заказа</a>
+          <RouterLink :to="`/composition_order/${orderId}/`" class="text-white no-underline">
+                                                   Перейти на страницу заказа
+                                          </RouterLink>
         </button>
       </div>
     </div>

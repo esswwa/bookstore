@@ -64,7 +64,9 @@
                                         </svg>
                                           <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white">{{helperOrder.book.rating}}</p>
                                           <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
-                                          <a :href="`http://localhost:5173/book/${helperOrder.book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">{{helperOrder.book.count_rating}} отзывов</a>
+                                          <RouterLink :to="`/book/${helperOrder.book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
+                                                   {{helperOrder.book.count_rating}} отзывов
+                                            </RouterLink>
                                       </div>
                               </div>
                     </div>

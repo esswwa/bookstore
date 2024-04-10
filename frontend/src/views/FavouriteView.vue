@@ -35,8 +35,9 @@
                                           </svg>
                                             <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white">{{book.rating}}</p>
                                             <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
-                                            <a :href="`http://localhost:5173/book/${book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">{{book.count_rating}} отзывов</a>
-                                        </div>
+<RouterLink :to="`/book/${book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
+                                                   {{book.count_rating}} отзывов
+                                            </RouterLink>                                            </div>
                     <div class="mb-4" >
                         <button @click="deleteFavourite(book.id)" title="Удалить из избранных" class="py-4 px-6 text-white rounded-lg hover:bg-gray-100 hover:rounded-full  duration-200">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="#60a5fa" stroke="isCurrent" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
@@ -59,7 +60,9 @@
   </div>
     <div v-else>
       <div class="card rounded mt-4 p-8 overflow-hidden bg-white shadow-lg">
-           <a href="http://localhost:5173/books/" class="hover:underline text-gray-900 text-xl mb-2">Ваша избранные пусты, самое время это исправить!</a>
+          <RouterLink to="/books/" class="hover:underline text-gray-900 text-xl mb-2">
+           Ваши избранные пусты, самое время это исправить!
+      </RouterLink>
       </div>
     </div>
 </div>
