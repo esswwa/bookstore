@@ -1,6 +1,8 @@
 import uuid
 from django.db import models
 
+from account.models import User
+
 
 class Genre(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
@@ -20,7 +22,7 @@ class Published(models.Model):
 
 class Author(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
-    text = models.TextField(blank=True, null=True)
+    text = models.TextField(blank=True, null=False, default="")
 
 
 class Book(models.Model):
@@ -29,11 +31,11 @@ class Book(models.Model):
     status = models.TextField(blank=True, null=False)
     name = models.TextField(blank=True, null=False)
     type_cover = models.TextField(blank=True, null=True)
-    date_of_create = models.IntegerField(default=0, null=True)
+    date_of_create = models.IntegerField(default=0, null=False)
     isbn = models.TextField(blank=True, null=False)
     count_of_pages = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
-    count_rating = models.IntegerField(default=0, null=True)
+    count_rating = models.IntegerField(default=0)
     age_restrictions = models.TextField(blank=True, null=True)
     weight = models.IntegerField(default=0)
     count_on_stock = models.IntegerField(default=5)
@@ -43,3 +45,15 @@ class Book(models.Model):
     additional_genre = models.ForeignKey(AdditionalGenre, on_delete=models.DO_NOTHING, null=True)
     publishing_house = models.ForeignKey(Published, on_delete=models.DO_NOTHING)
     author = models.ForeignKey(Author, on_delete=models.DO_NOTHING)
+
+
+class ViewedBook(models.Model):
+    id = models.IntegerField(primary_key=True, editable=False)
+    book = models.ForeignKey(Book, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+
+class SimilarBook(models.Model):
+    id = models.IntegerField(primary_key=True, editable=False)
+    book = models.ForeignKey(Book, on_delete=models.DO_NOTHING, related_name='similar_books_for_this')
+    book_for_similar = models.ForeignKey(Book, on_delete=models.DO_NOTHING, related_name='similar_books')
