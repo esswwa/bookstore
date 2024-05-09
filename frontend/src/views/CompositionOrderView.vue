@@ -43,7 +43,7 @@
                                   </svg>
                                    {{ helperOrder.book.author.text.split(',')[0] }}
                                 </p>
-                                <img class="p-2" src="https://api.lorem.space/image/book?w=200&h=200" alt="Book cover">
+                                <img class="p-2" height="200px" width="200px" src="@/assets/preview.jpg" alt="Book cover">
                                 <div class="text-gray-900 font-medium text-xl mb-2">{{helperOrder.book.name.slice(0, 15) + (helperOrder.book.name.length > 15 ? '...' : '')}}</div>
                                   <span class=" flex items-center px-3 text-xl font-semibold text-gray-500">{{ helperOrder.book.cost_per_one }} ₽</span>
 

@@ -27,12 +27,12 @@ class Author(models.Model):
 
 class Book(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
-    description = models.TextField(blank=True, null=False)
+    description = models.TextField(blank=True, null=True)
     status = models.TextField(blank=True, null=False)
-    name = models.TextField(blank=True, null=False)
+    name = models.TextField(blank=True, null=True)
     type_cover = models.TextField(blank=True, null=True)
-    date_of_create = models.IntegerField(default=0, null=False)
-    isbn = models.TextField(blank=True, null=False)
+    date_of_create = models.IntegerField(default=0, null=True)
+    isbn = models.TextField(blank=True, null=True)
     count_of_pages = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
     count_rating = models.IntegerField(default=0)
@@ -41,10 +41,10 @@ class Book(models.Model):
     count_on_stock = models.IntegerField(default=5)
     cost_per_one = models.DecimalField(max_digits=10, decimal_places=2)
     size = models.TextField(blank=True, null=True)
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, default=1)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, null=True)
     additional_genre = models.ForeignKey(AdditionalGenre, on_delete=models.DO_NOTHING, null=True)
-    publishing_house = models.ForeignKey(Published, on_delete=models.DO_NOTHING)
-    author = models.ForeignKey(Author, on_delete=models.DO_NOTHING)
+    publishing_house = models.ForeignKey(Published, on_delete=models.DO_NOTHING, null=True)
+    author = models.ForeignKey(Author, on_delete=models.DO_NOTHING, null=True)
 
 
 class ViewedBook(models.Model):

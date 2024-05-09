@@ -20,7 +20,7 @@
 
         <div class="font-bold text-xl mb-2">{{ book.name }}</div>
         <div class="flex">
-          <img class="p-2 rounded" src="https://api.lorem.space/image/book?w=300&h=400" alt="Book cover">
+          <img class="p-2 rounded" height="300px" width="400px" src="@/assets/preview.jpg" alt="Book cover">
           <div class="flex flex-col items-center p-2">
                 <p class="text-gray-700 text-base" v-if="book.description">{{book.description.slice(0, 700) + (book.description.length > 700 ? '...' : '')}}</p>
                 </div>
