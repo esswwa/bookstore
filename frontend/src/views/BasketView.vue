@@ -144,8 +144,15 @@ export default {
     },
     methods:{
         goToBook(bookId) {
-      this.$router.push({ path: `/book/${bookId}/1/` });
-          console.log("Переход к книге с ID:", bookId);
+    axios
+           .post(`/api/book/add_view/`, {"bookId":bookId,"user": this.userStore.user.id})
+           .then(response => {
+             this.$router.push({ path: `/book/${bookId}/1/` });
+             console.log("Переход к книге с ID:", bookId);
+           })
+           .catch(error => {
+               console.log('error', error)
+           })
     },
                getBasket() {
                  console.log("ASDAS", this.userStore.user.id)

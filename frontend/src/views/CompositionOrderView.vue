@@ -8,9 +8,7 @@
           <div class="text-gray-900 font-medium text-xl mb-2">
 
             <div class="px-6 py-4">
-              <h1 class="text-xl">
-                    Номер заказа: {{order.id}}
-                  </h1>
+
               <p class="text-sm text-gray-600 flex items-center" v-if="order.status">
                         <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                           <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
@@ -19,9 +17,14 @@
                        <div class="inline-block bg-yellow-200 px-3 py-1 rounded-full" v-else-if="order.status ==='В пути'">{{order.status}}</div>
                        <div class="inline-block bg-green-200 px-3 py-1 rounded-full" v-else>{{order.status}}</div>
                      </p>
+               <h1 class="text-xl">
+                    Номер заказа: {{order.id}}
+                  </h1>
                     <div class="text-gray-700 text-xl mb-2" v-if="order.address">Пункт выдачи: {{ order.address.text }}</div>
                     <p class="text-gray-700 text-base" v-if="order.date_order">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
                     <p class="text-gray-700 text-base" v-if="order.status === 'В пункте выдачи'">Дата прибытия в пункт выдачи: {{new Date(order.date_delivered).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                    <p class="text-gray-700 text-base" v-if="order.status === 'Завершен'">Заказ был получен: {{new Date(order.date_of_receiving).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                     <button @click="cancelOrder()" v-if="order.status !== 'Отменен' && order.status !== 'Завершен' && order.status !== 'Не выкуплен'" class="card-button py-4 px-6 mt-4 bg-blue-400 text-white rounded-lg">Отменить заказ</button>
 
@@ -132,8 +135,15 @@ export default {
                     })
       },
     goToBook(bookId) {
-      this.$router.push({ path: `/book/${bookId}/1/` });
-      console.log("Переход к книге с ID:", bookId);
+     axios
+           .post(`/api/book/add_view/`, {"bookId":bookId,"user": this.userStore.user.id})
+           .then(response => {
+             this.$router.push({ path: `/book/${bookId}/1/` });
+             console.log("Переход к книге с ID:", bookId);
+           })
+           .catch(error => {
+               console.log('error', error)
+           })
     },
       getHelperOrder(){
                 axios.post(`/api/order/get_helper_order/`, {'order': this.$route.params.id})

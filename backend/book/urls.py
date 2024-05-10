@@ -12,6 +12,7 @@ urlpatterns = [
     path('get_pagination_author/<int:author>/<int:page>/', api.get_pagination_author, name='get_pagination_author'),
     path('books_popular/', api.books_popular, name='books_popular'),
     path('get_genres/', api.get_genres, name='get_genres'),
+    path('add_view/', api.add_view, name='add_view'),
     path('get_author/<int:author>/', api.get_author, name='get_author'),
 
 

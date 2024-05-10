@@ -1,10 +1,12 @@
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 from account.models import User
 from account.serializers import (UserSerializer)
+from rest_framework.response import Response
 
-from .models import Book, Genre, AdditionalGenre, Author
+from .models import Book, Genre, AdditionalGenre, Author, ViewedBook
 from .serializers import BookSerializer, GenreSerializer, AuthorSerializer
 
 
@@ -182,6 +184,51 @@ def get_pagination_author(request, author, page):
     serializer = BookSerializer(books, many=True)
 
     return JsonResponse({'books': serializer.data, 'count': count}, safe=False)
+
+
+@api_view(['POST'])
+def add_view(request):
+    data = request.data
+    bookId = data['bookId']
+    user_id = data['user']
+    user = User.objects.get(id=user_id)
+    book = Book.objects.get(id=bookId)
+    # viewed_book = ViewedBook.objects.get(book=book, user=user)
+    # # if viewed_book:
+    # #     return Response({'message': 'Book already viewed'}, status=status.HTTP_200_OK)
+    # # else:
+    # #     viewed_book = ViewedBook.objects.create(book=book, user=user)
+    # #     if viewed_book:
+    # #         viewed_book.save()
+    # #         return Response({'message': 'Book viewed added'}, status=status.HTTP_200_OK)
+    # #     else:
+    # #         return JsonResponse({'message': 'Book viewed dont added'}, status=status.HTTP_400_BAD_REQUEST)
+    # try:
+    #     viewed_book = ViewedBook.objects.get(book=book, user=user)
+    #     return Response({'message': 'Book already viewed'}, status=status.HTTP_200_OK)
+    # except ViewedBook.DoesNotExist:
+    #     viewed_book = ViewedBook.objects.create(book=book, user=user)
+    #     if viewed_book:
+    #         viewed_book.save()
+    #         return Response({'message': 'Book viewed added'}, status=status.HTTP_200_OK)
+    #     else:
+    #         return JsonResponse({'message': 'Book viewed dont added'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        book = Book.objects.get(id=bookId)
+    except Book.DoesNotExist:
+        return Response({'message': 'Book not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    viewed_book, created = ViewedBook.objects.get_or_create(book=book, user=user)
+
+    if not created:
+        return Response({'message': 'Book already viewed'}, status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'Book viewed added'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def get_genres(request):
