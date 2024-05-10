@@ -4,9 +4,9 @@
             <div class="p-4 bg-white border border-gray-200 rounded-lg flex flex-col items-center">
               <div class="flex items-center">
                   <img src="https://i.pravatar.cc/40?img=70" class="w-16 rounded-full">
-                  <p class="p-4"><strong>{{ user.name }}</strong></p>
+                  <p class="p-4" v-if="user.name"><strong>{{ user.name }}</strong></p>
               </div>
-              <p class="p-4">{{ user.email }}</p>
+              <p class="p-4" v-if="user.email">{{ user.email }}</p>
             </div>
         </div>
      </div>

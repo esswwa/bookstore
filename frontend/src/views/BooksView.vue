@@ -25,20 +25,20 @@
             <div class="max-w-sm w-full lg:max-w-full lg:flex">
                     <div class="h-48 lg:h-auto lg: flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Перейти на книгу">
                           <div @click="goToBook(book.id)" class="hover:bg-gray-100 duration-200 cursor-pointer bg-white rounded-lg m-2 p-8 flex flex-col justify-between leading-normal">
-                            <p class="text-sm text-gray-600 flex items-center">
+                            <p class="text-sm text-gray-600 flex items-center" v-if="book.author">
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                                   </svg>
                                    {{ book.author.text.split(',')[0] }}
                                 </p>
                                 <img class="p-2" style="height: 200px; width: 200px;" src="@/assets/preview.jpg" alt="Book cover">
-                                <div class="text-gray-900 font-medium text-xl mb-2">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
-                                  <span class=" flex items-center px-3 text-xl font-semibold text-gray-500">{{ book.cost_per_one }} ₽</span>
+                                <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
+                                  <span class=" flex items-center px-3 text-xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }} ₽</span>
 
                               </div>
                           </div>
                     </div>
-                                  <div class="mx-auto flex items-center px-3 text-sm">
+                                  <div class="mx-auto flex items-center px-3 text-sm" v-if="book.rating >= 0">
                                       <div class="flex items-center">
                                           <svg class="w-4 h-4 text-yellow-300 me-1" v-if="book.rating > 0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                               <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
@@ -116,22 +116,22 @@
             <div class="max-w-sm w-full lg:max-w-full lg:flex">
                     <div class="h-48 lg:h-auto lg: flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Перейти на книгу">
                           <div @click="goToBook(book.id)" class="hover:bg-gray-100 duration-200 cursor-pointer bg-white rounded-lg m-2 p-8 flex flex-col justify-between leading-normal">
-                            <p class="text-sm text-gray-600 flex items-center">
+                            <p class="text-sm text-gray-600 flex items-center" v-if="book.author">
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                                   </svg>
                                    {{ book.author.text.split(',')[0] }}
                                 </p>
                                 <img class="p-2" style="height: 200px; width: 200px;" src="@/assets/preview.jpg" alt="Book cover">
-                                <div class="text-gray-900 font-medium text-xl mb-2">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
-                                  <span class=" flex items-center px-3 text-xl font-semibold text-gray-500">{{ book.cost_per_one }} ₽</span>
+                                <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
+                                  <span class=" flex items-center px-3 text-xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }} ₽</span>
 
                               </div>
 
                           </div>
                     </div>
               <div class="mx-auto flex items-center px-3 text-sm">
-                                      <div class="flex items-center">
+                                      <div class="flex items-center" v-if="book.rating >= 0">
                                           <svg class="w-4 h-4 text-yellow-300 me-1" v-if="book.rating > 0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                               <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                                           </svg>
@@ -180,7 +180,7 @@
       </swiper>
 
 
-      <div class="max-w-7xl mx-auto" v-if="books_new_items.length > 0">
+      <div class="max-w-7xl mx-auto" v-if="books_new_items.length === 10">
         <div class="main-center col-span-3 space-y-4">
           <div class="text-center m-2 text-black py-4 px-6">
               <h1 class="text-4xl font-bold">НОВИНКИ В ЛИТЕРАТУРЕ</h1>
@@ -189,7 +189,7 @@
     </div>
 
     <swiper
-        v-if="books_new_items.length > 0"
+        v-if="books_new_items.length === 10"
         :spaceBetween="10"
         :pauseOnMouseEnter="true"
         :slidesPerView="5"
@@ -207,20 +207,20 @@
             <div class="max-w-sm w-full lg:max-w-full lg:flex">
                     <div class="h-48 lg:h-auto lg: flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Перейти на книгу">
                           <div @click="goToBook(book.id)" class="hover:bg-gray-100 duration-200 cursor-pointer bg-white rounded-lg m-2 p-8 flex flex-col justify-between leading-normal">
-                            <p class="text-sm text-gray-600 flex items-center">
+                            <p class="text-sm text-gray-600 flex items-center" v-if="book.author">
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                                   </svg>
                                    {{ book.author.text.split(',')[0] }}
                                 </p>
                                 <img class="p-2" style="height: 200px; width: 200px;" src="@/assets/preview.jpg" alt="Book cover">
-                                <div class="text-gray-900 font-medium text-xl mb-2">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
-                                  <span class=" flex items-center px-3 text-xl font-semibold text-gray-500">{{ book.cost_per_one }} ₽</span>
+                                <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
+                                  <span class=" flex items-center px-3 text-xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }} ₽</span>
                               </div>
                           </div>
                     </div>
               <div class="mx-auto flex items-center px-3 text-sm">
-                                      <div class="flex items-center">
+                                      <div class="flex items-center" v-if="book.rating >= 0">
                                           <svg class="w-4 h-4 text-yellow-300 me-1" v-if="book.rating > 0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                               <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                                           </svg>

@@ -7,7 +7,8 @@
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                                   </svg>
-                                  {{book.genre.text}}, {{book.additional_genre.text_additional}}, {{book.author.text}}
+                                  <div @click="goToAuthor(book.author.id)" class="hover:bg-gray-100 duration-200 cursor-pointer inline-block px-1 py-1 rounded-full">{{ book.author.text}},</div>{{book.genre.text}}, {{book.additional_genre.text_additional}}
+
          </p>
         <p class="text-sm text-gray-600 flex items-center" v-else>
                                   <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -18,7 +19,7 @@
         </div>
 
 
-        <div class="font-bold text-xl mb-2">{{ book.name }}</div>
+        <div class="font-bold text-xl mb-2" v-if="book.name">{{ book.name }}</div>
         <div class="flex">
           <img class="p-2 rounded" height="300px" width="400px" src="@/assets/preview.jpg" alt="Book cover">
           <div class="flex flex-col items-center p-2">
@@ -26,7 +27,7 @@
                 </div>
 
                     <div class="px-2 flex flex-col">
-                      <span class="flex px-3 text-2xl font-semibold text-gray-500">{{ book.cost_per_one }}₽</span>
+                      <span class="flex px-3 text-2xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }}₽</span>
                       <div class="mt-4">
                                   <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" title="Удалить из избранных" class="py-4 px-6 text-white rounded-lg hover:bg-gray-100 hover:rounded-full  duration-200">
                                      <svg xmlns="http://www.w3.org/2000/svg" fill="#60a5fa" stroke="isCurrent" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
@@ -52,16 +53,16 @@
                     </div>
                 </div>
                 <div class="">
-                    <p class="text-sm text-gray-600 flex items-center">Год издания:    {{book.date_of_create}}</p>
-                    <p class="text-sm text-gray-600 flex items-center mt-2">ISBN:    {{book.isbn}}</p>
-                    <p class="text-sm text-gray-600 flex items-center mt-2">Количество страниц:    {{book.count_of_pages}}</p>
-                    <p class="text-sm text-gray-600 flex items-center mt-2">Размер:   {{book.size}}</p>
-                    <p class="text-sm text-gray-600 flex items-center mt-2">Тип обложки:    {{book.type_cover}}</p>
-                    <p class="text-sm text-gray-600 flex items-center mt-2">Вес, г:     {{book.weight}}</p>
+                    <p class="text-sm text-gray-600 flex items-center" v-if="book.date_of_create">Год издания:    {{book.date_of_create}}</p>
+                    <p class="text-sm text-gray-600 flex items-center mt-2" v-if="book.isbn">ISBN:    {{book.isbn}}</p>
+                    <p class="text-sm text-gray-600 flex items-center mt-2" v-if="book.count_of_pages">Количество страниц:    {{book.count_of_pages}}</p>
+                    <p class="text-sm text-gray-600 flex items-center mt-2" v-if="book.size">Размер:   {{book.size}}</p>
+                    <p class="text-sm text-gray-600 flex items-center mt-2" v-if="book.type_cover">Тип обложки:    {{book.type_cover}}</p>
+                    <p class="text-sm text-gray-600 flex items-center mt-2" v-if="book.weight">Вес, г:     {{book.weight}}</p>
                     <p class="text-sm text-gray-600 flex items-center mt-2" v-if="book.age_restrictions">Возрастные ограничения:     {{book.age_restrictions}}</p>
                 </div>
                         <div class="mx-auto flex items-center px-3 text-sm mt-4">
-                                      <div class="flex items-center">
+                                      <div class="flex items-center" v-if="book.rating >=0">
                                           <svg class="w-4 h-4 text-yellow-300 me-1" v-if="book.rating > 0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                               <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                                           </svg>
@@ -70,10 +71,10 @@
                                         </svg>
                                           <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white">{{book.rating}}</p>
                                           <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
-<RouterLink :to="`/book/${book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
+                                            <RouterLink :to="`/book/${book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
                                                    {{book.count_rating}} отзывов
                                             </RouterLink>                                      </div>
-                                  </div>
+                                      </div>
 
         </div>
 
@@ -85,7 +86,7 @@
     <div class="flex flex-col items-center justify-center text-center" >
             <div class="px-6 py-4 flex flex-col items-center">
         <div class="font-bold text-xl mb-2">Отзывы</div>
-        <span class="inline-block px-3 py-1 text-sm font-semibold text-gray-700 ml-2">Рейтинг: {{book.rating}}</span>
+        <span class="inline-block px-3 py-1 text-sm font-semibold text-gray-700 ml-2" v-if="book.rating >=0">Рейтинг: {{book.rating}}</span>
       </div>
       <div class="flex flex-row items-center">
         <div v-if="check === false" class="flex flex-col items-center">
@@ -174,7 +175,19 @@ export default {
     this.getBasket();
     this.getReview();
     },
-    methods:{
+    methods:{goToAuthor() {
+                console.log("id", this.$route.params.id)
+                      axios
+                          .get(`/api/book/${this.$route.params.id}/`)
+                          .then(response => {
+                              console.log('data', response.data.book)
+                              this.book = response.data.book
+                          })
+                          .catch(error => {
+                              console.log('error', error)
+                          })
+
+              },
                getBook() {
                 console.log("id", this.$route.params.id)
                       axios

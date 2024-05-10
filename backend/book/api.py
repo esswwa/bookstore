@@ -71,6 +71,7 @@ def books_new_items(request):
     book_checks.sort(key=lambda x: x.rating, reverse=True)
     book_checks.sort(key=lambda x: x.count_rating, reverse=True)
     book_checks = book_checks[:10]
+    books_rating1 = books_rating1[:10]
     if book_checks:
         serializer = BookSerializer(book_checks, many=True)
     else:
