@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from django.conf import settings
 from .models import Order, Address, OrderHelper
 
+from datetime import timedelta
+from django.utils import timezone
+
 from .serializers import OrderSerializer, AddressSerializer, HelperOrderSerializer
 from django.core.mail import EmailMultiAlternatives
 
@@ -25,9 +28,16 @@ def get_order(request):
 
 	order_all = Order.objects.filter(user=user)
 
-	order_canceled = Order.objects.filter(user=user, status='Отменен')
+	order_canceled = Order.objects.filter(Q(user=user) & (Q(status='Отменен') | Q(status='Не выкуплен')))
 
 	order_archive = Order.objects.filter(user=user, status='Завершен')
+
+	for order in order_active:
+		if order.status == 'В пункте выдачи':
+			if order.date_delivered < timezone.now() - timedelta(weeks=2):
+				order.status = 'Не выкуплен'
+				if order:
+					order.save()
 
 	order_all = OrderSerializer(order_all, many=True)
 	order_active = OrderSerializer(order_active, many=True)
