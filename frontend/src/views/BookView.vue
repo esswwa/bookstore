@@ -87,7 +87,6 @@
     <div class="flex flex-col items-center justify-center text-center" >
             <div class="px-6 py-4 flex flex-col items-center">
         <div class="font-bold text-xl mb-2">Отзывы</div>
-        <span class="inline-block px-3 py-1 text-sm font-semibold text-gray-700 ml-2" v-if="book.rating >=0">Рейтинг: {{book.rating}}</span>
       </div>
       <div class="flex flex-row items-center">
         <div v-if="check === false" class="flex flex-col items-center">
@@ -111,15 +110,20 @@
 
   <div class="flex flex-col">
               <div v-for="review1 in reviews" :key="review1.id" class="p-2">
-                <div class="rounded overflow-hidden bg-gray-200 shadow-lg">
+                <div class="rounded overflow-hidden bg-gray-50 shadow-xl">
                   <div class="px-6 py-4">
                      <p class="text-sm text-gray-600 flex items-center">
                         <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                           <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
                         </svg>
-                        {{review1.user.name}}, {{new Date(review1.date_review).getDay()}}.{{new Date(review1.date_review).getMonth()}}.{{new Date(review1.date_review).getFullYear()}}
+                        {{review1.user.name}}, {{new Date(review1.date_review).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}
                      </p>
-                    <div class="font-bold text-xl mb-2">Рейтинг: {{ review1.rating }}</div>
+                    <div class="flex items-center font-bold text-xl mb-2">
+                      <svg class="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                      </svg>
+                      {{ review1.rating }}
+                    </div>
                     <p class="text-gray-700 text-base">Отзыв: {{ review1.review }}</p>
                   </div>
                 </div>

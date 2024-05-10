@@ -23,15 +23,18 @@ def get_order(request):
 
 	order_active = Order.objects.filter(Q(user=user) & (Q(status='В пути') | Q(status='Оформлен') | Q(status='В пункте выдачи')))
 
+	order_all = Order.objects.filter(user=user)
+
 	order_canceled = Order.objects.filter(user=user, status='Отменен')
 
 	order_archive = Order.objects.filter(user=user, status='Завершен')
 
+	order_all = OrderSerializer(order_all, many=True)
 	order_active = OrderSerializer(order_active, many=True)
 	order_canceled = OrderSerializer(order_canceled, many=True)
 	order_archive = OrderSerializer(order_archive, many=True)
 
-	return JsonResponse({"activeOrders": order_active.data, "canceledOrders": order_canceled.data, "archiveOrders": order_archive.data})
+	return JsonResponse({"allOrders": order_all.data, "activeOrders": order_active.data, "canceledOrders": order_canceled.data, "archiveOrders": order_archive.data})
 
 
 @api_view(['GET'])

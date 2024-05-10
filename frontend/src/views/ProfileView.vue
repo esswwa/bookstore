@@ -13,6 +13,53 @@
 
     <div class=" p-4 m-4 bg-white border border-gray-200 text-center rounded-lg">
     <fwb-tabs v-model="activeTab" class="p-5">
+       <fwb-tab name="all" v-if="allOrders.length > 0" title="Все заказы">
+          <div class="flex flex-wrap">
+              <div v-for="order in allOrders" :key="order.id" class="w-1/4 p-2">
+                <div @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
+                  <div class="px-6 py-4" v-if="order.status === 'Оформлен' || order.status ==='В пути' || order.status ==='В пункте выдачи'">
+                     <p class="text-sm text-gray-600 flex items-center">
+                        <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                          <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+                        </svg>
+                       <div class="inline-block bg-red-200 px-3 py-1 rounded-full" v-if="order.status ==='Оформлен'">{{order.status}}</div>
+                       <div class="inline-block bg-yellow-200 px-3 py-1 rounded-full" v-else-if="order.status ==='В пути'">{{order.status}}</div>
+                       <div class="inline-block bg-green-200 px-3 py-1 rounded-full" v-else>{{order.status}}</div>
+                     </p>
+                    <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                    <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
+                  </div>
+                  <div class="px-6 py-4" v-else-if="order.status === 'Завершен'">
+                      <p class="text-sm text-gray-600 flex items-center">
+                        <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                          <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+                        </svg>
+                        <div class="inline-block bg-green-200 px-3 py-1 rounded-full">{{order.status}}</div>
+                     </p>
+                    <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
+                    <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                    <p class="text-gray-700 text-base">Заказ был получен: {{new Date(order.date_of_receiving).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                  </div>
+                  <div class="px-6 py-4" v-else-if="order.status === 'Отменен'">
+                      <p class="text-sm text-gray-600 flex items-center">
+                        <svg class="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                          <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+                        </svg>
+                        <div class="inline-block bg-gray-200 px-3 py-1 rounded-full">{{order.status}}</div>
+                     </p>
+                    <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
+                    <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </fwb-tab>
+        <fwb-tab name="all" v-else title="Все заказы" >
+          Все заказы отсутствуют
+        </fwb-tab>
         <fwb-tab name="first" v-if="activeOrders.length > 0" title="Активные заказы" >
           <div class="flex flex-wrap">
               <div v-for="order in activeOrders" :key="order.id" class="w-1/4 p-2">
@@ -27,7 +74,7 @@
                        <div class="inline-block bg-green-200 px-3 py-1 rounded-full" v-else>{{order.status}}</div>
                      </p>
                     <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
-                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                   </div>
                 </div>
@@ -50,8 +97,8 @@
                      </p>
                     <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
-                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
-                    <p class="text-gray-700 text-base">Заказ был получен: {{new Date(order.date_of_receiving).getDay()}}.{{new Date(order.date_of_receiving).getMonth()}}.{{new Date(order.date_of_receiving).getFullYear()}}</p>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                    <p class="text-gray-700 text-base">Заказ был получен: {{new Date(order.date_of_receiving).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
                   </div>
                 </div>
               </div>
@@ -73,7 +120,7 @@
                      </p>
                     <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
-                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
+                    <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_of_receiving).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
 
                   </div>
                 </div>
@@ -84,13 +131,7 @@
           Отмененных заказов нет. Спасибо за доверие:)
         </fwb-tab>
   </fwb-tabs>
-
-    </div>
-
-
-
-
-
+</div>
 </template>
 
 <script>
@@ -125,11 +166,12 @@ export default {
           password1: null,
           password2: null,
           email: null,
+            allOrders: [],
             activeOrders: [],
             canceledOrders:[],
             archiveOrders: [],
             helperOrders: [],
-            activeTab: ref('first')
+            activeTab: ref('all')
         }
     },
 
@@ -158,10 +200,13 @@ export default {
         axios
             .post('/api/order/', {'user': this.userStore.user})
             .then(response => {
+
+                  this.allOrders = response.data.allOrders
                   this.activeOrders = response.data.activeOrders
                   this.canceledOrders = response.data.canceledOrders
                   this.archiveOrders = response.data.archiveOrders
 
+              console.log('allOrders', this.allOrders)
               console.log('activeOrders', this.activeOrders)
               console.log('canceledOrders', this.canceledOrders)
               console.log('archiveOrders', this.archiveOrders)
@@ -177,17 +222,6 @@ export default {
 
             this.$router.push('/signin')
         },
-      // editProfile(){
-      //           axios.
-      //                 post('/api/edit_profile/', {'user': this.userStore.user.id, 'password1': this.password1, 'password2': this.password2, 'email': this.email})
-      //               .then(response => {
-      //
-      //                   this.getUser()
-      //               })
-      //               .catch(error => {
-      //                 console.log('error', error)
-      //               })
-      // }
     }
 }
 </script>

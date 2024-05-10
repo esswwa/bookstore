@@ -16,8 +16,8 @@
                        <div class="inline-block bg-green-200 px-3 py-1 rounded-full" v-else>{{order.status}}</div>
                      </p>
                     <div class="text-gray-700 text-xl mb-2" v-if="order.address">Пункт выдачи: {{ order.address.text }}</div>
-                    <p class="text-gray-700 text-base" v-if="order.date_order">Дата оформления заказа: {{new Date(order.date_order).getDay()}}.{{new Date(order.date_order).getMonth()}}.{{new Date(order.date_order).getFullYear()}}</p>
-                    <p class="text-gray-700 text-base" v-if="order.status === 'В пункте выдачи'">Дата прибытия в пункт выдачи: {{new Date(order.date_delivered).getDay()}}.{{new Date(order.date_delivered).getMonth()}}.{{new Date(order.date_delivered).getFullYear()}}</p>
+                    <p class="text-gray-700 text-base" v-if="order.date_order">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                    <p class="text-gray-700 text-base" v-if="order.status === 'В пункте выдачи'">Дата прибытия в пункт выдачи: {{new Date(order.date_delivered).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                     <button @click="cancelOrder()" v-if="order.status !== 'Отменен' && order.status !== 'Завершен'" class="card-button py-4 px-6 mt-4 bg-blue-400 text-white rounded-lg">Отменить заказ</button>
 
