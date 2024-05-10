@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from account.models import User
 from account.serializers import (UserSerializer)
 
-from .models import Book, Genre, AdditionalGenre
-from .serializers import BookSerializer, GenreSerializer
+from .models import Book, Genre, AdditionalGenre, Author
+from .serializers import BookSerializer, GenreSerializer, AuthorSerializer
 
 
 @api_view(['GET'])
@@ -141,6 +141,47 @@ def get_pagination(request, page):
 
     return JsonResponse({'books': serializer.data, 'count': count}, safe=False)
 
+@api_view(['POST'])
+def get_pagination_author(request, author, page):
+    print(request.data['searchInput'] )
+    authors = Author.objects.get(id=author)
+    if request.data['selected_genres']:
+        genres = Genre.objects.filter(id__in=request.data['selected_genres'])
+        genre_additionals = AdditionalGenre.objects.filter(text_genre_id__in=genres)
+        books = Book.objects.filter(status="В наличии", author=authors, genre__in=genres)
+        count = books.count()
+        start_index = (page - 1) * 12
+        end_index = start_index + 12
+        if request.data['searchInput'] != '':
+            books = books.filter(name__contains=request.data['searchInput'])
+            count = books.count()
+            start_index = (page - 1) * 12
+            end_index = start_index + 12
+            if request.data['sort_order'] != 'Без сортировки':
+                books = books.order_by('-'+request.data['sort_order'])
+        else:
+            if request.data['sort_order'] != 'Без сортировки':
+                books = books.order_by('-'+request.data['sort_order'])
+    elif request.data['searchInput'] == '':
+        books = Book.objects.filter(status="В наличии", author=authors)
+        if request.data['sort_order'] != 'Без сортировки':
+            books = books.order_by('-' + request.data['sort_order'])
+        count = books.count()
+        start_index = (page - 1) * 12
+        end_index = start_index + 12
+    else:
+        books = Book.objects.filter(status="В наличии", name__contains=request.data['searchInput'], author=authors)
+        count = books.count()
+        start_index = (page - 1) * 12
+        end_index = start_index + 12
+        if request.data['sort_order'] != 'Без сортировки':
+            books = books.order_by('-'+request.data['sort_order'])
+
+    books = books[start_index:end_index]
+
+    serializer = BookSerializer(books, many=True)
+
+    return JsonResponse({'books': serializer.data, 'count': count}, safe=False)
 
 @api_view(['GET'])
 def get_genres(request):
@@ -150,3 +191,12 @@ def get_genres(request):
     serializer = GenreSerializer(genres, many=True).data
 
     return JsonResponse({'genres': serializer}, safe=False)
+
+@api_view(['GET'])
+def get_author(request, author):
+
+    authors = Author.objects.get(id=author)
+
+    serializer = AuthorSerializer(authors, many=False).data
+
+    return JsonResponse({'author': serializer}, safe=False)

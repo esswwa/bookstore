@@ -3,7 +3,8 @@
            <div class="max-w-7xl mx-auto">
         <div class="main-center col-span-3 space-y-4">
           <div class="text-center text-black py-4 px-6">
-              <h1 class="text-4xl font-bold">ВCЕ КНИГИ</h1>
+              <h1 class="text-4xl">ВCЕ КНИГИ ПО АВТОРУ:</h1>
+              <h1 class="text-4xl font-bold">{{this.author}}</h1>
           </div>
         </div>
     </div>
@@ -15,78 +16,6 @@
     <button v-if="(selectedGenres != '' && selectedGenres != null) || sortOrder !== 'Без сортировки' || searchInput !== ''" @click="resetFilters()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-400 rounded" title="Сбросить фильтры">
         Сбросить сортировку и фильтры
     </button>
-<!--    <div class="">-->
-<!--      <button-->
-<!--        @click="isOpen = true"-->
-<!--        class="px-6 py-2 text-white bg-blue-400 rounded shadow"-->
-<!--        type="button"-->
-<!--        title="Сортировка и фильтр по книгам"-->
-<!--      >-->
-<!--        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">-->
-<!--  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />-->
-<!--</svg>-->
-
-<!--      </button>-->
-
-<!--      <div-->
-<!--        v-show="isOpen"-->
-<!--        class="overflow-hidden-->
-<!--          absolute-->
-<!--          inset-0-->
-<!--          flex-->
-<!--          items-center-->
-<!--          justify-center-->
-<!--          bg-gray-700 bg-opacity-50-->
-<!--        "-->
-<!--      >-->
-<!--        <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">-->
-<!--          <div class="flex items-center justify-between">-->
-<!--            <h3 class="text-2xl">Сортировка и фильтрация книг</h3>-->
-<!--            <svg-->
-<!--              @click="isOpen = false"-->
-<!--              xmlns="http://www.w3.org/2000/svg"-->
-<!--              class="w-8 ml-4 h-8 text-red-900 cursor-pointer"-->
-<!--              fill="none"-->
-<!--              viewBox="0 0 24 24"-->
-<!--              stroke="currentColor"-->
-<!--            >-->
-<!--              <path-->
-<!--                stroke-linecap="round"-->
-<!--                stroke-linejoin="round"-->
-<!--                stroke-width="2"-->
-<!--                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"-->
-<!--              />-->
-<!--            </svg>-->
-<!--          </div>-->
-<!--          <div class="mt-4">-->
-<!--              <select v-model="sortOrder" class="flex flex-col max-w-sm rounded-lg py-4 m-4 p-4 overflow-hidden bg-gray-200 shadow-lg focus:outline-none focus:shadow-outline">-->
-<!--                <option value="Без сортировки">Без сортировки</option>-->
-<!--                <option value="cost_per_one">По цене</option>-->
-<!--                <option value="rating">По рейтингу</option>-->
-<!--              </select>-->
-
-
-<!--    <div class="card flex p-6" v-if="genres.length > 0">-->
-<!--        <div class="flex flex-col gap-3">-->
-<!--            <div v-for="genre of genres" :key="genre.id" class="flex items-center">-->
-<!--                <Checkbox v-model="selectedGenres" :inputId="genre.id" name="genre" :value="genre.id" />-->
-<!--                <label class="p-2" :for="genre.id">{{ genre.text }}</label>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--            <button-->
-<!--              @click="isOpen = false"-->
-<!--              class="px-6 py-2 text-blue-800 border border-blue-600 rounded"-->
-<!--            >-->
-<!--              Отменить-->
-<!--            </button>-->
-<!--            <button @click="saveOptions()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded">-->
-<!--              Сохранить-->
-<!--            </button>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
   </div>
   </div>
 
@@ -215,6 +144,7 @@ export default {
       books: [],
       favourite: [],
       favourites: [],
+      author: '',
       searchInput: '',
       total: 0, // Устанавливаем начальное значение total
       perPage: 12,
@@ -226,11 +156,11 @@ export default {
       pizza: null,
       genres: [],
       selectedGenres: null
-
     };
   },
   created() {
     this.userStore = useUserStore() // Устанавливаем total после получения данных
+    this.getAuthor();
     this.getBook();
     this.getFavourite();
         this.getBasket();
@@ -238,9 +168,9 @@ export default {
   },
   methods: {
     getBook() {
-      if (this.$route.params.page) {
+      if (this.$route.params.page && this.$route.params.author) {
         axios
-          .post(`/api/book/get_pagination/${this.$route.params.page}/`, {'searchInput': this.searchInput, 'selected_genres': this.selectedGenres, 'sort_order': this.sortOrder})
+          .post(`/api/book/get_pagination_author/${this.$route.params.author}/${this.$route.params.page}/`, {'searchInput': this.searchInput, 'selected_genres': this.selectedGenres, 'sort_order': this.sortOrder})
           .then(response => {
             console.log('data', response.data.books);
             this.books = response.data.books;
@@ -251,6 +181,19 @@ export default {
           });
       }
     },
+    getAuthor() {
+      if (this.$route.params.author) {
+          axios
+            .get(`/api/book/get_author/${this.$route.params.author}/`)
+            .then(response => {
+              this.author = response.data.author.text;
+              console.log("author", response.data.author.text)
+            })
+            .catch(error => {
+              console.log('error', error);
+            });
+        }
+      },
     changePage(page) {
       this.$router.push({ path: `/all_books/${page}/` });
     },

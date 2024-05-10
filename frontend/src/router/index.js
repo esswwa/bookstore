@@ -8,6 +8,7 @@ import ProfileView from "@/views/ProfileView.vue";
 import BookView from "@/views/BookView.vue";
 import AllBooksView from "@/views/AllBooksView.vue";
 import CompositionOrderView from "@/views/CompositionOrderView.vue";
+import AuthorView from "@/views/AuthorView.vue";
 
 
 
@@ -48,6 +49,11 @@ const router = createRouter({
       path: '/all_books/:page',
       name: 'all_books',
       component: AllBooksView
+    },
+    {
+      path: '/author_books/:author/:page',
+      name: 'author_books',
+      component: AuthorView
     },
     {
       path: '/book/:id/:page/',
