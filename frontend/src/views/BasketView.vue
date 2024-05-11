@@ -4,7 +4,7 @@
 
   <div class="flex items-center" >
     <div class="">
-      <div class="flex flex-col max-w-sm rounded-lg p-4 overflow-hidden bg-white shadow-lg">
+      <div class="flex flex-col max-w-sm rounded-lg p-4 overflow-hidden bg-green-200 shadow-lg">
         Общая стоимость всей корзины:
       {{ all_price }} ₽
       </div>
@@ -14,19 +14,24 @@
         <option v-for="item in address" :key="item.id" :value="item.id">{{ item.text }}</option>
       </select>
     </div>
-    <div class="">
-       <button @click="goToOrder()" class="card-button py-4 px-6 ml-4 bg-blue-400 text-white rounded-lg">Оформить заказ</button>
+    <div class="flex items-center">
+       <button @click="goToOrder()" v-if="check" disabled class="card-button py-4 px-6 ml-4 bg-blue-400 text-white rounded-lg">Оформить заказ</button>
+       <button @click="goToOrder()" v-else class="card-button py-4 px-6 ml-4 bg-blue-400 text-white rounded-lg">Оформить заказ</button>
+        <div class="ml-4 flex flex-col max-w-sm rounded-lg p-4 overflow-hidden bg-red-200 shadow-lg" v-if="check">
+        Заказ невозможно оформить т.к. у вас добавлена книга, которой нет в наличии
+      </div>
+
     </div>
   </div>
 
  <div class="flex">
   <div class="flex flex-col">
     <div v-for="book in books" :key="book.id" v-if="books.length > 0">
-      <div class="card rounded mt-4 p-4 overflow-hidden bg-white shadow-lg">
+      <div class="card rounded mt-4 p-4 overflow-hidden shadow-lg" :class="{'bg-red-200': book.count_on_stock === 0, 'bg-white': book.count_on_stock > 0 }">
         <div @click="goToBook(book.id)" class="hover:bg-gray-100 duration-200 cursor-pointer rounded-lg card-content">
-          <div class="px-6 py-4">
-            <p class="text-sm text-gray-600 flex items-center" v-if="book.author">
-               <svg v-if="!viewedBooks.includes(book.id)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <div class="px-6 py-4">
+                                  <p class="text-sm text-gray-600 flex items-center" v-if="book.author">
+                                  <svg v-if="!viewedBooks.includes(book.id)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
                                   </svg>
                                   <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -34,13 +39,15 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                   </svg>
                                    {{ book.author.text.split(',')[0] }}
-            </p>
-            <div class="font-bold text-xl mb-2" v-if="book.name">{{book.name.slice(0,50) + (book.name.length > 50 ? '...' : '')}}</div>
-            <p class="text-gray-700 text-base" v-if="book.description">{{ book.description.slice(0, 200) + (book.name.length > 200 ? '...' : '') }}</p>
-          </div>
-          <div class="px-6 py-4">
-            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700" v-if="book.cost_per_one">Цена: {{ book.cost_per_one }} ₽</span>
-          </div>
+                                      </p>
+                                      <div class="font-bold text-xl mb-2" v-if="book.name">{{book.name.slice(0,50) + (book.name.length > 50 ? '...' : '')}}</div>
+                                      <p class="text-gray-700 text-base" v-if="book.description">{{ book.description.slice(0, 200) + (book.name.length > 200 ? '...' : '') }}</p>
+
+                                    </div>
+                                    <div class="px-6 py-4 flex items-center">
+                                      <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700" v-if="book.cost_per_one">Цена: {{ book.cost_per_one }} ₽</span>
+                                      <p class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold  ml-4">На складе {{ book.count_on_stock}} штук</p>
+                                    </div>
         </div>
   <div class="mx-auto flex items-center px-3 text-sm">
                                       <div class="flex items-center m-2" v-if="book.rating >= 0">
@@ -60,7 +67,12 @@
          <div v-for="additional in basket_additionals" :key="additional.id" v-if="basket_additionals.length > 0" >
 
            <div v-if="additional.book.id === book.id" class="flex items-center text-center">
-                  <button @click="addOneMore(book.id)" title="Добавить еще одну штуку" class="py-4 px-6 rounded-lg hover:bg-gray-100 hover:rounded-full duration-200">
+                  <button @click="addOneMore(book.id)" v-if="additional.count < additional.book.count_on_stock" title="Добавить еще одну штуку" class="py-4 px-6 rounded-lg hover:bg-gray-100 hover:rounded-full duration-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                </button>
+                <button @click="addOneMore(book.id)" v-else disabled title="Добавить еще одну штуку" class="py-4 px-6 rounded-lg hover:bg-gray-100 hover:rounded-full duration-200">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
@@ -139,6 +151,7 @@ export default {
           address: [],
           orderId: 0,
           addressOrder: '',
+          check:false,
           showCard: false,
           selectedItem: null,
             body: ''
@@ -169,6 +182,13 @@ export default {
                               console.log('data', response.data.books)
 
                             this.books = response.data.books
+                            this.check = false;
+                             for (var i in this.books) {
+                                  if (this.books[i].count_on_stock === 0) {
+                                      this.check = true;
+                                      break; // Exit the loop once a book with count_on_stock 0 is found
+                                  }
+                              }
                             this.basket_additionals = response.data.basket_additionals
                             this.all_price = response.data.all_price
                             console.log('basket', this.books)
@@ -197,7 +217,6 @@ export default {
                         axios
                           .post(`/api/basket/delete_one_more/`, {"user": this.userStore.user.id, "book": bookId})
                           .then(response => {
-
                             this.getBasket()
 
                           })

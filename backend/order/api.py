@@ -163,6 +163,10 @@ def add_helper_order(request):
 	print(basket_additionals_list)
 	for basket_additional in basket_additionals_list:
 		order_helper = OrderHelper.objects.create(order=order, book=basket_additional['book'], count=basket_additional['count'], all_price=basket_additional['all_price'])
+		book = Book.objects.get(id=basket_additional['book'].id)
+		book.count_on_stock = book.count_on_stock - basket_additional['count']
+		print(book.count_on_stock)
+		book.save()
 		if order_helper:
 			last_order_helper = OrderHelper.objects.filter(order=order, book=basket_additional['book']).order_by('-id').first()
 			last_order_helper.delete()
