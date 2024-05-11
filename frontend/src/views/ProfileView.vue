@@ -11,7 +11,7 @@
         </div>
      </div>
 
-    <div class=" p-4 m-4 bg-white border border-gray-200 text-center rounded-lg">
+    <div class=" p-4 m-4 bg-white border border-gray-200 text-center rounded-lg" v-if="!this.userStore.user.superuser">
     <fwb-tabs v-model="activeTab" class="p-5">
        <fwb-tab name="all" v-if="allOrders.length > 0" title="Все заказы">
           <div class="flex flex-wrap">

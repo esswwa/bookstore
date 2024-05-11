@@ -4,7 +4,10 @@
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between">
                 <div class="menu-left">
-                    <RouterLink to="/books" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200">
+                    <RouterLink v-if="!userStore.user.superuser" to="/books" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200">
+                            МАГАЗИН КНИГ "ЧИТАЙ-ЛЕТАЙ"
+                    </RouterLink>
+                  <RouterLink v-else to="/admin_orders/1/" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200">
                             МАГАЗИН КНИГ "ЧИТАЙ-ЛЕТАЙ"
                     </RouterLink>
                 </div>
@@ -44,14 +47,6 @@
                     </RouterLink>
                 </div>
                 <div class="flex items-center space-x-12" v-if="userStore.user.isAuthenticated && userStore.user.superuser">
-                    <RouterLink to="/admin_orders/1/" class="text-gray-700 p-4 flex flex-col items-center  hover:bg-gray-100 hover:rounded-full duration-200" title="Список заказов">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                        </svg>
-                      <div class="text-sm ml-2">
-                            Заказы
-                      </div>
-                    </RouterLink>
 
                 </div>
                 <div class="menu-right">
