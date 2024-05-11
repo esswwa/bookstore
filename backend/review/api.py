@@ -9,6 +9,7 @@ from .models import Review
 from book.models import Book
 
 from .serializers import ReviewSerializer
+from order.models import Order, OrderHelper
 
 
 @api_view(['POST'])
@@ -16,6 +17,13 @@ def get_review(request, id, page):
 	user = request.user
 	user = User.objects.get(id=user.id)
 	review_check = Review.objects.filter(book=id, user=user).first()
+	check_order = Order.objects.filter(user=user.id)
+	check_order = OrderHelper.objects.filter(order_id__in=check_order)
+	check_order = check_order.filter(book=id).first()
+	order_check = False
+	if check_order:
+		order_check = True
+	print(order_check)
 	check = False
 	if review_check:
 		check = True
@@ -29,7 +37,7 @@ def get_review(request, id, page):
 		review = review[start_index:end_index]
 
 		review = ReviewSerializer(review, many=True).data
-		return JsonResponse({"reviews": review, "check": check, 'count': count})
+		return JsonResponse({"reviews": review, "check": check, "checkOrder": order_check, 'count': count})
 	else:
 		return Response({'message': 'Reviews doesnt have in db'}, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['POST'])

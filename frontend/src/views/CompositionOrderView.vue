@@ -26,8 +26,7 @@
                     <p class="text-gray-700 text-base" v-if="order.status === 'Завершен'">Заказ был получен: {{new Date(order.date_of_receiving).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
 
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
-                    <button @click="cancelOrder()" v-if="!this.userStore.user.superuser && order.status !== 'Отменен' && order.status !== 'Завершен' && order.status !== 'Не выкуплен'" class="card-button py-4 px-6 mt-4 bg-blue-400 text-white rounded-lg">Отменить заказ</button>
-
+                    <button @click="cancelOrder()" v-if="userStore.user.superuser !== true && order.status !== 'Отменен' && order.status !== 'Завершен' && order.status !== 'Не выкуплен'" class="card-button py-4 px-6 mt-4 bg-blue-400 text-white rounded-lg">Отменить заказ</button>
                     <div v-if="order.status === 'В пункте выдачи'" class="m-4 whitespace-normal text-m text-gray-900 flex justify-center text-center items-center">
                       Ваш заказ прибыл в пункт выдачи,<br>
                       если вы не заберете заказ в течении<br>

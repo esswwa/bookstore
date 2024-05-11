@@ -95,12 +95,11 @@ export default {
                       .then(response => {
                          this.userStore.setUserInfo(response.data)
 
-                          if(!this.userStore.user.superuser){
+                          if(this.userStore.user.superuser !== true){
                             this.$router.push('/books')
                           }
                           else{
-                            this.$router.push('/admin_orders')
-
+                            this.$router.push('/admin_orders/1/')
                           }
                       })
                       .catch(error => {

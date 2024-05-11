@@ -31,7 +31,7 @@
 
                     <div class="px-2 flex flex-col">
                       <span class="flex px-3 text-2xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }}₽</span>
-                      <div class="mt-4" v-if="!this.userStore.user.superuser ">
+                      <div class="mt-4" v-if="userStore.user.superuser !== true">
                                   <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" title="Удалить из избранных" class="py-4 px-6 text-white rounded-lg hover:bg-gray-100 hover:rounded-full  duration-200">
                                      <svg xmlns="http://www.w3.org/2000/svg" fill="#60a5fa" stroke="isCurrent" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
                                           <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
@@ -86,12 +86,12 @@
 
   <div class="max-w-7xl mx-auto rounded overflow-hidden bg-white shadow-lg mt-4 flex flex-col  w-1/3 p-2">
 
-    <div class="flex flex-col items-center justify-center text-center" >
+    <div class="flex flex-col items-center justify-center text-center">
             <div class="px-6 py-4 flex flex-col items-center">
         <div class="font-bold text-xl mb-2">Отзывы</div>
       </div>
-      <div class="flex flex-row items-center" v-if="!this.userStore.user.superuser">
-        <div v-if="check === false" class="flex flex-col items-center">
+      <div class="flex flex-row items-center" v-if="userStore.user.superuser !== true">
+        <div v-if="check === false && checkOrder === true" class="flex flex-col items-center">
           <input v-model="review" class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="text" placeholder="Введите отзыв">
           <input v-model="rating" class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="number" min="0" max="5" placeholder="Введите рейтинг">
 
@@ -171,6 +171,7 @@ export default {
             basket: [],
             baskets: [],
           check: false,
+          checkOrder: false,
           review: '',
           rating: 0,
 
@@ -246,7 +247,8 @@ export default {
            }) },
 
           getBasket() {
-                console.log("ASDAS", this.userStore.user.id)
+              if(this.userStore.user.superuser !== true){
+                  console.log("ASDAS", this.userStore.user.id)
                       axios
                           .post(`/api/basket/`, {"user": this.userStore.user.id})
                           .then(response => {
@@ -259,6 +261,8 @@ export default {
                           .catch(error => {
                               console.log('error', error)
                           })
+              }
+
 
           },
                addBookToBasket(bookId){
@@ -295,12 +299,21 @@ export default {
             })
             .then(response => {
               this.reviews = response.data.reviews
+              console.log('reviews', this.reviews)
               this.check = response.data.check
+              this.checkOrder = response.data.checkOrder
+              console.log('checkOrder',this.checkOrder)
+              console.log('check',this.check)
+              console.log('user',this.userStore.user.superuser)
               this.total = response.data.count;
 
             })
+            .catch(error => {
+              console.log('error', error)
+            })
 
       },
+
       addReview(bookId){
                  axios.
                      post('/api/review/add_review/', {

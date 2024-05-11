@@ -4,15 +4,16 @@
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between">
                 <div class="menu-left">
-                    <RouterLink v-if="!userStore.user.superuser" to="/books" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200">
+                  <RouterLink v-if="userStore.user.superuser === true" to="/admin_orders/1/" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200">
                             МАГАЗИН КНИГ "ЧИТАЙ-ЛЕТАЙ"
                     </RouterLink>
-                  <RouterLink v-else to="/admin_orders/1/" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200">
+                    <RouterLink v-else to="/books" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200">
                             МАГАЗИН КНИГ "ЧИТАЙ-ЛЕТАЙ"
                     </RouterLink>
+
                 </div>
 
-                <div class="menu-center flex space-x-12" v-if="userStore.user.isAuthenticated && !userStore.user.superuser">
+                <div class="menu-center flex space-x-12" v-if="this.userStore.user.isAuthenticated && userStore.user.superuser !== true">
                     <RouterLink to="/books" class="text-blue-700 p-4 hover:bg-gray-100 hover:rounded-full duration-200" title="Основная страница с рекомендациями книг">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
@@ -39,14 +40,14 @@
                             </svg>
                     </RouterLink>
 
-                    <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}" class="p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Профиль">
+                    <RouterLink :to="{name: 'profile', params:{'id': this.userStore.user.id}}" class="p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Профиль">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                        </svg>
 
                     </RouterLink>
                 </div>
-                <div class="flex items-center space-x-12" v-if="userStore.user.isAuthenticated && userStore.user.superuser">
+                <div class="flex items-center space-x-12" v-if="this.userStore.user.isAuthenticated && userStore.user.superuser === true">
 
                 </div>
                 <div class="menu-right">
@@ -56,7 +57,7 @@
 <!--                    </RouterLink>-->
 <!--                  </template>-->
 
-                   <div class="box" v-if="userStore.user.isAuthenticated" @contextmenu="onContextMenu($event)">
+                   <div class="box" v-if="this.userStore.user.isAuthenticated" @contextmenu="onContextMenu($event)">
                      <img src="https://i.pravatar.cc/40?img=70" class="w-12 rounded-full">
                      {{userStore.user.name}}
                    </div>
@@ -172,6 +173,7 @@ import axios from "axios";
 export default {
   setup(){
     const userStore = useUserStore()
+    console.log("supersuerCONSOLELOG", userStore.user.superuser)
     return{
       userStore
     }
@@ -192,6 +194,8 @@ export default {
           label: "Перейти в профиль",
           onClick: () => {
             this.$router.push(`/profile/${this.userStore.user.id}/`)
+
+    console.log("supersuerCONSOLELOG", this.userStore.user.superuser)
           }
         },
         {
