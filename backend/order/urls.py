@@ -11,6 +11,7 @@ urlpatterns = [
 	path('get_helper_order/', api.get_helper_order, name='get_helper_order'),
 	path('get_order_only/', api.get_order_only, name='get_order_only'),
 	path('cancel_order/', api.cancel_order, name='cancel_order'),
-	path('apply_order/', api.apply_order, name='apply_order')
+	path('apply_order/', api.apply_order, name='apply_order'),
+	path('admin_orders/<int:page>/', api.admin_orders, name='admin_orders'),
 
 ]

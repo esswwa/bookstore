@@ -17,6 +17,7 @@ def me(request):
 		'id': request.user.id,
 		'name': request.user.name,
 		'email': request.user.email,
+		'superuser': request.user.is_superuser,
 
 	})
 
@@ -42,6 +43,7 @@ def signup(request):
 
 	print(message)
 	return JsonResponse({'message': message})
+
 
 @api_view(['GET'])
 def profile(request, id):

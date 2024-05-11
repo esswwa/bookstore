@@ -38,13 +38,64 @@ def get_order(request):
 				order.status = 'Не выкуплен'
 				if order:
 					order.save()
-
-	order_all = OrderSerializer(order_all, many=True)
 	order_active = OrderSerializer(order_active, many=True)
 	order_canceled = OrderSerializer(order_canceled, many=True)
 	order_archive = OrderSerializer(order_archive, many=True)
 
 	return JsonResponse({"allOrders": order_all.data, "activeOrders": order_active.data, "canceledOrders": order_canceled.data, "archiveOrders": order_archive.data})
+
+
+@api_view(['POST'])
+def admin_orders(request, page):
+	status_list = [
+		{"id": 1, "text": "Оформлен"},
+		{"id": 2, "text": "В пути"},
+		{"id": 3, "text": "В пункте выдачи"},
+		{"id": 4, "text": "Завершен"},
+		{"id": 5, "text": "Отменен"},
+		{"id": 6, "text": "Не выкуплен"}
+	]
+	if request.data['selected_filter']:
+
+		selected_ids = [int(id) for id in request.data['selected_filter']]
+		filtered_statuses = [status['text'] for status in status_list if status['id'] in selected_ids]
+		orders = Order.objects.filter(status__in=filtered_statuses)
+
+		count = orders.count()
+		start_index = (page - 1) * 12
+		end_index = start_index + 12
+		if request.data['search_input'] != '':
+			orders = Order.objects.filter(id__in=request.data['search_input'])
+			count = orders.count()
+			start_index = (page - 1) * 12
+			end_index = start_index + 12
+			if request.data['sort_order'] != 'Без сортировки':
+				orders = orders.order_by('-' + request.data['sort_order'])
+		else:
+			if request.data['sort_order'] != 'Без сортировки':
+				orders = orders.order_by('-' + request.data['sort_order'])
+	elif request.data['search_input'] == '':
+		orders = Order.objects.all()
+		if request.data['sort_order'] != 'Без сортировки':
+			orders = orders.order_by('-' + request.data['sort_order'])
+		count = orders.count()
+		start_index = (page - 1) * 12
+		end_index = start_index + 12
+	else:
+		orders = Order.objects.filter(id__in=request.data['searchInput'])
+		count = orders.count()
+		start_index = (page - 1) * 12
+		end_index = start_index + 12
+		if request.data['sort_order'] != 'Без сортировки':
+			orders = orders.order_by('-' + request.data['sort_order'])
+
+	orders = orders[start_index:end_index]
+
+	serializer = OrderSerializer(orders, many=True)
+
+
+	return JsonResponse({"orders": serializer.data, 'count': count}, safe=False)
+
 
 
 @api_view(['GET'])
@@ -144,61 +195,3 @@ def apply_order(request):
 		return Response({'message': 'Order apply successfully'}, status=status.HTTP_200_OK)
 	else:
 		return Response({'message': 'Order not apply successfully'}, status=status.HTTP_400_BAD_REQUEST)
-
-# @api_view(['POST'])
-# def add_order(request):
-# 	data = request.data
-# 	basket_additionals = data['basket_additionals']
-# 	user_id = data['user']
-# 	all_price = data['all_price']
-# 	user = User.objects.get(id=user_id)
-# 	address = Address.objects.get(id=data['selected_item'])
-#
-# 	basket_additionals = BasketAdditional.objects.filter(id=basket_additionals).first()
-# 	print(basket_additionals)
-# 	if basket_additionals:
-# 		order = Order.objects.create(basket=basket_additionals.basket, user=user, status='Оформлен', address=address,all_price=all_price)
-# 		if order:
-# 			basket_additionals = BasketAdditional.objects.filter(basket=basket_additionals.basket)
-# 			last_order = Order.objects.filter(user=user).order_by('-id').first()
-# 			last_order.delete()
-#
-# 			order_helpers = []
-# 			for basket_additional in basket_additionals:
-# 				order_helper = OrderHelper.objects.create(order=order, book=basket_additional.book, count=basket_additional.count, all_price=basket_additional.all_price)
-# 				order_helpers.append(order_helper)
-# 				last_order_helper = OrderHelper.objects.filter(user=user, book=basket_additional.book, count=basket_additional.count).order_by('-id').first()
-# 				last_order_helper.delete()
-#
-# 			for order_helper in order_helpers:
-# 				order_helper.save()
-#
-# 			basket_additionals.delete()
-# 			order.save()
-#
-# 			# subject, from_email, to = "hello", "chitay.letay@mail.ru", "zoom.light@yandex.ru"
-# 			# text_content = "This is an important message."
-# 			# html_content = "<p>This is an <strong>important</strong> message.</p>"
-# 			# msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-# 			# msg.attach_alternative(html_content, "text/html")
-# 			#
-# 			# # Set the email host user and password
-# 			# msg.connection['username'] = settings.EMAIL_HOST_USER
-# 			# msg.connection['password'] = settings.EMAIL_HOST_PASSWORD
-# 			# msg.send()
-#
-# 			# from django.core.mail import send_mail
-# 			#
-# 			# response = send_mail(
-# 			# 	"Subject here213213213",
-# 			# 	"Here is the message.dsfdsfdsfsdfdsfdsfdsfds",
-# 			# 	settings.EMAIL_HOST_USER,
-# 			# 	["zoom.light@yandex.ru"],
-# 			# 	fail_silently=False,
-# 			# )
-# 			# print(response)
-# 			return Response({'message': 'Order added successfully'}, status=status.HTTP_200_OK)
-# 		else:
-# 			return Response({'message': 'Order is not addes'}, status=status.HTTP_400_BAD_REQUEST)
-# 	else:
-# 		return JsonResponse({'message': 'Error basket is empty'}, status=status.HTTP_400_BAD_REQUEST)

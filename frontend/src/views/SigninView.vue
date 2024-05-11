@@ -94,7 +94,14 @@ export default {
                       .get('/api/me/')
                       .then(response => {
                          this.userStore.setUserInfo(response.data)
-                         this.$router.push('/books')
+
+                          if(!this.userStore.user.superuser){
+                            this.$router.push('/books')
+                          }
+                          else{
+                            this.$router.push('/admin_orders')
+
+                          }
                       })
                       .catch(error => {
                           console.log('error', error)

@@ -8,6 +8,7 @@ export const useUserStore = defineStore({
             isAuthenticated: false,
             id: null,
             name: null,
+            superuser:null,
             email: null,
             access: null,
             refresh: null,
@@ -22,6 +23,7 @@ export const useUserStore = defineStore({
                 this.user.refresh = localStorage.getItem('user.refresh')
                 this.user.id = localStorage.getItem('user.id')
                 this.user.name = localStorage.getItem('user.name')
+                this.user.superuser = localStorage.getItem('user.superuser')
                 this.user.email = localStorage.getItem('user.email')
                 this.user.isAuthenticated = true
 
@@ -51,6 +53,7 @@ export const useUserStore = defineStore({
             this.user.id = null
             this.user.name = null
             this.user.email = null
+            this.user.superuser = null
             this.user.isAuthenticated = false
 
 
@@ -58,6 +61,7 @@ export const useUserStore = defineStore({
             localStorage.setItem('user.refresh', '')
             localStorage.setItem('user.id', '')
             localStorage.setItem('user.name', '')
+            localStorage.setItem('user.superuser', '')
             localStorage.setItem('user.email', '')
 
         },
@@ -67,10 +71,12 @@ export const useUserStore = defineStore({
             this.user.id = user.id
             this.user.name = user.name
             this.user.email = user.email
+            this.user.superuser = user.superuser
             this.user.isAuthenticated = true
 
             localStorage.setItem('user.id', this.user.id)
             localStorage.setItem('user.name', this.user.name)
+            localStorage.setItem('user.superuser', this.user.superuser)
             localStorage.setItem('user.email', this.user.email)
 
 
