@@ -94,6 +94,15 @@ def admin_orders(request, page):
 	serializer = OrderSerializer(orders, many=True)
 
 
+	order_active = Order.objects.filter(status='В пункте выдачи')
+
+	for order in order_active:
+		if order.status == 'В пункте выдачи':
+			if order.date_delivered < timezone.now() - timedelta(weeks=2):
+				order.status = 'Не выкуплен'
+				if order:
+					order.save()
+
 	return JsonResponse({"orders": serializer.data, 'count': count}, safe=False)
 
 
@@ -195,3 +204,18 @@ def apply_order(request):
 		return Response({'message': 'Order apply successfully'}, status=status.HTTP_200_OK)
 	else:
 		return Response({'message': 'Order not apply successfully'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def change_status(request):
+	data = request.data
+	order = Order.objects.get(id=data['order_id'])
+	order.status = data['status']
+	if order.status == 'В пункте выдачи':
+		order.date_delivered = timezone.now()
+	if order.status == 'Завершен':
+		order.date_of_receiving = timezone.now()
+	if order:
+		order.save()
+		return Response({'message': 'Order edit status successfully'}, status=status.HTTP_200_OK)
+	else:
+		return Response({'message': 'Order edit status not successfully'}, status=status.HTTP_400_BAD_REQUEST)

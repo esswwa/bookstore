@@ -56,7 +56,7 @@
 
 <div class="flex flex-wrap" v-if="orders.length > 0">
         <div v-for="order in orders" :key="order.id" class="w-1/3 p-2 min-w-max">
-          <div @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 p-4 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
+          <div @contextmenu="onContextMenu($event, order.id)" @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 p-4 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
             <h1 class="text-xl">
               Номер заказа: {{order.id}}
             </h1>
@@ -150,21 +150,94 @@ export default {
     this.getOrder();
     this.getGenre();
   },
-  methods: {
+  methods: { onContextMenu(e, orderId) {
+    //prevent the browser's default menu
+    e.preventDefault();
+    //show our menu
+    this.$contextmenu({
+      x: e.x,
+      y: e.y,
+      items: [
+        {
+          label: "Изменить статус заказа на 'Оформлен'",
+          children: [
+            { label: "Подтвердить изменение статуса",
+              onClick: () => {
+                this.statusChanged("Оформлен", orderId)}
+            },
+          ]
+        },
+        {
+          label: "Изменить статус заказа на 'В пути'",
+          children: [
+            { label: "Подтвердить изменение статуса",
+              onClick: () => {
+                this.statusChanged("В пути", orderId)}
+            },
+          ]
+        },
+          {
+          label: "Изменить статус заказа на 'В пункте выдачи'",
+          children: [
+            { label: "Подтвердить изменение статуса",
+              onClick: () => {
+                this.statusChanged("В пункте выдачи", orderId)}
+            },
+          ]
+        },
+          {
+          label: "Изменить статус заказа на 'Завершен'",
+          children: [
+            { label: "Подтвердить изменение статуса",
+              onClick: () => {
+                this.statusChanged("Завершен", orderId)}
+            },
+          ]
+        },
+          {
+          label: "Изменить статус заказа на 'Отменен'",
+          children: [
+            { label: "Подтвердить изменение статуса",
+              onClick: () => {
+                this.statusChanged("Отменен", orderId)}
+            },
+          ]
+        },
+           {
+          label: "Изменить статус заказа на 'Не выкуплен'",
+          children: [
+            { label: "Подтвердить изменение статуса",
+              onClick: () => {
+                this.statusChanged("Не выкуплен", orderId)}
+            },
+          ]
+        },
+      ]
+    })},
     getOrder(){
         if (this.$route.params.page) {
+            axios
+                .post(`/api/order/admin_orders/${this.$route.params.page}/`, {'search_input': this.searchInput, 'selected_filter': this.selectedFilter, 'sort_order': this.sortOrder})
+                .then(response => {
+                  console.log('data', response.data.books);
+                  this.orders = response.data.orders;
+                  this.total = response.data.count;
+                })
+                .catch(error => {
+                  console.log('error', error);
+                });
+        }
+    },
+    statusChanged(status, orderId){
         axios
-          .post(`/api/order/admin_orders/${this.$route.params.page}/`, {'search_input': this.searchInput, 'selected_filter': this.selectedFilter, 'sort_order': this.sortOrder})
-          .then(response => {
-            console.log('data', response.data.books);
-            this.orders = response.data.orders;
-            this.total = response.data.count;
-          })
-          .catch(error => {
-            console.log('error', error);
-          });
-      }
-      },
+            .post('/api/order/change_status/', {'status': status, 'order_id': orderId})
+            .then(response => {
+                this.getOrder()
+            })
+            .catch(error=>{
+              console.log('error', error)
+            })
+    },
     changePage(page) {
       this.$router.push({ path: `/admin_orders/${page}/` });
     },
