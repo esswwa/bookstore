@@ -31,10 +31,9 @@
                     <div v-if="order.status === 'В пункте выдачи'" class="m-4 whitespace-normal text-m text-gray-900 flex justify-center text-center items-center">
                       Ваш заказ прибыл в пункт выдачи,<br>
                       если вы не заберете заказ в течении<br>
-                      2-х недель, то он будет отменен!<br>
+                      2-х недель, то он будет автоматически отменен!<br>
                       Спасибо за покупку!
                     </div>
-                      <button v-if="order.status === 'В пункте выдачи' && !this.userStore.user.superuser" @click="applyOrder()" class="card-button py-4 px-6 mt-4 ml-4 bg-blue-400 text-white flex justify-center text-center items-center rounded-lg">Подтвердить получение заказа</button>
                   </div>
           </div>
   </div>
