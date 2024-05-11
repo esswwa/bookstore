@@ -230,6 +230,19 @@ def add_view(request):
     else:
         return Response({'message': 'Book viewed added'}, status=status.HTTP_200_OK)
 
+
+@api_view(['POST'])
+def get_viewed_books(request):
+
+    user = User.objects.get(id=request.data['user_id'])
+    viewed_books = ViewedBook.objects.filter(user=user)
+    print(viewed_books)
+    books = [viewed_book.book for viewed_book in viewed_books]
+    print(books)
+    serializer = BookSerializer(books, many=True).data
+
+    return JsonResponse({'viewedBooks': serializer}, safe=False)
+
 @api_view(['GET'])
 def get_genres(request):
 
