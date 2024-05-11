@@ -39,7 +39,7 @@ def get_review(request, id, page):
 		review = ReviewSerializer(review, many=True).data
 		return JsonResponse({"reviews": review, "check": check, "checkOrder": order_check, 'count': count})
 	else:
-		return Response({'message': 'Reviews doesnt have in db'}, status=status.HTTP_400_BAD_REQUEST)
+		return JsonResponse({'message': 'Reviews doesnt have in db',"reviews": [], "check": False, "checkOrder": order_check})
 @api_view(['POST'])
 def add_review(request):
 	user = request.data['user']
