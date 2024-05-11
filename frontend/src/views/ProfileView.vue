@@ -216,7 +216,7 @@ export default {
         },
       getOrder(){
         axios
-            .post('/api/order/', {'user': this.userStore.user})
+            .post('/api/order/', {'user': this.userStore.user.id})
             .then(response => {
 
                   this.allOrders = response.data.allOrders

@@ -22,8 +22,9 @@ from book.models import Book
 @api_view(['POST'])
 def get_order(request):
 
-	user = request.user
-
+	user = request.data['user']
+	user = User.objects.get(id=user)
+	print(user)
 	order_active = Order.objects.filter(Q(user=user) & (Q(status='В пути') | Q(status='Оформлен') | Q(status='В пункте выдачи')))
 
 	order_all = Order.objects.filter(user=user)
@@ -38,6 +39,8 @@ def get_order(request):
 				order.status = 'Не выкуплен'
 				if order:
 					order.save()
+
+	order_all = OrderSerializer(order_all, many=True)
 	order_active = OrderSerializer(order_active, many=True)
 	order_canceled = OrderSerializer(order_canceled, many=True)
 	order_archive = OrderSerializer(order_archive, many=True)
