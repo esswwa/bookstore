@@ -164,7 +164,7 @@ export default {
                     .then(response => {
                       this.helperOrders = response.data.activeOrders
                       console.log('helperOrders', this.helperOrders)
-                      this.$router.push({ path: `/profile/${this.userStore.id}/` });
+                      this.$router.push({ path: `/profile/${this.userStore.user.id}/` });
                     })
                     .catch(error => {
                       console.log('error', error)
@@ -175,7 +175,7 @@ export default {
                     .then(response => {
                       this.helperOrders = response.data.activeOrders
                       console.log('helperOrders', this.helperOrders)
-                      this.$router.push({ path: `/profile/${this.userStore.id}/` });
+                      this.$router.push({ path: `/profile/${this.userStore.user.id}/` });
                     })
                     .catch(error => {
                       console.log('error', error)
