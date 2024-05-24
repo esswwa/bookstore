@@ -6,7 +6,7 @@ from account.models import User
 from account.serializers import (UserSerializer)
 from rest_framework.response import Response
 
-from .models import Book, Genre, AdditionalGenre, Author, ViewedBook
+from .models import Book, Genre, AdditionalGenre, Author, ViewedBook, SimilarBook
 from .serializers import BookSerializer, GenreSerializer, AuthorSerializer
 
 
@@ -242,6 +242,15 @@ def get_viewed_books(request):
     serializer = BookSerializer(books, many=True).data
 
     return JsonResponse({'viewedBooks': serializer}, safe=False)
+
+@api_view(['POST'])
+def get_similar_books(request):
+    book_id = request.data['book_id']
+    book = Book.objects.get(id=book_id)
+    similar_books = SimilarBook.objects.filter(book_id=book)
+    books = Book.objects.filter(id__in=[sb.book_for_similar_id for sb in similar_books])
+    serializer = BookSerializer(books, many=True)
+    return JsonResponse({'similar_books': serializer.data}, safe=False)
 
 @api_view(['GET'])
 def get_genres(request):

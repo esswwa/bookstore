@@ -83,14 +83,95 @@
         </div>
 
       </div>
+  <div class="max-w-7xl mx-auto" v-if="books_similar.length > 0">
+        <div class="main-center col-span-3 space-y-4">
+          <div class="text-center mb-2 text-black py-4 px-6">
+              <h1 class="text-4xl font-bold">Похожие книги</h1>
+          </div>
+        </div>
+    </div>
+    <swiper
+        v-if="books_similar.length > 0"
+        :spaceBetween="6"
+        :slidesPerView="5"
+        :modules="modules"
+        class="mySwiper"
+      >
+        <swiper-slide v-for="book in books_similar"
+                :key="book.id" class=" w-1/5 p-2 rounded-2xl">
+          <div class="flex flex-col">
+            <div class="max-w-sm w-full lg:max-w-full lg:flex">
+                    <div class="h-48 lg:h-auto lg: flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Перейти на книгу">
+                          <div @click="goToBook(book.id)" class="hover:bg-gray-100 duration-200 cursor-pointer bg-white rounded-lg m-2 p-8 flex flex-col justify-between leading-normal">
+                            <p class="text-sm text-gray-600 flex items-center" v-if="book.author">
+                                   <svg v-if="!viewedBooks.includes(book.id)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                                  </svg>
+                                  <svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                  </svg>
+                                   {{ book.author.text.split(',')[0] }}
+                                </p>
+                                <img class="p-2" style="height: 200px; width: 200px;" src="@/assets/preview.jpg" alt="Book cover">
+                                <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
+                                  <span class=" flex items-center px-3 text-xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }} ₽</span>
+<span class="px-3 flex items-center text-red-500" v-if="book.count_on_stock === 0">Нет в наличии</span>
+                              </div>
+                          </div>
+                    </div>
+                                  <div class="mx-auto flex items-center px-3 text-sm" v-if="book.rating >= 0">
+                                      <div class="flex items-center">
+                                          <svg class="w-4 h-4 text-yellow-300 me-1" v-if="book.rating > 0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                              <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                          </svg>
+                                        <svg v-else class="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>
+                                          <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white">{{book.rating.toFixed(2)}}</p>
+                                          <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
+                                          <RouterLink :to="`/book/${book.id}/1/`" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
+                                           {{book.count_rating}} отзывов
+                                          </RouterLink>
+                                          </div>
+                                  </div>
+                    <div class="mb-4" >
+                        <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" title="Удалить из избранных" class="py-4 px-6 text-white rounded-lg hover:bg-gray-100 hover:rounded-full  duration-200">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="#60a5fa" stroke="isCurrent" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                           </svg>
+                        </button>
+                        <button v-else @click="addBookToFavourite(book.id)" class="py-4 px-6 text-white rounded-lg hover:bg-gray-100 hover:rounded-full  duration-200" title="Добавить в избранные">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
+                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+                            </svg>
+                          </button>
+                        <button v-if="baskets.includes(book.id)" @click="deleteBookFromBasket(book.id)" class="py-4 px-6 text-white rounded-lg hover:bg-gray-100 hover:rounded-full duration-200" title="Удалить из корзины">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                          </svg>
+                        </button>
+                        <button v-else @click="addBookToBasket(book.id)" class="py-4 px-6 text-white rounded-lg hover:bg-gray-100 hover:rounded-full  duration-200" title="Добавить в корзину">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#60a5fa" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 hover:stroke-red-600 duration-200">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                            </svg>
+                        </button>
+                    </div>
+            </div>
+        </swiper-slide>
+      </swiper>
 
 
+  <div class="max-w-7xl mx-auto">
+        <div class="main-center col-span-3 space-y-4">
+          <div class="text-center mb-2 text-black py-4 px-6">
+              <h1 class="text-4xl font-bold">Отзывы</h1>
+          </div>
+        </div>
+    </div>
   <div class="max-w-7xl mx-auto rounded overflow-hidden bg-white shadow-lg mt-4 flex flex-col  w-1/3 p-2">
 
     <div class="flex flex-col items-center justify-center text-center">
-            <div class="px-6 py-4 flex flex-col items-center">
-        <div class="font-bold text-xl mb-2">Отзывы</div>
-      </div>
       <div class="flex flex-row items-center" v-if="userStore.user.superuser !== true">
         <div v-if="check === false && checkOrder === true" class="flex flex-col items-center">
           <input v-model="review" class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="text" placeholder="Введите отзыв">
@@ -149,12 +230,25 @@
 
 import axios from 'axios'
 import {useUserStore} from "@/stores/user.js";
+import {Swiper, SwiperSlide} from "swiper/vue";
+
+  import {Navigation } from 'swiper/modules';
+
+import BookComponent from "@/components/BookComponent.vue";
+import {ref} from "vue";
 export default {
     name: 'FavouriteView',
+  components: {Swiper, SwiperSlide},
   setup(){
        const userStore = useUserStore()
+      const progressCircle = ref(null);
+      const progressContent = ref(null);
+
        return{
-         userStore
+        progressCircle,
+        progressContent,
+         userStore,
+        modules: [Navigation],
        }
      },
     data() {
@@ -165,6 +259,8 @@ export default {
           total: 0, // Устанавливаем начальное значение total
           perPage: 5,
           currentPage: 1,
+          viewedBooks: [],
+            books_similar: [],
           showReview: false,
       favourite: [],
           reviews: [],
@@ -179,12 +275,35 @@ export default {
         }
     },
     created() {
+        this.getViewedBooks();
     this.getBook();
+    this.getSimilarBook();
     this.getFavourite();
     this.getBasket();
     this.getReview();
     },
-    methods:{
+    methods:{    getViewedBooks(){
+      axios
+          .post('/api/book/get_viewed_books/', {"user_id": this.userStore.user.id})
+          .then(response => {
+            this.viewed = response.data.viewedBooks
+            this.viewedBooks = this.viewed.map(item => item.id)
+            console.log("viewedBooks", this.viewedBooks)
+          })
+          .catch(error =>{
+            console.log("error", error)
+          })
+    },  goToBook(bookId) {
+     axios
+           .post(`/api/book/add_view/`, {"bookId":bookId,"user": this.userStore.user.id})
+           .then(response => {
+             this.$router.push({ path: `/book/${bookId}/1/` });
+             console.log("Переход к книге с ID:", bookId);
+           })
+           .catch(error => {
+               console.log('error', error)
+           })
+        },
       goToAuthor(authorId) {
              this.$router.push({ path: `/author_books/${authorId}/1/` });
                 console.log("Переход к автору с ID:", authorId);
@@ -200,6 +319,18 @@ export default {
                           .catch(error => {
                               console.log('error', error)
                           })
+
+              },
+       getSimilarBook() {
+               axios
+          .post('/api/book/get_similar_books/', {"book_id": this.$route.params.id})
+          .then(response => {
+            this.books_similar = response.data.similar_books
+            console.log("books_similar", this.books_similar)
+          })
+          .catch(error =>{
+            console.log("error", error)
+          })
 
               },
     getFavourite() {
