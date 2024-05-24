@@ -8,7 +8,7 @@ export const useUserStore = defineStore({
             isAuthenticated: false,
             id: null,
             name: null,
-            superuser:null,
+            superuser:false,
             email: null,
             access: null,
             refresh: null,
@@ -53,7 +53,7 @@ export const useUserStore = defineStore({
             this.user.id = null
             this.user.name = null
             this.user.email = null
-            this.user.superuser = null
+            this.user.superuser = false
             this.user.isAuthenticated = false
 
 

@@ -127,7 +127,7 @@
                       </svg>
                       {{ review1.rating }}
                     </div>
-                    <p class="text-gray-700 text-base">Отзыв: {{ review1.review }}</p>
+                    <p class="text-gray-700 text-base">{{ review1.review }}</p>
                   </div>
                 </div>
               </div>

@@ -27,24 +27,25 @@
 
                     </RouterLink>
 
-                    <RouterLink to="/favourite/1/" class="p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Избранные книги">
+                    <RouterLink to="/favourite/1/" class=" flex items-center p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Избранные книги">
+
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                         </svg>
-
+                      <p>{{this.countFavourite}}</p>
                     </RouterLink>
 
-                    <RouterLink to="/basket" class="p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Корзина">
+                    <RouterLink to="/basket" class=" flex items-center p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Корзина">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                             </svg>
+                      <p>{{this.countBasket}}</p>
                     </RouterLink>
 
                     <RouterLink :to="{name: 'profile', params:{'id': this.userStore.user.id}}" class="p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Профиль">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                        </svg>
-
                     </RouterLink>
                 </div>
                 <div class="flex items-center space-x-12" v-if="this.userStore.user.isAuthenticated && userStore.user.superuser === true">
@@ -180,6 +181,18 @@ export default {
       userStore
     }
   },
+  data(){
+    return{
+      countFavourite:0,
+      countBasket:0,
+    }
+  },
+  created(){
+      if(this.userStore.user && this.userStore.user.superuser !== true){
+        this.getBaskets()
+        this.getFavourites()
+    }
+  },
   components: {
     Toast
   },
@@ -218,6 +231,26 @@ export default {
             this.$router.push('/signin')
         },
 
+    getFavourites(){
+      axios
+                          .post(`/api/favourite/get_count_favourite/`, {"user": this.userStore.user.id})
+                          .then(response => {
+                             this.countFavourite = response.data.count
+                          })
+                          .catch(error => {
+                              console.log('error', error)
+                          })
+    },
+    getBaskets(){
+        axios
+                          .post(`/api/basket/get_count_basket/`, {"user": this.userStore.user.id})
+                          .then(response => {
+                             this.countBasket = response.data.count
+                          })
+                          .catch(error => {
+                              console.log('error', error)
+                          })
+    },
     },
 
   beforeCreate() {

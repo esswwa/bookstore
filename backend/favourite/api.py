@@ -56,6 +56,18 @@ def add_to_favourite(request):
 
 
 @api_view(['POST'])
+def get_count_favourite(request):
+    data = request.data
+    user = User.objects.get(id=data['user'])
+    favoruites = Favourite.objects.filter(user_id=user)
+    if favoruites:
+        count = favoruites.count()
+        return Response({'message': 'favoruites exist', 'count': count}, status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'favoruites not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
 def delete_favourite(request):
     data = request.data
     book_id = data['book']

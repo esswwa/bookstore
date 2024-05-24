@@ -21,19 +21,33 @@
                     Номер заказа: {{order.id}}
                   </h1>
                     <div class="text-gray-700 text-xl mb-2" v-if="order.address">Пункт выдачи: {{ order.address.text }}</div>
-                    <p class="text-gray-700 text-base" v-if="order.date_order">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                                  <p class="text-gray-700 text-base">Контактная информация покупателя: {{ order.user.email }}</p>
+
+              <p class="text-gray-700 text-base" v-if="order.date_order">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
                     <p class="text-gray-700 text-base" v-if="order.status === 'В пункте выдачи'">Дата прибытия в пункт выдачи: {{new Date(order.date_delivered).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                    <p class="text-gray-700 text-base" v-if="order.status === 'Оформлен' || order.status ==='В пути'">Планируемая дата выдачи: {{new Date(new Date(order.date_order).getTime() + 10 * 24 * 60 * 60 * 1000).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+
                     <p class="text-gray-700 text-base" v-if="order.status === 'Завершен'">Заказ был получен: {{new Date(order.date_of_receiving).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
 
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
-                    <button @click="cancelOrder()" v-if="userStore.user.superuser !== true && order.status !== 'Отменен' && order.status !== 'Завершен' && order.status !== 'Не выкуплен'" class="card-button py-4 px-6 mt-4 bg-blue-400 text-white rounded-lg">Отменить заказ</button>
-                    <div v-if="order.status === 'В пункте выдачи'" class="m-4 whitespace-normal text-m text-gray-900 flex justify-center text-center items-center">
+
+               <div v-if="order.status === 'В пункте выдачи'" class="m-4 whitespace-normal text-m text-gray-900 flex justify-center text-center items-center">
                       Ваш заказ прибыл в пункт выдачи,<br>
                       если вы не заберете заказ в течении<br>
                       2-х недель, то он будет автоматически отменен!<br>
+                      <br>
+                      Спасибо за покупку!
+                    </div>
+                      <div v-else class="m-4 whitespace-normal text-m text-gray-900 flex">
+                      После прибытия заказа в пункт выдачи<br> вы можете забрать заказ
+                      в течение 2-х недель, если<br> вы его не заберете,<br> то он будет автоматически отменен!<br>
+                      <br>
                       Спасибо за покупку!
                     </div>
                   </div>
+              <button @click="cancelOrder()" v-if="userStore.user.superuser !== true && order.status !== 'Отменен' && order.status !== 'Завершен' && order.status !== 'Не выкуплен' && order.status !== 'В пункте выдачи'" class="card-button py-4 px-6 ml-4 mt-4 bg-blue-400 text-white rounded-lg">Отменить заказ</button>
+
+
           </div>
   </div>
   <div class="flex flex-wrap">

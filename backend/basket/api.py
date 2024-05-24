@@ -123,3 +123,14 @@ def delete_basket(request):
 		return Response({'message': 'Basket_additional not deleted'}, status=status.HTTP_404_NOT_FOUND)
 
 
+@api_view(['POST'])
+def get_count_basket(request):
+	data = request.data
+	user = User.objects.get(id=data['user'])
+	basket = Basket.objects.get(user_id=user)
+	basket_additional = BasketAdditional.objects.filter(basket=basket)
+	if basket_additional:
+		count = basket_additional.count()
+		return Response({'message': 'Basket_additional exist', 'count': count}, status=status.HTTP_200_OK)
+	else:
+		return Response({'message': 'Basket_additional not exist'}, status=status.HTTP_404_NOT_FOUND)

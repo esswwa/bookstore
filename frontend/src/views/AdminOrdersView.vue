@@ -8,13 +8,30 @@
           </div>
       </div>
 
-      <div class="container" >
-          <button @click="saveOptions()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-400 rounded">
+      <div class="container flex" >
+        <div class="mt-4 ml-2">
+              <input v-model="searchInput" placeholder="Поиск" class="flex flex-col max-w-sm rounded-lg py-4 mb-4 p-4 overflow-hidden shadow-lg focus:outline-none focus:shadow-outline"/>
+            </div>
+         <div class="mt-4 ml-2">
+              <select v-model="sortOrder" class="flex flex-col max-w-sm rounded-lg py-4 mb-4 p-4 overflow-hidden shadow-lg focus:outline-none focus:shadow-outline">
+                <option value="Без сортировки">Без сортировки</option>
+                <option value="all_price">По цене</option>
+                <option value="status">По статусу</option>
+                <option value="date_order">По дате оформления заказа</option>
+              </select>
+            </div>
+        <div class="flex items-center">
+            <button @click="saveOptions()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-400 rounded">
                Сохранить
           </button>
-          <button v-if="(selectedFilter != '' && selectedFilter != null) || sortOrder !== 'Без сортировки' || searchInput !== ''" @click="resetFilters()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-400 rounded" title="Сбросить фильтры">
+        </div>
+
+        <div class="flex items-center">
+             <button v-if="(selectedFilter != '' && selectedFilter != null) || sortOrder !== 'Без сортировки' || searchInput !== ''" @click="resetFilters()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-400 rounded" title="Сбросить фильтры">
               Сбросить сортировку и фильтры
           </button>
+        </div>
+
 
       </div>
   </div>
@@ -25,25 +42,16 @@
   <div class="max-w-s rounded-2xl overflow-hidden bg-white shadow-lg m-2 min-w-max">
       <div class="card flex p-6" v-if="genres.length > 0">
         <div class="flex flex-col">
-          <div class="text-gray-900 font-medium text-xl mt-4 mb-2">
-            Поиск по книгам
-          </div>
-            <div class="mt-4">
-              <input v-model="searchInput" placeholder="Поиск" class="flex flex-col max-w-sm rounded-lg py-4 mb-4 p-4 overflow-hidden bg-gray-200 shadow-lg focus:outline-none focus:shadow-outline"/>
-            </div>
-          <div class="text-gray-900 font-medium text-xl mt-4 mb-2">
-            Сортировка по цене и рейтингу
-          </div>
-            <div class="mt-4">
-              <select v-model="sortOrder" class="flex flex-col max-w-sm rounded-lg py-4 mb-4 p-4 overflow-hidden bg-gray-200 shadow-lg focus:outline-none focus:shadow-outline">
-                <option value="Без сортировки">Без сортировки</option>
-                <option value="all_price">По цене</option>
-                <option value="status">По статусу</option>
-                <option value="date_order">По дате оформления заказа</option>
-              </select>
-            </div>
+<!--          <div class="text-gray-900 font-medium text-xl mt-4 mb-2">-->
+<!--            Поиск по книгам-->
+<!--          </div>-->
+
+<!--          <div class="text-gray-900 font-medium text-xl mt-4 mb-2">-->
+<!--            Сортировка по цене и рейтингу-->
+<!--          </div>-->
+
           <div class="text-gray-900 font-medium text-xl mb-2">
-            Фильтрация по жанрам
+            Статусы
           </div>
             <div v-for="genre of genres" :key="genre.id" class="flex items-center">
 
@@ -56,7 +64,7 @@
 
 <div class="flex flex-wrap" v-if="orders.length > 0">
         <div v-for="order in orders" :key="order.id" class="w-1/3 p-2 min-w-max">
-          <div @contextmenu="onContextMenu($event, order.id)" @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 p-4 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
+          <div @contextmenu="onContextMenu($event, order.id, order.status)" @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 p-4 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
             <h1 class="text-xl">
               Номер заказа: {{order.id}}
             </h1>
@@ -150,70 +158,91 @@ export default {
     this.getOrder();
     this.getGenre();
   },
-  methods: { onContextMenu(e, orderId) {
+  methods: { onContextMenu(e, orderId, status) {
     //prevent the browser's default menu
     e.preventDefault();
     //show our menu
-    this.$contextmenu({
-      x: e.x,
-      y: e.y,
-      items: [
-        {
-          label: "Изменить статус заказа на 'Оформлен'",
-          children: [
-            { label: "Подтвердить изменение статуса",
-              onClick: () => {
-                this.statusChanged("Оформлен", orderId)}
-            },
-          ]
-        },
-        {
-          label: "Изменить статус заказа на 'В пути'",
-          children: [
-            { label: "Подтвердить изменение статуса",
-              onClick: () => {
-                this.statusChanged("В пути", orderId)}
-            },
-          ]
-        },
+      console.log('status', status)
+      if(status === "В пути" ){
+
+            this.$contextmenu({
+        x: e.x,
+        y: e.y,
+        items: [
           {
-          label: "Изменить статус заказа на 'В пункте выдачи'",
-          children: [
-            { label: "Подтвердить изменение статуса",
-              onClick: () => {
-                this.statusChanged("В пункте выдачи", orderId)}
-            },
-          ]
-        },
+            label: "Изменить статус заказа на 'В пункте выдачи'",
+            children: [
+              { label: "Подтвердить изменение статуса",
+                onClick: () => {
+                  this.statusChanged("В пункте выдачи", orderId)}
+              },
+            ]
+          },
+            {
+            label: "Изменить статус заказа на 'Отменен'",
+            children: [
+              { label: "Подтвердить изменение статуса",
+                onClick: () => {
+                  this.statusChanged("Отменен", orderId)}
+              },
+            ]
+          },
+        ]
+    })
+      }
+      else if(status === "Оформлен" ){
+               this.$contextmenu({
+        x: e.x,
+        y: e.y,
+        items: [
           {
-          label: "Изменить статус заказа на 'Завершен'",
-          children: [
-            { label: "Подтвердить изменение статуса",
-              onClick: () => {
-                this.statusChanged("Завершен", orderId)}
-            },
-          ]
-        },
+            label: "Изменить статус заказа на 'В пути'",
+            children: [
+              { label: "Подтвердить изменение статуса",
+                onClick: () => {
+                  this.statusChanged("В пути", orderId)}
+              },
+            ]
+          },
+            {
+            label: "Изменить статус заказа на 'Отменен'",
+            children: [
+              { label: "Подтвердить изменение статуса",
+                onClick: () => {
+                  this.statusChanged("Отменен", orderId)}
+              },
+            ]
+          },
+        ]
+    })
+      }
+       else if(status === "В пункте выдачи" ){
+               this.$contextmenu({
+        x: e.x,
+        y: e.y,
+        items: [
           {
-          label: "Изменить статус заказа на 'Отменен'",
-          children: [
-            { label: "Подтвердить изменение статуса",
-              onClick: () => {
-                this.statusChanged("Отменен", orderId)}
-            },
-          ]
-        },
-           {
-          label: "Изменить статус заказа на 'Не выкуплен'",
-          children: [
-            { label: "Подтвердить изменение статуса",
-              onClick: () => {
-                this.statusChanged("Не выкуплен", orderId)}
-            },
-          ]
-        },
-      ]
-    })},
+            label: "Изменить статус заказа на 'Завершен'",
+            children: [
+              { label: "Подтвердить изменение статуса",
+                onClick: () => {
+                  this.statusChanged("Завершен", orderId)}
+              },
+            ]
+          },
+            {
+            label: "Изменить статус заказа на 'Не выкуплен'",
+            children: [
+              { label: "Подтвердить изменение статуса",
+                onClick: () => {
+                  this.statusChanged("Не выкуплен", orderId)}
+              },
+            ]
+          },
+        ]
+    })
+      }
+},
     getOrder(){
         if (this.$route.params.page) {
             axios

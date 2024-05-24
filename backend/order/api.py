@@ -68,7 +68,7 @@ def admin_orders(request, page):
 		start_index = (page - 1) * 12
 		end_index = start_index + 12
 		if request.data['search_input'] != '':
-			orders = Order.objects.filter(id__in=request.data['search_input'])
+			orders = orders.filter(id__in=request.data['search_input'])
 			count = orders.count()
 			start_index = (page - 1) * 12
 			end_index = start_index + 12
@@ -85,7 +85,7 @@ def admin_orders(request, page):
 		start_index = (page - 1) * 12
 		end_index = start_index + 12
 	else:
-		orders = Order.objects.filter(id__in=request.data['searchInput'])
+		orders = Order.objects.filter(id=request.data['search_input'])
 		count = orders.count()
 		start_index = (page - 1) * 12
 		end_index = start_index + 12
