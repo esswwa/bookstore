@@ -31,6 +31,7 @@
 
                     <div class="px-2 flex flex-col">
                       <span class="flex px-3 text-2xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }}₽</span>
+                      <span class="px-3 flex text-2xl items-center text-red-500" v-if="book.count_on_stock === 0">Нет в наличии</span>
                       <div class="mt-4" v-if="userStore.user.superuser !== true">
                                   <button v-if="favourites.includes(book.id)" @click="deleteFavourite(book.id)" title="Удалить из избранных" class="py-4 px-6 text-white rounded-lg hover:bg-gray-100 hover:rounded-full  duration-200">
                                      <svg xmlns="http://www.w3.org/2000/svg" fill="#60a5fa" stroke="isCurrent" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">

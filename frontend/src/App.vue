@@ -50,7 +50,7 @@
                 <div class="flex items-center space-x-12" v-if="this.userStore.user.isAuthenticated && userStore.user.superuser === true">
 
                 </div>
-                <div class="menu-right">
+                <div class="menu-right p-4 hover:bg-gray-100 hover:rounded-full duration-200">
 <!--                  <template  v-if="userStore.user.isAuthenticated">-->
 <!--                    <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}" title="Профиль">-->
 <!--                      <img src="https://i.pravatar.cc/40?img=70" class="w-12 rounded-full">-->

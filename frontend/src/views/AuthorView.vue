@@ -72,7 +72,8 @@
                                 <img class="p-2" height="200px" width="200px" src="@/assets/preview.jpg" alt="Book cover">
                                 <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
                                   <span class=" flex items-center px-3 text-xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }} ₽</span>
-                              </div>
+                                  <span class="px-3 flex items-center text-red-500" v-if="book.count_on_stock === 0">Нет в наличии</span>
+                          </div>
 
                           </div>
                     </div>

@@ -3,16 +3,20 @@
 
 
   <div class="flex items-center" >
-    <div class="">
+
+    <div>
+      <div class="flex flex-col max-w-sm rounded-lg py-4 p-4 overflow-hidden bg-white shadow-lg focus:outline-none focus:shadow-outline">
+        <label for="delivery-points" class="mb-2 font-bold">Пункты выдачи</label>
+        <select class="flex flex-col max-w-sm rounded-lg py-4 p-4 overflow-hidden bg-white focus:outline-none focus:shadow-outline hover:bg-gray-100 duration-200 cursor-pointer" v-model="selectedItem" title="Пункты выдачи">
+          <option v-for="item in address" :key="item.id" :value="item.id">{{ item.text }}</option>
+        </select>
+      </div>
+    </div>
+        <div class="ml-2">
       <div class="flex flex-col max-w-sm rounded-lg p-4 overflow-hidden bg-green-200 shadow-lg">
         Общая стоимость всей корзины:
       {{ all_price }} ₽
       </div>
-    </div>
-    <div>
-      <select class="flex flex-col max-w-sm rounded-lg py-4 ml-4 p-4 overflow-hidden bg-white shadow-lg focus:outline-none focus:shadow-outline" v-model="selectedItem">
-        <option v-for="item in address" :key="item.id" :value="item.id">{{ item.text }}</option>
-      </select>
     </div>
     <div class="flex items-center">
        <button @click="goToOrder()" v-if="check" disabled class="card-button py-4 px-6 ml-4 bg-blue-400 text-white rounded-lg">Оформить заказ</button>
@@ -30,9 +34,9 @@
       <div class="card rounded mt-4 p-4 overflow-hidden shadow-lg" :class="{'bg-red-200': book.count_on_stock === 0, 'bg-white': book.count_on_stock > 0 }">
         <div @click="goToBook(book.id)" class="flex hover:bg-gray-100 duration-200 cursor-pointer rounded-lg card-content">
                            <div>
-                             <img class="p-2" style="height: 200px; width: 200px;" src="@/assets/preview.jpg" alt="Book cover">
+                             <img class="p-2" style="height: 150px; width: 150px;" src="@/assets/preview.jpg" alt="Book cover">
                            </div>
-                            <div class="px-6 py-4 flex flex-col">
+                            <div class="px-6 flex flex-col">
                               <div>
                                  <p class="text-sm text-gray-600 flex items-center" v-if="book.author">
                                 <svg v-if="!viewedBooks.includes(book.id)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -45,7 +49,7 @@
                                 {{ book.author.text.split(',')[0] }}
                                 </p>
                                 <div class="font-bold text-xl mb-2" v-if="book.name">{{book.name.slice(0,50) + (book.name.length > 50 ? '...' : '')}}</div>
-                                  <p class="text-gray-700 text-base" v-if="book.description">{{ book.description.slice(0, 200) + (book.name.length > 200 ? '...' : '') }}</p>
+                                  <p class="text-gray-700 text-base" v-if="book.description">{{ book.description.slice(0, 200) + (book.name.length > 200 ? '...' : '') }}</p><p class=" rounded-full py-4 text-sm font-semibold">На складе {{ book.count_on_stock}} штук(и)</p>
                                 </div>
                               </div>
 
@@ -54,9 +58,8 @@
 
                                 </div>
                             </div>
-        <p class=" rounded-full px-6 py-4 text-sm font-semibold">На складе {{ book.count_on_stock}} штук(и)</p>
   <div class="mx-auto flex items-center px-3 text-sm">
-                                      <div class="flex items-center m-2" v-if="book.rating >= 0">
+                                      <div class="flex items-center ml-4" v-if="book.rating >= 0">
                                           <svg class="w-4 h-4 text-yellow-300 me-1" v-if="book.rating > 0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
                                               <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                                           </svg>
