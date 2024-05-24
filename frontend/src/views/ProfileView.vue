@@ -34,6 +34,8 @@
                      </p>
                     <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
                     <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                    <p class="text-gray-700 text-base" v-if="order.status === 'Оформлен' || order.status ==='В пути'">Планируемая дата выдачи: {{new Date(new Date(order.date_order).getTime() + 10 * 24 * 60 * 60 * 1000).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                   </div>
                   <div class="px-6 py-4" v-else-if="order.status === 'Завершен'">
@@ -87,6 +89,7 @@
                      </p>
                     <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
                     <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+                    <p class="text-gray-700 text-base" v-if="order.status === 'Оформлен' || order.status ==='В пути'">Планируемая дата выдачи: {{new Date(new Date(order.date_order).getTime() + 10 * 24 * 60 * 60 * 1000).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                   </div>
                 </div>
@@ -141,7 +144,6 @@
                     <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
                     <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
                     <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
-
                   </div>
                 </div>
               </div>
