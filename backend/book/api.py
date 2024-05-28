@@ -288,7 +288,7 @@ def review_to_dict(instance):
     opts = instance._meta
     data = {}
     for f in opts.concrete_fields + opts.many_to_many:
-        if f.name in ['id', 'rating', 'book_id', 'user_id']:  # Укажите нужные поля
+        if f.name in ['id', 'rating', 'book', 'user']:  # Укажите нужные поля
             data[f.name] = f.value_from_object(instance)
     return data
 
@@ -366,13 +366,17 @@ def personal_recommendation_system(request):
     reviews = Review.objects.all()
     data = [review_to_dict(review) for review in reviews]
     df = pd.DataFrame(data)
-    new_df = df[df['user_id'].map(df['user_id'].value_counts()) > 3]
-    users_pivot = new_df.pivot_table(index=["user_id"], columns=["book_id"], values="rating")
+    print(df.head())
+    new_df = df[df['user'].map(df['user'].value_counts()) > 3]
+    users_pivot = new_df.pivot_table(index=["user"], columns=["book"], values="rating")
     users_pivot.fillna(0, inplace=True)
-    similar_with = get_similar_with(users_pivot, int(request_data['user']))
+    print(users_pivot)
+    print(int(request_data['user_id']))
+    similar_with = get_similar_with(users_pivot, int(request_data['user_id']))
+    print(similar_with)
     first_key = int(next(iter(similar_with)))
     first_user_movies = pd.DataFrame(data=get_first_user_movies(users_pivot, first_key).index)
-    choosed_user_movies = pd.DataFrame(data=get_choosed_user_movies(users_pivot, int(request_data['user'])).index)
+    choosed_user_movies = pd.DataFrame(data=get_choosed_user_movies(users_pivot, int(request_data['user_id'])).index)
     common_values = get_common_values(first_user_movies, choosed_user_movies)
     print(common_values)
     return common_values

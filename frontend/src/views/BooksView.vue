@@ -373,7 +373,8 @@ export default {
         this.getNewBooks();
         this.getBestBooks();
         this.getFavourite();
-        this.getBasket();
+        this.getBasket()
+        this.getRecommendation();
     },
     methods: {handleImageError(event) {
     event.target.src = '/src/assets/preview.jpg'; // Заменяем путь на альтернативный
@@ -533,7 +534,18 @@ export default {
           .catch(error =>{
             console.log("error", error)
           })
+    },
+        getRecommendation(){
+        axios
+          .post('/api/book/personal_recommendation_system/', {"user_id": this.userStore.user.id})
+          .then(response => {
+            console.log('recommendation', 'recommendation gg')
+          })
+          .catch(error =>{
+            console.log("error", error)
+          })
     }
+
 
                 },
 
