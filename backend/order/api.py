@@ -279,6 +279,88 @@ def get_address(request):
 	return JsonResponse({"address": serializer.data})
 
 
+@api_view(['POST'])
+def send_message(request):
+	data = request.data
+
+	basket_additionals_list = data['basket_additionals_list']
+
+	order_id = data['order_id']
+	order1 = data['order1']
+	order1 = Order.objects.get(id=order1)
+	user = User.objects.get(id=data['user'])
+	import smtplib
+
+	smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+	smtp_server.starttls()
+	smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
+
+	from email.mime.multipart import MIMEMultipart
+	from email.mime.text import MIMEText
+
+	# Создание объекта сообщения
+	msg = MIMEMultipart()
+
+	# Настройка параметров сообщения
+	msg["From"] = "qweq95346@gmail.com"
+	msg["To"] = user.email
+	msg["Subject"] = f"Заказ № {order_id}"
+
+	# Добавление текста в сообщение
+	# Создание HTML-содержимого письма
+	html = f"""
+				<!DOCTYPE html>
+				<html>
+				<head>
+				  <meta charset="UTF-8">
+				  <title>Чек на покупку книг</title>
+	  				<link rel="stylesheet" href="style.css">
+				</head>
+				<body>
+				  <div class="container">
+				    <h1>Чек на покупку книг</h1>
+				    <table>
+				      <thead>
+				        <tr>
+				          <th>Название книги</th>
+				          <th>Количество</th>
+				          <th>Сумма</th>
+				          <th>Изображение</th>
+				        </tr>
+				      </thead>
+				      <tbody>
+				       {' '.join([
+		f"""
+							<tr>
+							  <td>{book['name']}</td>
+							  <td>{book['count']}</td>
+							  <td>{book['all_price']:.2f} ₽</td>
+							  <td>
+							  <img class="p-2" style="height: 70px; width: 50px;" :src="require(`./frontend/src/assets/img/${book['book']}.jpg`).url" alt="Изображение">
+							  </td>
+							</tr>
+							"""
+		for book in basket_additionals_list
+	])}
+				      </tbody>
+				    </table>
+				    <div class="total">Итого: {order1.all_price} ₽</div>
+				    <div class="delivery-date">Ориентировочная дата доставки: {(order1.date_order + timezone.timedelta(days=10)).date()}</div>
+				    <div class="thank-you">Спасибо за покупку! Приятного чтения!</div>
+				  </div>
+				</body>
+				</html>
+				"""
+
+	# Добавление HTML-содержимого в сообщение
+	msg.attach(MIMEText(html, "html"))
+
+	# Отправка письма
+	smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
+
+	# Закрытие соединения
+	smtp_server.quit()
+	return Response({'message': 'Message send'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def add_order(request):
@@ -306,80 +388,6 @@ def add_order(request):
 			print(order)
 			order_id = order
 			order = OrderSerializer(order, many=False).data
-
-			import smtplib
-
-			smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
-			smtp_server.starttls()
-			smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
-
-			from email.mime.multipart import MIMEMultipart
-			from email.mime.text import MIMEText
-
-			# Создание объекта сообщения
-			msg = MIMEMultipart()
-
-			# Настройка параметров сообщения
-			msg["From"] = "your_email@gmail.com"
-			msg["To"] = "recipient_email@example.com"
-			msg["Subject"] = f"Заказ № {order_id}"
-
-			# Добавление текста в сообщение
-			# Создание HTML-содержимого письма
-			html = f"""
-			<!DOCTYPE html>
-			<html>
-			<head>
-			  <meta charset="UTF-8">
-			  <title>Чек на покупку книг</title>
-  				<link rel="stylesheet" href="style.css">
-			</head>
-			<body>
-			  <div class="container">
-			    <h1>Чек на покупку книг</h1>
-			    <table>
-			      <thead>
-			        <tr>
-			          <th>Название книги</th>
-			          <th>Количество</th>
-			          <th>Сумма</th>
-			          <th>Изображение</th>
-			        </tr>
-			      </thead>
-			      <tbody>
-			       {' '.join([
-						f"""
-						<tr>
-						  <td>{book['name']}</td>
-						  <td>{book['count']}</td>
-						  <td>{book['all_price']:.2f} ₽</td>
-						  <td>
-						  <img class="p-2" style="height: 70px; width: 50px;" :src="require(`./frontend/src/assets/img/${book['book']}.jpg`).url" alt="Изображение">
-						  </td>
-						</tr>
-						"""
-						for book in basket_additionals_list
-					])}
-			      </tbody>
-			    </table>
-			    <div class="total">Итого: {order1.all_price} ₽</div>
-			    <div class="delivery-date">Ориентировочная дата доставки: {(order1.date_order + timezone.timedelta(days=10)).date()}</div>
-			    <div class="thank-you">Спасибо за покупку! Приятного чтения!</div>
-			  </div>
-			</body>
-			</html>
-			"""
-
-			# Добавление HTML-содержимого в сообщение
-			msg.attach(MIMEText(html, "html"))
-
-			# Отправка письма
-			smtp_server.sendmail("qweq95346@gmail.com", "nnice2015@yandex.ru", msg.as_string())
-
-			# Закрытие соединения
-			smtp_server.quit()
-
-
 			return Response({'message': 'Order added successfully', 'basket_additionals_list': basket_additionals_list, 'order': order, 'address': address.text}, status=status.HTTP_200_OK)
 		else:
 			return Response({'message': 'Order is not addes'}, status=status.HTTP_400_BAD_REQUEST)

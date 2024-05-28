@@ -284,6 +284,21 @@ export default {
                             this.orderId = response.data.order.id
                             this.addressOrder = response.data.address
                             this.goToOrderHelper(response.data.basket_additionals_list, response.data.order)
+                            this.sendMessage(response.data.basket_additionals_list, this.orderId, response.data.order.id);
+                          })
+                          .catch(error => {
+                              console.log('error', error)
+                          })
+
+
+
+              },
+                sendMessage(basket_additionals_list, order_id, order_check){
+          console.log('selected_item', this.selectedItem)
+                        axios
+                          .post(`/api/order/send_message/`, {"user": this.userStore.user.id, "basket_additionals_list": basket_additionals_list, "order_id": order_id, 'order1': order_check})
+                          .then(response => {
+                            console.log("message", "message send on email")
                           })
                           .catch(error => {
                               console.log('error', error)

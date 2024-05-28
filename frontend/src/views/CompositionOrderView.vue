@@ -1,8 +1,4 @@
 <template>
-
-<!--  -->
-
-
 <div class="flex">
   <div class="max-w-s rounded-2xl overflow-hidden bg-white shadow-lg m-2 min-w-max" v-if="order">
           <div class="text-gray-900 font-medium text-xl mb-2">
@@ -67,7 +63,7 @@
                                    {{ helperOrder.book.author.text.split(',')[0] }}
                                 </p>
 <div class="flex justify-items-center justify-center">
-                                 <img class="p-2" style="height: 200px; width: 150px;" :src="`/src/assets/img/${book.id}.jpg`" @error="handleImageError" alt="@/assets/preview.jpg">
+                                 <img class="p-2" style="height: 200px; width: 150px;" :src="`/src/assets/img/${helperOrder.book.id}.jpg`" @error="handleImageError" alt="@/assets/preview.jpg">
                             </div>                                <div class="text-gray-900 font-medium text-xl mb-2" v-if="helperOrder.book.name">{{helperOrder.book.name.slice(0, 15) + (helperOrder.book.name.length > 15 ? '...' : '')}}</div>
                                   <span class=" flex items-center px-3 text-xl font-semibold text-gray-500" v-if="helperOrder.book.cost_per_one">{{ helperOrder.book.cost_per_one }} ₽</span>
 
