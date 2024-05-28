@@ -231,6 +231,7 @@ def add_view(request):
         return Response({'message': 'Book viewed added'}, status=status.HTTP_200_OK)
 
 
+
 @api_view(['POST'])
 def get_viewed_books(request):
 
@@ -250,6 +251,20 @@ def get_similar_books(request):
     similar_books = SimilarBook.objects.filter(book_id=book)
     books = Book.objects.filter(id__in=[sb.book_for_similar_id for sb in similar_books])
     serializer = BookSerializer(books, many=True)
+    return JsonResponse({'similar_books': serializer.data}, safe=False)
+
+@api_view(['POST'])
+def resulting_similar_books(request):
+
+
+    books = Book.objects.all()
+
+
+
+
+
+
+
     return JsonResponse({'similar_books': serializer.data}, safe=False)
 
 @api_view(['GET'])

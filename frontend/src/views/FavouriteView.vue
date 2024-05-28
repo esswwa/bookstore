@@ -23,8 +23,9 @@
                                   </svg>
                                    {{ book.author.text.split(',')[0] }}
                                 </p>
-                                <img class="p-2" height="200px" width="200px" src="@/assets/preview.jpg" alt="Book cover">
-                                <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
+<div class="flex justify-items-center justify-center">
+                                 <img class="p-2" style="height: 200px; width: 150px;" :src="`/src/assets/img/${book.id}.jpg`" @error="handleImageError" alt="@/assets/preview.jpg">
+                            </div>                                <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
                                   <span class=" flex items-center px-3 text-xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }} ₽</span>
                           <span class="px-3 flex text-2xl items-center text-red-500" v-if="book.count_on_stock === 0">Нет в наличии</span>
                           </div>
@@ -114,7 +115,9 @@ export default {
         this.getFavourite();
     this.getBasket();
     },
-    methods:{
+    methods:{handleImageError(event) {
+    event.target.src = '/src/assets/preview.jpg'; // Заменяем путь на альтернативный
+  },
         goToBook(bookId) {
      axios
            .post(`/api/book/add_view/`, {"bookId":bookId,"user": this.userStore.user.id})

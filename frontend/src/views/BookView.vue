@@ -24,8 +24,9 @@
 
         <div class="font-bold text-xl mb-2" v-if="book.name">{{ book.name }}</div>
         <div class="flex">
-          <img class="p-2 rounded" height="300px" width="400px" src="@/assets/preview.jpg" alt="Book cover">
-          <div class="flex flex-col items-center p-2">
+<div class="flex justify-items-center justify-center">
+                                 <img class="p-2" style="height: 300px; width: 2200px;" :src="`/src/assets/img/${book.id}.jpg`" @error="handleImageError" alt="@/assets/preview.jpg">
+                            </div>          <div class="flex flex-col items-center p-2">
                 <p class="text-gray-700 text-base" v-if="book.description">{{book.description.slice(0, 700) + (book.description.length > 700 ? '...' : '')}}</p>
                 </div>
 
@@ -113,7 +114,9 @@
                                   </svg>
                                    {{ book.author.text.split(',')[0] }}
                                 </p>
-                                <img class="p-2" style="height: 200px; width: 200px;" src="@/assets/preview.jpg" alt="Book cover">
+<div class="flex justify-items-center justify-center">
+                                 <img class="p-2" style="height: 200px; width: 150px;" :src="`/src/assets/img/${book.id}.jpg`" @error="handleImageError" alt="@/assets/preview.jpg">
+                            </div>
                                 <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
                                   <span class=" flex items-center px-3 text-xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }} ₽</span>
 <span class="px-3 flex items-center text-red-500" v-if="book.count_on_stock === 0">Нет в наличии</span>
@@ -174,7 +177,7 @@
     <div class="flex flex-col items-center justify-center text-center">
       <div class="flex flex-row items-center" v-if="userStore.user.superuser !== true">
         <div v-if="check === false && checkOrder === true" class="flex flex-col items-center">
-          <input v-model="review" class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="text" placeholder="Введите отзыв">
+          <input v-model="review" class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" style="width: 300px; height:50px" type="text" placeholder="Введите отзыв">
           <input v-model="rating" class="bg-white shadow-md m-2 rounded-lg p-3 focus:outline-none focus:ring focus:ring-blue-400" type="number" min="0" max="5" placeholder="Введите рейтинг">
 
           <button @click="addReview(book.id)"  class="inline-block py-4 px-3 bg-blue-400 text-xs text-white rounded-lg" title="Добавить отзыв">
@@ -282,7 +285,9 @@ export default {
     this.getBasket();
     this.getReview();
     },
-    methods:{    getViewedBooks(){
+    methods:{  handleImageError(event) {
+    event.target.src = '/src/assets/preview.jpg'; // Заменяем путь на альтернативный
+  },   getViewedBooks(){
       axios
           .post('/api/book/get_viewed_books/', {"user_id": this.userStore.user.id})
           .then(response => {

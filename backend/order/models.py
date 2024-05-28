@@ -14,13 +14,14 @@ class Address(models.Model):
 class Order(models.Model):
     id = models.IntegerField(primary_key=True, editable=False)
     basket = models.ForeignKey(Basket, on_delete=models.DO_NOTHING)
-    date_order = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     status = models.TextField(blank=True, null=False)
     address = models.ForeignKey(Address, on_delete=models.DO_NOTHING)
+    all_price = models.DecimalField(max_digits=10, decimal_places=2)
+    date_order = models.DateTimeField(auto_now_add=True)
     date_delivered = models.DateTimeField(null=True, blank=True)
     date_of_receiving = models.DateTimeField(null=True, blank=True)
-    all_price = models.DecimalField(max_digits=10, decimal_places=2)
+    date_order_renewal_end_date = models.DateTimeField(null=True, blank=True)
 
 
 class OrderHelper(models.Model):

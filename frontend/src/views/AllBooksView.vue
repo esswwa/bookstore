@@ -3,7 +3,7 @@
            <div class="max-w-7xl mx-auto">
         <div class="main-center col-span-3 space-y-4">
           <div class="text-center text-black py-4 px-6">
-              <h1 class="text-4xl font-bold">ВCЕ КНИГИ</h1>
+              <h1 class="text-4xl">ВCЕ КНИГИ</h1>
           </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
               </select>
             </div>
     <div class="flex items-center">
-       <button @click="saveOptions()" v-if="(selectedGenres != '' && selectedGenres != null) || sortOrder !== 'rating' || searchInput !== ''" class="px-6 py-2 ml-2 text-blue-100 bg-blue-400 rounded">
+       <button @click="saveOptions()" class="px-6 py-2 ml-2 text-blue-100 bg-blue-400 rounded">
          Сохранить
     </button>
     </div>
@@ -77,8 +77,9 @@
 
                                    {{ book.author.text.split(',')[0] }}
                             </p>
-                                <img class="p-2" height="200px" width="200px" src="@/assets/preview.jpg" alt="Book cover">
-                                <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
+<div class="flex justify-items-center justify-center">
+                                 <img class="p-2" style="height: 200px; width: 150px;" :src="`/src/assets/img/${book.id}.jpg`" @error="handleImageError" alt="@/assets/preview.jpg">
+                            </div>                                <div class="text-gray-900 font-medium text-xl mb-2" v-if="book.name">{{book.name.slice(0, 15) + (book.name.length > 15 ? '...' : '')}}</div>
                                   <span class=" flex items-center px-3 text-xl font-semibold text-gray-500" v-if="book.cost_per_one">{{ book.cost_per_one }} ₽</span>
                                   <span class="px-3 flex items-center text-red-500" v-if="book.count_on_stock === 0">Нет в наличии</span>
 
@@ -182,7 +183,9 @@ export default {
         this.getBasket();
         this.getGenre();
   },
-  methods: {
+  methods: {handleImageError(event) {
+    event.target.src = '/src/assets/preview.jpg'; // Заменяем путь на альтернативный
+  },
     getBook() {
       if (this.$route.params.page) {
         axios

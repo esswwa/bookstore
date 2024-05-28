@@ -18,8 +18,8 @@ const router = createRouter({
   routes: [
       {
       path: '/',
-      name: '',
-      component: BooksView
+      name: 'signin_authorization',
+      component: SigninView
     },
     {
       path: '/signup',

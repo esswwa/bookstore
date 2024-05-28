@@ -1,4 +1,14 @@
 <template>
+   <div class="flex items-center">
+           <div class="max-w-7xl mx-auto">
+        <div class="main-center col-span-3 space-y-4">
+          <div class="text-center text-black py-4 px-6">
+              <h1 class="text-4xl">КОРЗИНА</h1>
+          </div>
+        </div>
+    </div>
+    </div>
+
   <div v-if="showCard === false">
 
 
@@ -34,8 +44,9 @@
       <div class="card rounded mt-4 p-4 overflow-hidden shadow-lg" :class="{'bg-red-200': book.count_on_stock === 0, 'bg-white': book.count_on_stock > 0 }">
         <div @click="goToBook(book.id)" class="flex hover:bg-gray-100 duration-200 cursor-pointer rounded-lg card-content">
                            <div>
-                             <img class="p-2" style="height: 150px; width: 150px;" src="@/assets/preview.jpg" alt="Book cover">
-                           </div>
+                            <div class="flex justify-items-center justify-center">
+                                 <img class="p-2" style="height: 150px; width: 130px;" :src="`/src/assets/img/${book.id}.jpg`" @error="handleImageError" alt="@/assets/preview.jpg">
+                            </div>                           </div>
                             <div class="px-6 flex flex-col">
                               <div>
                                  <p class="text-sm text-gray-600 flex items-center" v-if="book.author">
@@ -172,6 +183,9 @@ export default {
       this.getAddress();
     },
     methods:{
+      handleImageError(event) {
+        event.target.src = '/src/assets/preview.jpg'; // Заменяем путь на альтернативный
+  },
         goToBook(bookId) {
     axios
            .post(`/api/book/add_view/`, {"bookId":bookId,"user": this.userStore.user.id})

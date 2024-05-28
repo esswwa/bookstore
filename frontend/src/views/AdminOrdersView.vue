@@ -222,6 +222,27 @@ export default {
         y: e.y,
         items: [
           {
+              label: "Продлить срок хранения",
+               children: [
+                { label: "Продлить срок хранения на 7 дней.",
+                  onClick: () => {
+                    this.orderRenewalDate("7", orderId)}
+                },
+                   { label: "Продлить срок хранения на 14 дней.",
+                  onClick: () => {
+                    this.orderRenewalDate("14", orderId)}
+                },
+                   { label: "Продлить срок хранения на 21 день.",
+                  onClick: () => {
+                    this.orderRenewalDate("21", orderId)}
+                },
+                   { label: "Продлить срок хранения на 28 дней.",
+                  onClick: () => {
+                    this.orderRenewalDate("28", orderId)}
+                },
+            ]
+          },
+          {
             label: "Изменить статус заказа на 'Завершен'",
             children: [
               { label: "Подтвердить изменение статуса",
@@ -243,6 +264,17 @@ export default {
     })
       }
 },
+    orderRenewalDate(date, orderId){
+        axios
+            .post('/api/order/order_renewal_date/', {'date': date, 'order_id': orderId})
+            .then(response => {
+                this.getOrder()
+            })
+            .catch(error=>{
+              console.log('error', error)
+            })
+    },
+
     getOrder(){
         if (this.$route.params.page) {
             axios
