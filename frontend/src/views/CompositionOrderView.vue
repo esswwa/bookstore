@@ -71,9 +71,6 @@
                                         <span class="text-sm mb-2 font-semibold text-gray-700" v-if="helperOrder.count">Количество: {{ helperOrder.count }}</span>
                                         <span class="text-sm mb-2 font-semibold text-gray-700" v-if="helperOrder.all_price">Цена за все: {{ helperOrder.all_price }}</span>
                                     </div>
-
-
-
                           </div>
                       <div class="flex items-center justify-center text-center mb-8 mt-4" v-if="helperOrder.book.rating >= 0">
                                           <svg class="w-4 h-4 text-yellow-300 me-1" v-if="helperOrder.book.rating > 0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">

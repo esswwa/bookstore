@@ -62,10 +62,10 @@
     </div>
   </div>
 
-<div class="flex flex-wrap" v-if="orders.length > 0">
+<div class="flex flex-wrap" v-if="orders.length > 0 && this.isLoading === false">
         <div v-for="order in orders" :key="order.id" class="w-1/3 p-2 min-w-max">
           <div @contextmenu="onContextMenu($event, order.id, order.status)" @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 p-4 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
-            <h1 class="text-xl">
+            <h1 class="ml-4 text-xl font-semibold">
               Номер заказа: {{order.id}}
             </h1>
             <div class="px-6 py-4" v-if="order.status === 'Оформлен' || order.status ==='В пути' || order.status ==='В пункте выдачи'">
@@ -74,9 +74,9 @@
                               <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
-                 <div class="inline-block bg-red-200 px-3 py-1 rounded-full" v-if="order.status ==='Оформлен'">{{order.status}}</div>
-                 <div class="inline-block bg-yellow-200 px-3 py-1 rounded-full" v-else-if="order.status ==='В пути'">{{order.status}}</div>
-                 <div class="inline-block bg-green-200 px-3 py-1 rounded-full" v-else>{{order.status}}</div>
+                 <div class="ml-2 inline-block bg-red-200 px-3 py-1 rounded-full" v-if="order.status ==='Оформлен'">{{order.status}}</div>
+                 <div class="ml-2 inline-block bg-yellow-200 px-3 py-1 rounded-full" v-else-if="order.status ==='В пути'">{{order.status}}</div>
+                 <div class="ml-2 inline-block bg-green-200 px-3 py-1 rounded-full" v-else>{{order.status}}</div>
                </p>
               <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
               <p class="text-gray-700 text-base">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
@@ -88,7 +88,7 @@
                               <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
-                  <div class="inline-block bg-green-200 px-3 py-1 rounded-full">{{order.status}}</div>
+                  <div class="ml-2 inline-block bg-green-200 px-3 py-1 rounded-full">{{order.status}}</div>
                </p>
               <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
               <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
@@ -101,7 +101,7 @@
                               <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                               <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
-                  <div class="inline-block bg-gray-200 px-3 py-1 rounded-full">{{order.status}}</div>
+                  <div class="ml-2 inline-block bg-gray-200 px-3 py-1 rounded-full">{{order.status}}</div>
                </p>
               <div class="text-gray-700 text-xl mb-2">Пункт выдачи: {{ order.address.text }}</div>
               <p class="text-gray-700 text-base">Общая стоимость заказа: {{ order.all_price }} ₽</p>
@@ -110,11 +110,29 @@
           </div>
         </div>
     </div>
-  <div v-else class="flex flex-col items-center p-6">
+  <div v-else-if="orders.length === 0 && this.isLoading === false" class="flex flex-col items-center p-6">
     Книги с необходимыми вам параметрами отсутствуют
     <button @click="resetFilters()" class="py-4 px-6 m-4 bg-blue-400 text-white rounded-lg" title="Сбросить фильтры">
         Сбросить фильтры
     </button>
+  </div>
+  <div v-else class="grid grid-cols-3 gap-4">
+   <div v-for="index in 12" :key="index" class="border border-gray-300 shadow rounded-md max-w-sm mx-auto">
+     <div class="animate-pulse flex space-x-4 ml-4 mr-4">
+      <div class="rounded-full bg-slate-200 h-20 w-20"></div>
+      <div class="flex-1 space-y-6 py-1">
+        <div class="h-4 w-8 bg-slate-200 rounded"></div>
+        <div class="space-y-3">
+          <div class="grid grid-cols-3 gap-4">
+            <div class="h-4 w-8 bg-slate-200 rounded col-span-2"></div>
+            <div class="h-4 w-8 bg-slate-200 rounded col-span-1"></div>
+          </div>
+          <div class="h-4 w-8 bg-slate-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+
+    </div>
   </div>
   </div>
 
@@ -138,6 +156,7 @@ export default {
   components: {SwiperSlide},
   data() {
     return {
+      isLoading: false,
       viewedBooks: [],
       viewed: [],
       orders: [],
@@ -277,12 +296,14 @@ export default {
 
     getOrder(){
         if (this.$route.params.page) {
+            this.isLoading = true
             axios
                 .post(`/api/order/admin_orders/${this.$route.params.page}/`, {'search_input': this.searchInput, 'selected_filter': this.selectedFilter, 'sort_order': this.sortOrder})
                 .then(response => {
                   console.log('data', response.data.books);
                   this.orders = response.data.orders;
                   this.total = response.data.count;
+                  this.isLoading = false
                 })
                 .catch(error => {
                   console.log('error', error);
@@ -290,6 +311,7 @@ export default {
         }
     },
     statusChanged(status, orderId){
+            this.isLoading = true
         axios
             .post('/api/order/change_status/', {'status': status, 'order_id': orderId})
             .then(response => {
