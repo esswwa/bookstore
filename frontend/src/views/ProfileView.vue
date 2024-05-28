@@ -15,8 +15,8 @@
 
     <div class=" p-4 m-4 bg-white border border-gray-200 text-center rounded-lg" v-if="userStore.user.superuser !== true">
     <fwb-tabs v-model="activeTab" class="p-5">
-       <fwb-tab name="all" v-if="allOrders.length > 0" title="Все заказы">
-          <div class="flex flex-wrap">
+       <fwb-tab name="all" title="Все заказы">
+          <div class="flex flex-wrap" v-if="allOrders.length > 0 && this.isLoading === false">
               <div v-for="order in allOrders" :key="order.id" class="w-1/4 p-2">
                 <div @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <h1 class="text-xl">
@@ -66,12 +66,31 @@
                 </div>
               </div>
           </div>
+         <div v-else-if="allOrders.length > 0 && this.isLoading === false">
+            Все заказы отсутствуют
+         </div>
+         <div v-else class="grid grid-cols-4 gap-4">
+         <div v-for="index in 12" :key="index" class="border border-gray-300 shadow rounded-md max-w-sm mx-auto">
+           <div class="animate-pulse flex space-x-4 ml-4 mr-4">
+            <div class="rounded-full bg-slate-200 h-20 w-20"></div>
+            <div class="flex-1 space-y-6 py-1">
+              <div class="h-4 w-8 bg-slate-200 rounded"></div>
+              <div class="space-y-3">
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="h-4 w-8 bg-slate-200 rounded col-span-2"></div>
+                  <div class="h-4 w-8 bg-slate-200 rounded col-span-1"></div>
+                </div>
+                <div class="h-4 w-8 bg-slate-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+        </div>
         </fwb-tab>
-        <fwb-tab name="all" v-else title="Все заказы" >
-          Все заказы отсутствуют
-        </fwb-tab>
-        <fwb-tab name="first" v-if="activeOrders.length > 0" title="Активные заказы" >
-          <div class="flex flex-wrap">
+
+        <fwb-tab name="first" title="Активные заказы" >
+          <div class="flex flex-wrap" v-if="activeOrders.length > 0 && this.isLoading === false">
               <div v-for="order in activeOrders" :key="order.id" class="w-1/4 p-2">
                 <div @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <h1 class="text-xl">
@@ -95,12 +114,32 @@
                 </div>
               </div>
           </div>
-        </fwb-tab>
-        <fwb-tab name="first" v-else title="Активные заказы" >
+           <div v-else-if="activeOrders.length > 0 && this.isLoading === false">
+
           Активные заказы отсутствуют
+         </div>
+         <div v-else class="grid grid-cols-4 gap-4">
+         <div v-for="index in 12" :key="index" class="border border-gray-300 shadow rounded-md max-w-sm mx-auto">
+           <div class="animate-pulse flex space-x-4 ml-4 mr-4">
+            <div class="rounded-full bg-slate-200 h-20 w-20"></div>
+            <div class="flex-1 space-y-6 py-1">
+              <div class="h-4 w-8 bg-slate-200 rounded"></div>
+              <div class="space-y-3">
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="h-4 w-8 bg-slate-200 rounded col-span-2"></div>
+                  <div class="h-4 w-8 bg-slate-200 rounded col-span-1"></div>
+                </div>
+                <div class="h-4 w-8 bg-slate-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+        </div>
         </fwb-tab>
-        <fwb-tab name="second" v-if="archiveOrders.length > 0" title="Архив заказов">
-           <div class="flex flex-wrap">
+
+        <fwb-tab name="second" title="Архив заказов">
+           <div class="flex flex-wrap" v-if="archiveOrders.length > 0 && this.isLoading === false">
               <div v-for="order in archiveOrders" :key="order.id" class="w-1/4 p-2">
                 <div @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <h1 class="text-xl">
@@ -122,12 +161,32 @@
                 </div>
               </div>
           </div>
-        </fwb-tab>
-        <fwb-tab name="second" v-else title="Архив заказов">
+              <div v-else-if="archiveOrders.length > 0 && this.isLoading === false">
+
           Архив заказов пуст. Самое время это исправить:)
+         </div>
+         <div v-else class="grid grid-cols-4 gap-4">
+         <div v-for="index in 12" :key="index" class="border border-gray-300 shadow rounded-md max-w-sm mx-auto">
+           <div class="animate-pulse flex space-x-4 ml-4 mr-4">
+            <div class="rounded-full bg-slate-200 h-20 w-20"></div>
+            <div class="flex-1 space-y-6 py-1">
+              <div class="h-4 w-8 bg-slate-200 rounded"></div>
+              <div class="space-y-3">
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="h-4 w-8 bg-slate-200 rounded col-span-2"></div>
+                  <div class="h-4 w-8 bg-slate-200 rounded col-span-1"></div>
+                </div>
+                <div class="h-4 w-8 bg-slate-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+        </div>
         </fwb-tab>
-        <fwb-tab name="third" v-if="canceledOrders.length > 0" title="Отмененные заказы">
-            <div class="flex flex-wrap">
+
+        <fwb-tab name="third"  title="Отмененные заказы">
+            <div class="flex flex-wrap" v-if="canceledOrders.length > 0 && this.isLoading === false">
               <div v-for="order in canceledOrders" :key="order.id" class="w-1/4 p-2">
                 <div @click="checkCompositionOrder(order.id)" title="Перейти на заказ" class="hover:bg-gray-100 duration-200 cursor-pointer max-w-sm rounded overflow-hidden bg-white shadow-lg">
                   <h1 class="text-xl">
@@ -148,10 +207,30 @@
                 </div>
               </div>
           </div>
-        </fwb-tab>
-        <fwb-tab name="third" v-else title="Отмененные заказы">
+             <div v-else-if="archiveOrders.length > 0 && this.isLoading === false">
+
           Отмененных заказов нет. Спасибо за доверие:)
+         </div>
+         <div v-else class="grid grid-cols-4 gap-4">
+         <div v-for="index in 12" :key="index" class="border border-gray-300 shadow rounded-md max-w-sm mx-auto">
+           <div class="animate-pulse flex space-x-4 ml-4 mr-4">
+            <div class="rounded-full bg-slate-200 h-20 w-20"></div>
+            <div class="flex-1 space-y-6 py-1">
+              <div class="h-4 w-8 bg-slate-200 rounded"></div>
+              <div class="space-y-3">
+                <div class="grid grid-cols-3 gap-4">
+                  <div class="h-4 w-8 bg-slate-200 rounded col-span-2"></div>
+                  <div class="h-4 w-8 bg-slate-200 rounded col-span-1"></div>
+                </div>
+                <div class="h-4 w-8 bg-slate-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+        </div>
         </fwb-tab>
+
   </fwb-tabs>
 </div>
 </template>
@@ -184,6 +263,7 @@ export default {
             user: {
                 id: ''
             },
+      isLoading: false,
       isOpen: false,
           password1: null,
           password2: null,
@@ -219,6 +299,7 @@ export default {
                 })
         },
       getOrder(){
+                this.isLoading = true;
         axios
             .post('/api/order/', {'user': this.userStore.user.id})
             .then(response => {
@@ -227,6 +308,7 @@ export default {
                   this.activeOrders = response.data.activeOrders
                   this.canceledOrders = response.data.canceledOrders
                   this.archiveOrders = response.data.archiveOrders
+                this.isLoading = false;
 
               console.log('allOrders', this.allOrders)
               console.log('activeOrders', this.activeOrders)
