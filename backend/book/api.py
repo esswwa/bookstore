@@ -1,13 +1,15 @@
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-
+import pandas as pd
+import numpy as np
 from account.models import User
 from account.serializers import (UserSerializer)
 from rest_framework.response import Response
 
 from .models import Book, Genre, AdditionalGenre, Author, ViewedBook, SimilarBook
 from .serializers import BookSerializer, GenreSerializer, AuthorSerializer
+from review.models import Review
 
 
 @api_view(['GET'])
@@ -261,10 +263,6 @@ def resulting_similar_books(request):
 
 
 
-
-
-
-
     return JsonResponse({'similar_books': serializer.data}, safe=False)
 
 @api_view(['GET'])
@@ -284,3 +282,98 @@ def get_author(request, author):
     serializer = AuthorSerializer(authors, many=False).data
 
     return JsonResponse({'author': serializer}, safe=False)
+
+
+def review_to_dict(instance):
+    opts = instance._meta
+    data = {}
+    for f in opts.concrete_fields + opts.many_to_many:
+        if f.name in ['id', 'rating', 'book_id', 'user_id']:  # Укажите нужные поля
+            data[f.name] = f.value_from_object(instance)
+    return data
+
+
+def book_to_dict(instance):
+    opts = instance._meta
+    data = {}
+    for f in opts.concrete_fields + opts.many_to_many:
+        if f.name in ['id', 'name', 'rating']:  # Укажите нужные поля
+            data[f.name] = f.value_from_object(instance)
+    return data
+
+# def same_books(book):
+#     users_vote_film=users_pivot[book]
+#     similar_with=users_pivot.corrwith(users_vote_film)
+#     similar_with = pd.DataFrame(similar_with, columns=['correlation'])
+#     print(similar_with)
+#     df=similar_with.sort_values('correlation',ascending=False).head(10)
+#     print(df)
+#     df_sort=df[df['correlation']>0.8]
+#     return df_sort
+
+# @api_view(['POST'])
+# def personal_recommendation_system(request):
+#     reviews = Review.objects.all()
+#     data = [review_to_dict(review) for review in reviews]
+#     df = pd.DataFrame(data)
+#     new_df = df[df['user_id'].map(df['user_id'].value_counts()) > 3]
+#     users_pivot = new_df.pivot_table(index=["user_id"], columns=["book_id"], values="rating")
+#     users_pivot.fillna(0, inplace=True)
+#     from sklearn.metrics.pairwise import cosine_similarity
+#     similarity_score = cosine_similarity(users_pivot.T)
+#     users_pivot2 = users_pivot.T
+#
+#     books = Book.objects.all()
+#     data2 = [book_to_dict(review) for review in reviews]
+#     books = pd.DataFrame(data2)
+#
+#     def recommend(book_name):
+#         index = np.where(users_pivot2.index == book_name)[0][0]
+#         similar_books = sorted(list(enumerate(similarity_score[index])), key=lambda x: x[1], reverse=True)[1:11]
+#
+#         data = []
+#
+#         for i in similar_books:
+#             item = []
+#             temp_df = books[books['id'] == users_pivot2.index[i[0]]]
+#             item.extend(list(temp_df.drop_duplicates('id')['id'].values))
+#             item.extend(list(temp_df.drop_duplicates('id')['name'].values))
+#             item.extend(list(temp_df.drop_duplicates('id')['rating'].values))
+#
+#             data.append(item)
+#         return data
+
+
+def get_first_user_movies(users_pivot, key):
+    return users_pivot.T[key].sort_values(ascending=False).loc[lambda s: s >= 4.5]
+
+
+def get_choosed_user_movies(users_pivot, key):
+    return users_pivot.T[key].sort_values(ascending=False).loc[lambda s: s == 0]
+
+
+def get_similar_with(users_pivot, userid):
+    return users_pivot.T.corrwith(users_pivot.T[userid]).sort_values(ascending=False).loc[lambda s: (s > 0.45) & (s < 0.99)].to_dict()
+
+
+def get_common_values(df1, df2):
+    return pd.merge(df1, df2, on='id', how='inner')
+
+
+@api_view(['POST'])
+def personal_recommendation_system(request):
+    request_data = request.data
+    reviews = Review.objects.all()
+    data = [review_to_dict(review) for review in reviews]
+    df = pd.DataFrame(data)
+    new_df = df[df['user_id'].map(df['user_id'].value_counts()) > 3]
+    users_pivot = new_df.pivot_table(index=["user_id"], columns=["book_id"], values="rating")
+    users_pivot.fillna(0, inplace=True)
+    similar_with = get_similar_with(users_pivot, int(request_data['user']))
+    first_key = int(next(iter(similar_with)))
+    first_user_movies = pd.DataFrame(data=get_first_user_movies(users_pivot, first_key).index)
+    choosed_user_movies = pd.DataFrame(data=get_choosed_user_movies(users_pivot, int(request_data['user'])).index)
+    common_values = get_common_values(first_user_movies, choosed_user_movies)
+    print(common_values)
+    return common_values
+

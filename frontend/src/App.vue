@@ -198,7 +198,7 @@ export default {
       countBasket:0,
     }
   },
-  created(){
+  mounted(){
       if(this.userStore.user && this.userStore.user.superuser !== true){
         this.getBaskets()
         this.getFavourites()

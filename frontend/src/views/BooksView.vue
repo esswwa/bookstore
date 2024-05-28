@@ -504,7 +504,7 @@ export default {
                 console.log("user_id", response.data.user_id)
                 console.log("message", response.data.message)
                 console.log("fav", response.data.favourite)
-               this.getBasket();
+                this.getBasket();
 
               })
               .catch(error => {
