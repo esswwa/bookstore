@@ -16,6 +16,7 @@ urlpatterns = [
     path('get_viewed_books/', api.get_viewed_books, name='get_viewed_books'),
     path('get_similar_books/', api.get_similar_books, name='get_similar_books'),
     path('personal_recommendation_system/', api.personal_recommendation_system, name='personal_recommendation_system'),
+    path('resulting_similar_books/', api.resulting_similar_books, name='resulting_similar_books'),
     path('get_author/<int:author>/', api.get_author, name='get_author'),
 
 

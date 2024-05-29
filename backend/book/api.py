@@ -255,15 +255,6 @@ def get_similar_books(request):
     serializer = BookSerializer(books, many=True)
     return JsonResponse({'similar_books': serializer.data}, safe=False)
 
-@api_view(['POST'])
-def resulting_similar_books(request):
-
-
-    books = Book.objects.all()
-
-
-
-    return JsonResponse({'similar_books': serializer.data}, safe=False)
 
 @api_view(['GET'])
 def get_genres(request):
@@ -301,47 +292,152 @@ def book_to_dict(instance):
             data[f.name] = f.value_from_object(instance)
     return data
 
-# def same_books(book):
-#     users_vote_film=users_pivot[book]
-#     similar_with=users_pivot.corrwith(users_vote_film)
-#     similar_with = pd.DataFrame(similar_with, columns=['correlation'])
-#     print(similar_with)
-#     df=similar_with.sort_values('correlation',ascending=False).head(10)
-#     print(df)
-#     df_sort=df[df['correlation']>0.8]
-#     return df_sort
-
-# @api_view(['POST'])
-# def personal_recommendation_system(request):
+# не рабочий вариант с find_similar_movies
+# @api_view(['GET'])
+# def resulting_similar_books(request):
 #     reviews = Review.objects.all()
 #     data = [review_to_dict(review) for review in reviews]
 #     df = pd.DataFrame(data)
-#     new_df = df[df['user_id'].map(df['user_id'].value_counts()) > 3]
-#     users_pivot = new_df.pivot_table(index=["user_id"], columns=["book_id"], values="rating")
+#     new_df = df[df['user'].map(df['user'].value_counts()) >= 0]
+#     users_pivot = new_df.pivot_table(index=["user"], columns=["book"], values="rating")
 #     users_pivot.fillna(0, inplace=True)
 #     from sklearn.metrics.pairwise import cosine_similarity
-#     similarity_score = cosine_similarity(users_pivot.T)
-#     users_pivot2 = users_pivot.T
 #
 #     books = Book.objects.all()
-#     data2 = [book_to_dict(review) for review in reviews]
+#     data2 = [book_to_dict(book) for book in books]
 #     books = pd.DataFrame(data2)
 #
-#     def recommend(book_name):
-#         index = np.where(users_pivot2.index == book_name)[0][0]
-#         similar_books = sorted(list(enumerate(similarity_score[index])), key=lambda x: x[1], reverse=True)[1:11]
+#     # метод для определения похожих фильмов по определенному
+#     from scipy.sparse import csr_matrix
+#     from sklearn.neighbors import NearestNeighbors
+#     movie_df_matrix = csr_matrix(users_pivot.values)
 #
-#         data = []
+#     def find_similar_movies(movie_name, num_neighbors=1000):
+#         # Инициализируем модель ближайших соседей
+#         model_knn = NearestNeighbors(metric='cosine', algorithm='brute')
+#         model_knn.fit(movie_df_matrix)
 #
-#         for i in similar_books:
-#             item = []
-#             temp_df = books[books['id'] == users_pivot2.index[i[0]]]
-#             item.extend(list(temp_df.drop_duplicates('id')['id'].values))
-#             item.extend(list(temp_df.drop_duplicates('id')['name'].values))
-#             item.extend(list(temp_df.drop_duplicates('id')['rating'].values))
+#         # Находим индекс входной книги
+#         movie_index = users_pivot.columns.get_loc(movie_name)
 #
-#             data.append(item)
-#         return data
+#         # Поиск ближайших соседей
+#         distances, indices = model_knn.kneighbors(movie_df_matrix[movie_index],
+#                                                   n_neighbors=min(num_neighbors + 1, movie_df_matrix.shape[0]))
+#         # Исключение первого индекса (которым является сам входной фильм)
+#         similar_indices = indices[0][1:]
+#
+#         # Получаем название похожих фильмов на основе индексов
+#         list_similar_movies = [users_pivot.columns[idx] for idx in similar_indices]
+#         similar_movies = pd.DataFrame({"id": list_similar_movies})
+#         return similar_movies
+#
+#
+#
+#     for i in books['id']:
+#         print(find_similar_movies(i))
+#         data = find_similar_movies(i)
+#         print(data)
+#         for j in data['id']:
+#             bookI = Book.objects.get(id=i)
+#             bookJ = Book.objects.get(id=j)
+#             similar_book, created = SimilarBook.objects.get_or_create(book_id=bookI.id, book_for_similar_id=bookJ.id)
+#             similar_book.save()
+#     return Response({'message': 'OK'}, status=status.HTTP_200_OK)
+
+
+
+# не рабочий вариант с same_movies
+# @api_view(['GET'])
+# def resulting_similar_books(request):
+#     reviews = Review.objects.all()
+#     data = [review_to_dict(review) for review in reviews]
+#     df = pd.DataFrame(data)
+#     new_df = df[df['user'].map(df['user'].value_counts()) >= 0]
+#     users_pivot = new_df.pivot_table(index=["user"], columns=["book"], values="rating")
+#     users_pivot.fillna(0, inplace=True)
+#     from sklearn.metrics.pairwise import cosine_similarity
+#
+#     books = Book.objects.all()
+#     data2 = [book_to_dict(book) for book in books]
+#     books = pd.DataFrame(data2)
+#
+#     def same_books(book):
+#         users_vote_film = users_pivot[book]
+#         similar_with = users_pivot.corrwith(users_vote_film)
+#         similar_with = pd.DataFrame(similar_with, columns=['correlation'])
+#         print(similar_with)
+#         df = similar_with.sort_values('correlation',ascending=False).head(10)
+#         print(df)
+#         df_sort = df[df['correlation'] > 0.8]
+#         return df_sort
+#     for i in books['id']:
+#         print(same_books(i))
+#         break
+#         data = same_books(i)
+#         print(data)
+#         for j in data:
+#             bookI = Book.objects.get(id=i)
+#             bookJ = Book.objects.get(id=j[0])
+#             similar_book, created = SimilarBook.objects.get_or_create(book_id=bookI.id, book_for_similar_id=bookJ.id)
+#             similar_book.save()
+#     return Response({'message': 'OK'}, status=status.HTTP_200_OK)
+
+#рабочий вариант с  косинусовым сходством
+def same_books(book):
+    users_vote_film=users_pivot[book]
+    similar_with=users_pivot.corrwith(users_vote_film)
+    similar_with = pd.DataFrame(similar_with, columns=['correlation'])
+    print(similar_with)
+    df=similar_with.sort_values('correlation',ascending=False).head(10)
+    print(df)
+    df_sort=df[df['correlation']>0.8]
+    return df_sort
+
+@api_view(['GET'])
+def resulting_similar_books(request):
+    reviews = Review.objects.all()
+    data = [review_to_dict(review) for review in reviews]
+    df = pd.DataFrame(data)
+    new_df = df[df['user'].map(df['user'].value_counts()) > 3]
+    users_pivot = new_df.pivot_table(index=["user"], columns=["book"], values="rating")
+    users_pivot.fillna(0, inplace=True)
+    from sklearn.metrics.pairwise import cosine_similarity
+    similarity_score = cosine_similarity(users_pivot.T)
+    users_pivot2 = users_pivot.T
+
+    books = Book.objects.all()
+    data2 = [book_to_dict(book) for book in books]
+    books = pd.DataFrame(data2)
+
+    def recommend(book_name):
+        try:
+            index = np.where(users_pivot2.index == book_name)[0][0]
+        except IndexError:
+            return []
+
+        similar_books = sorted(list(enumerate(similarity_score[index])), key=lambda x: x[1], reverse=True)[1:11]
+
+        data = []
+
+        for i in similar_books:
+            item = []
+            temp_df = books[books['id'] == users_pivot2.index[i[0]]]
+            item.extend(list(temp_df.drop_duplicates('id')['id'].values))
+            item.extend(list(temp_df.drop_duplicates('id')['name'].values))
+            item.extend(list(temp_df.drop_duplicates('id')['rating'].values))
+
+            data.append(item)
+        return data
+    for i in books['id']:
+        data = recommend(i)
+        print(data)
+        for j in data:
+            bookI = Book.objects.get(id=i)
+            bookJ = Book.objects.get(id=j[0])
+            similar_book, created = SimilarBook.objects.get_or_create(book_id=bookI.id, book_for_similar_id=bookJ.id)
+            similar_book.save()
+    return Response({'message': 'OK'}, status=status.HTTP_200_OK)
+
 
 
 def get_first_user_movies(users_pivot, key):
@@ -382,6 +478,17 @@ def personal_recommendation_system(request):
     choosed_user_movies = pd.DataFrame(data=get_choosed_user_movies(users_pivot, int(request_data['user_id'])).index)
 
     common_values = get_common_values(first_user_movies, choosed_user_movies)
-    print("gg", common_values)
-    return common_values
+    print("gg12312312", common_values['book'])
+    book_id = []
+    for key, value in common_values['book'].items():
+        book_id.append(value)
+    print('book_id', book_id)
+    if len(book_id) >= 5:
+        if len(book_id) > 10:
+            book_id = book_id[:10]
+        books = Book.objects.filter(id__in=book_id)
+        books = BookSerializer(books, many=True).data
+        return Response({'message': 'Recommendations completed', 'books': books, 'count_recommendation': len(book_id)}, status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'Recommendation dont exist'}, status=status.HTTP_200_OK)
 

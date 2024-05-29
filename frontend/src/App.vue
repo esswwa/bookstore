@@ -30,8 +30,8 @@
 
                     <RouterLink to="/all_books/1/" class="p-4 hover:bg-gray-100 hover:rounded-full duration-200" title="Все книги">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
-</svg>
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+                        </svg>
 
                     </RouterLink>
 
@@ -57,7 +57,11 @@
                     </RouterLink>
                 </div>
                 <div class="flex items-center space-x-12" v-if="this.userStore.user.isAuthenticated && userStore.user.superuser === true">
-
+                  <div v-if="this.userStore.user.isAuthenticated && userStore.user.superuser === true">
+                      <button @click="recreate_similar_books()" class="py-4 px-6 bg-blue-200 text-white rounded-full hover:bg-gray-200 hover:rounded-full  duration-200">
+                          Пересоздать похожие книги
+                      </button>
+                   </div>
                 </div>
                 <div class="menu-right p-4 hover:bg-gray-100 hover:rounded-full duration-200">
 <!--                  <template  v-if="userStore.user.isAuthenticated">-->
@@ -241,7 +245,15 @@ export default {
             this.userStore.removeToken()
             this.$router.push('/signin')
         },
-
+    recreate_similar_books(){
+      axios
+                          .get(`/api/book/resulting_similar_books/`)
+                          .then(response => {
+                          })
+                          .catch(error => {
+                              console.log('error', error)
+                          })
+    },
     getFavourites(){
       axios
                           .post(`/api/favourite/get_count_favourite/`, {"user": this.userStore.user.id})
