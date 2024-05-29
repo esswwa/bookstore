@@ -353,11 +353,18 @@ def get_choosed_user_movies(users_pivot, key):
 
 
 def get_similar_with(users_pivot, userid):
-    return users_pivot.T.corrwith(users_pivot.T[userid]).sort_values(ascending=False).loc[lambda s: (s > 0.45) & (s < 0.99)].to_dict()
+    corr_series = users_pivot.corrwith(users_pivot[userid])
+    # Фильтровать серию корреляций, чтобы включать только положительные и не идеальные корреляции
+    similar_users = corr_series[(corr_series > 0.45) & (corr_series < 0.99)].to_dict()
+
+    return similar_users
 
 
 def get_common_values(df1, df2):
-    return pd.merge(df1, df2, on='id', how='inner')
+    print('huy', df1.columns)
+    print('huy2', df2.columns)
+
+    return pd.merge(df1, df2, on='book', how='inner')
 
 
 @api_view(['POST'])
@@ -366,18 +373,15 @@ def personal_recommendation_system(request):
     reviews = Review.objects.all()
     data = [review_to_dict(review) for review in reviews]
     df = pd.DataFrame(data)
-    print(df.head())
     new_df = df[df['user'].map(df['user'].value_counts()) > 3]
     users_pivot = new_df.pivot_table(index=["user"], columns=["book"], values="rating")
     users_pivot.fillna(0, inplace=True)
-    print(users_pivot)
-    print(int(request_data['user_id']))
     similar_with = get_similar_with(users_pivot, int(request_data['user_id']))
-    print(similar_with)
     first_key = int(next(iter(similar_with)))
     first_user_movies = pd.DataFrame(data=get_first_user_movies(users_pivot, first_key).index)
     choosed_user_movies = pd.DataFrame(data=get_choosed_user_movies(users_pivot, int(request_data['user_id'])).index)
+
     common_values = get_common_values(first_user_movies, choosed_user_movies)
-    print(common_values)
+    print("gg", common_values)
     return common_values
 
