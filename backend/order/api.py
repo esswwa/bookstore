@@ -1468,24 +1468,115 @@ def order_renewal_date(request):
 	msg["To"] = user.email
 	if order:
 		order.save()
-		html = f"""
-							<!DOCTYPE html>
-							<html>
-							<head>
-							  <meta charset="UTF-8">
-							  <title>Заказ № {order.id}</title>
-								<link rel="stylesheet" href="style.css">
-							</head>
-							<body>
-							  <div class="container">
-							    <h1>Информация о вашем заказе № {order.id}</h1>
-							    <div class="total">По вашей просьбе срок хранения заказа был продлен. \n Новый срок хранения заказа до: {order.date_order_renewal_end_date.date()}</div>
-							      <br/>
-							    <div>Спасибо, что вы выбрали наш магазин!</div>
-							  </div>
-							</body>
-							</html>
-							"""
+
+		html = f"""<article style="max-width: 622px;">
+																			<div>
+																				<div style="margin:0;padding:0">
+																				<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+																					<div style="margin:0 auto 0 auto;max-width:600px">
+																						<div style="padding-top:50px">
+																							<table style="width:100%">
+																								<tbody>
+																									<tr>
+																										<td align="center">
+																											<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																										</td>
+																									</tr>
+																								</tbody>
+																							</table>
+																						</div>
+
+																						<div style="background-color:#ffffff;padding:30px">
+																							<div style="line-height:24px;text-align:center">
+																								<span style="font-size:18px;font-weight:bold">
+																									Здравствуйте, {user.name}!
+																								</span>
+																								<br>
+																								По вашей просьбе срок хранения заказа был продлен.
+																					      		<br/>
+																								Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+																					      	</div>
+
+																								<span style="font-size:35px;line-height:40px">
+																									<strong>Номер заказа: <br>№
+																										<span>{order.id}</span>
+																									</strong>
+																								</span>
+																								<br>
+																							</div>
+																							<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+																								<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+																							</div>
+																							<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+																								<tbody>
+																									<tr>
+																										<th style="height:1px;width:50%"></th>
+																										<th style="height:1px;width:50%"></th>
+																									</tr>
+																									<tr>
+																										<td style="padding-top:15px">
+																											<strong>Номер заказа:</strong>
+																										</td>
+																										<td style="padding-top:15px">
+																											<strong>Счет выставлен:</strong>
+																										</td>
+																									</tr>
+																									<tr>
+																										<td>
+																											№<span>{order.id}</span>
+																										</td>
+																										<td>
+																											<span>{user.email}</span>
+																										</td>
+																									</tr>
+																									<tr>
+																										<td style="padding-top:15px">
+																											<strong>Дата заказа:</strong>
+																										</td>
+																										<td style="padding-top:15px">
+																											<strong>Новый срок хранения заказа по:</strong>
+																										</td>
+																									</tr>
+																									<tr>
+																										<td>{order.date_order.date()}</td>
+																										<td>{order.date_order_renewal_end_date.date()}</td>
+																									</tr>
+																									<tr>
+																										<td style="padding-top:15px">
+																											<strong>Новый статус заказа:</strong>
+																										</td>
+																										<td style="padding-top:15px">
+																											<strong>Источник</strong>
+																										</td>
+																									</tr>
+																									<tr>
+																										<td>{order.status}</td>
+																										<td>Читай-Летай</td>
+																									</tr>
+																								</tbody>
+																							</table>
+
+																							<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
+																								<tbody>
+																									<tr>
+																										<td style="padding-top:15px;text-align:center">										
+																										<br>
+																											В пункте выдачи заказ хранится 14 дней, если в течение 14 дней вы не получите заказ,
+																											то он автоматически отменится. Если вы не успеваете его получить, то следует обратиться в службу поддержки.
+																											Срок хранения заказа смогут продлить до 28 дней.
+																										</td>
+																										</tr>
+																								</tbody>
+																							</table>
+																						</div>
+																					</div>
+																				</div>
+
+																			</div>
+																		</article>"""
+
+
+
 		msg.attach(MIMEText(html, "html"))
 
 		# Отправка письма
