@@ -46,43 +46,117 @@ def get_order(request):
 	msg = MIMEMultipart()
 
 	# Настройка параметров сообщения
-	msg["From"] = "qweq95346@gmail.com"
+	msg["From"] = "Читай-Летай"
 
 	for order in order_active:
 		if order.status == 'В пункте выдачи':
 			msg["Subject"] = f"Заказ № {order.id}"
-			user = User.objects.get(id=order.user_id).email
-			msg["To"] = user
+			user = User.objects.get(id=order.user_id)
+			msg["To"] = user.email
 			if order.date_order_renewal_end_date is None:
 				if order.date_delivered < timezone.now() - timedelta(weeks=2):
 					order.status = 'Не выкуплен'
 					if order:
 						order.save()
-						html = f"""
-									<!DOCTYPE html>
-									<html>
-									<head>
-									  <meta charset="UTF-8">
-									  <title>Заказ № {order.id}</title>
-						  				<link rel="stylesheet" href="style.css">
-									</head>
-									<body>
-									  <div class="container">
-									    <h1>Информация о вашем заказе № {order.id}</h1>
-									    <div class="total">К сожалению, так как вы не забрали свой заказ\n
-									      в течение 14 дней с момента покупки, книги были отправлены на склад.</div>
-									      <br/>
-									    <div>Надеемся, что вы повторите свой заказ:)</div>
-									  </div>
-									</body>
-									</html>
-									"""
+						html = f"""<article style="max-width: 622px;">
+							<div>
+								<div style="margin:0;padding:0">
+								<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+									<div style="margin:0 auto 0 auto;max-width:600px">
+										<div style="padding-top:50px">
+											<table style="width:100%">
+												<tbody>
+													<tr>
+														<td align="center">
+															<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+
+										<div style="background-color:#ffffff;padding:30px">
+											<div style="line-height:24px;text-align:center">
+												<span style="font-size:18px;font-weight:bold">
+													Здравствуйте, {user.name}!
+												</span>
+												<br>
+												К сожалению, так как вы не забрали свой заказ\n
+									      		в течение 14 дней с момента покупки, книги были отправлены на склад.
+									      		<br/>
+												Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+									      	</div>
+									      		
+												<span style="font-size:35px;line-height:40px">
+													<strong>Номер заказа: <br>№
+														<span>{order.id}</span>
+													</strong>
+												</span>
+												<br>
+											</div>
+											<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+												<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+											</div>
+											<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+												<tbody>
+													<tr>
+														<th style="height:1px;width:50%"></th>
+														<th style="height:1px;width:50%"></th>
+													</tr>
+													<tr>
+														<td style="padding-top:15px">
+															<strong>Номер заказа:</strong>
+														</td>
+														<td style="padding-top:15px">
+															<strong>Счет выставлен:</strong>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															№<span>{order.id}</span>
+														</td>
+														<td>
+															<span>{user.email}</span>
+														</td>
+													</tr>
+													<tr>
+														<td style="padding-top:15px">
+															<strong>Дата заказа:</strong>
+														</td>
+														<td style="padding-top:15px">
+															<strong>Дата отмены заказы:</strong>
+														</td>
+													</tr>
+													<tr>
+														<td>{order.date_order.date()}</td>
+														<td>{timezone.now().date()}</td>
+													</tr>
+													<tr>
+														<td style="padding-top:15px">
+															<strong>Новый статус заказа:</strong>
+														</td>
+														<td style="padding-top:15px">
+															<strong>Источник</strong>
+														</td>
+													</tr>
+													<tr>
+														<td>{order.status}</td>
+														<td>Читай-Летай</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</article>"""
 
 						# Добавление HTML-содержимого в сообщение
 						msg.attach(MIMEText(html, "html"))
 
 						# Отправка письма
-						smtp_server.sendmail("qweq95346@gmail.com", user, msg.as_string())
+						smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
 
 						# Закрытие соединения
 						smtp_server.quit()
@@ -90,31 +164,105 @@ def get_order(request):
 				if order.date_order_renewal_end_date <= timezone.now():
 					order.status = 'Не выкуплен'
 					if order:
-						html = f"""
-															<!DOCTYPE html>
-															<html>
-															<head>
-															  <meta charset="UTF-8">
-															  <title>Заказ № {order.id}</title>
-												  				<link rel="stylesheet" href="style.css">
-															</head>
-															<body>
-															  <div class="container">
-															    <h1>Информация о вашем заказе № {order.id}</h1>
-															    <div class="total">К сожалению, так как вы не забрали свой заказ\n
-															      в течение 14 дней с момента покупки, книги были отправлены на склад.</div>
-															      <br/>
-															    <div>Надеемся, что вы повторите свой заказ:)</div>
-															  </div>
-															</body>
-															</html>
-															"""
+						html = f"""<article style="max-width: 622px;">
+									<div>
+										<div style="margin:0;padding:0">
+										<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+											<div style="margin:0 auto 0 auto;max-width:600px">
+												<div style="padding-top:50px">
+													<table style="width:100%">
+														<tbody>
+															<tr>
+																<td align="center">
+																	<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+
+												<div style="background-color:#ffffff;padding:30px">
+													<div style="line-height:24px;text-align:center">
+														<span style="font-size:18px;font-weight:bold">
+															Здравствуйте, {user.name}!
+														</span>
+														<br>
+														К сожалению, так как вы не забрали свой заказ\n
+											      		в течение 14 дней с момента покупки, книги были отправлены на склад.
+											      		<br/>
+														Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+											      	</div>
+
+														<span style="font-size:35px;line-height:40px">
+															<strong>Номер заказа: <br>№
+																<span>{order.id}</span>
+															</strong>
+														</span>
+														<br>
+													</div>
+													<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+														<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+													</div>
+													<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+														<tbody>
+															<tr>
+																<th style="height:1px;width:50%"></th>
+																<th style="height:1px;width:50%"></th>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Номер заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Счет выставлен:</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	№<span>{order.id}</span>
+																</td>
+																<td>
+																	<span>{user.email}</span>
+																</td>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Дата заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Дата отмены заказы:</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>{order.date_order.date()}</td>
+																<td>{timezone.now().date()}</td>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Новый статус заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Источник</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>{order.status}</td>
+																<td>Читай-Летай</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</article>"""
 
 						# Добавление HTML-содержимого в сообщение
 						msg.attach(MIMEText(html, "html"))
 
 						# Отправка письма
-						smtp_server.sendmail("qweq95346@gmail.com", user, msg.as_string())
+						smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
 
 						# Закрытие соединения
 						smtp_server.quit()
@@ -192,43 +340,117 @@ def admin_orders(request, page):
 	msg = MIMEMultipart()
 
 	# Настройка параметров сообщения
-	msg["From"] = "qweq95346@gmail.com"
+	msg["From"] = "Читай-Летай"
 
 	for order in order_active:
 		if order.status == 'В пункте выдачи':
 			msg["Subject"] = f"Заказ № {order.id}"
-			user = User.objects.get(id=order.user_id).email
-			msg["To"] = user
+			user = User.objects.get(id=order.user_id)
+			msg["To"] = user.email
 			if order.date_order_renewal_end_date is None:
 				if order.date_delivered < timezone.now() - timedelta(weeks=2):
 					order.status = 'Не выкуплен'
 					if order:
 						order.save()
-						html = f"""
-						<!DOCTYPE html>
-						<html>
-						<head>
-						  <meta charset="UTF-8">
-						  <title>Заказ № {order.id}</title>
-							<link rel="stylesheet" href="style.css">
-						</head>
-						<body>
-						  <div class="container">
-						    <h1>Информация о вашем заказе № {order.id}</h1>
-						    <div class="total">К сожалению, так как вы не забрали свой заказ\n
-						      в течение 14 дней с момента покупки, книги были отправлены на склад.</div>
-						      <br/>
-						    <div>Надеемся, что вы повторите свой заказ:)</div>
-						  </div>
-						</body>
-						</html>
-						"""
+						html = f"""<article style="max-width: 622px;">
+															<div>
+																<div style="margin:0;padding:0">
+																<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+																	<div style="margin:0 auto 0 auto;max-width:600px">
+																		<div style="padding-top:50px">
+																			<table style="width:100%">
+																				<tbody>
+																					<tr>
+																						<td align="center">
+																							<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																						</td>
+																					</tr>
+																				</tbody>
+																			</table>
+																		</div>
+
+																		<div style="background-color:#ffffff;padding:30px">
+																			<div style="line-height:24px;text-align:center">
+																				<span style="font-size:18px;font-weight:bold">
+																					Здравствуйте, {user.name}!
+																				</span>
+																				<br>
+																				К сожалению, так как вы не забрали свой заказ\n
+																	      		в течение 14 дней с момента покупки, книги были отправлены на склад.
+																	      		<br/>
+																				Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+																	      	</div>
+
+																				<span style="font-size:35px;line-height:40px">
+																					<strong>Номер заказа: <br>№
+																						<span>{order.id}</span>
+																					</strong>
+																				</span>
+																				<br>
+																			</div>
+																			<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+																				<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+																			</div>
+																			<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+																				<tbody>
+																					<tr>
+																						<th style="height:1px;width:50%"></th>
+																						<th style="height:1px;width:50%"></th>
+																					</tr>
+																					<tr>
+																						<td style="padding-top:15px">
+																							<strong>Номер заказа:</strong>
+																						</td>
+																						<td style="padding-top:15px">
+																							<strong>Счет выставлен:</strong>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td>
+																							№<span>{order.id}</span>
+																						</td>
+																						<td>
+																							<span>{user.email}</span>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td style="padding-top:15px">
+																							<strong>Дата заказа:</strong>
+																						</td>
+																						<td style="padding-top:15px">
+																							<strong>Дата отмены заказы:</strong>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td>{order.date_order.date()}</td>
+																						<td>{timezone.now().date()}</td>
+																					</tr>
+																					<tr>
+																						<td style="padding-top:15px">
+																							<strong>Новый статус заказа:</strong>
+																						</td>
+																						<td style="padding-top:15px">
+																							<strong>Источник</strong>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td>{order.status}</td>
+																						<td>Читай-Летай</td>
+																					</tr>
+																				</tbody>
+																			</table>
+																		</div>
+																	</div>
+																</div>
+
+															</div>
+														</article>"""
 
 						# Добавление HTML-содержимого в сообщение
 						msg.attach(MIMEText(html, "html"))
 
 						# Отправка письма
-						smtp_server.sendmail("qweq95346@gmail.com", user, msg.as_string())
+						smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
 
 						# Закрытие соединения
 						smtp_server.quit()
@@ -236,31 +458,105 @@ def admin_orders(request, page):
 				if order.date_order_renewal_end_date <= timezone.now():
 					order.status = 'Не выкуплен'
 					if order:
-						html = f"""
-						<!DOCTYPE html>
-						<html>
-						<head>
-						  <meta charset="UTF-8">
-						  <title>Заказ № {order.id}</title>
-							<link rel="stylesheet" href="style.css">
-						</head>
-						<body>
-						  <div class="container">
-						    <h1>Информация о вашем заказе № {order.id}</h1>
-						    <div class="total">К сожалению, так как вы не забрали свой заказ\n
-						      в течение 14 дней с момента покупки, книги были отправлены на склад.</div>
-						      <br/>
-						    <div>Надеемся, что вы повторите свой заказ:)</div>
-						  </div>
-						</body>
-						</html>
-						"""
+						html = f"""<article style="max-width: 622px;">
+															<div>
+																<div style="margin:0;padding:0">
+																<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+																	<div style="margin:0 auto 0 auto;max-width:600px">
+																		<div style="padding-top:50px">
+																			<table style="width:100%">
+																				<tbody>
+																					<tr>
+																						<td align="center">
+																							<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																						</td>
+																					</tr>
+																				</tbody>
+																			</table>
+																		</div>
+
+																		<div style="background-color:#ffffff;padding:30px">
+																			<div style="line-height:24px;text-align:center">
+																				<span style="font-size:18px;font-weight:bold">
+																					Здравствуйте, {user.name}!
+																				</span>
+																				<br>
+																				К сожалению, так как вы не забрали свой заказ\n
+																	      		в течение 14 дней с момента покупки, книги были отправлены на склад.
+																	      		<br/>
+																				Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+																	      	</div>
+
+																				<span style="font-size:35px;line-height:40px">
+																					<strong>Номер заказа: <br>№
+																						<span>{order.id}</span>
+																					</strong>
+																				</span>
+																				<br>
+																			</div>
+																			<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+																				<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+																			</div>
+																			<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+																				<tbody>
+																					<tr>
+																						<th style="height:1px;width:50%"></th>
+																						<th style="height:1px;width:50%"></th>
+																					</tr>
+																					<tr>
+																						<td style="padding-top:15px">
+																							<strong>Номер заказа:</strong>
+																						</td>
+																						<td style="padding-top:15px">
+																							<strong>Счет выставлен:</strong>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td>
+																							№<span>{order.id}</span>
+																						</td>
+																						<td>
+																							<span>{user.email}</span>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td style="padding-top:15px">
+																							<strong>Дата заказа:</strong>
+																						</td>
+																						<td style="padding-top:15px">
+																							<strong>Дата отмены заказы:</strong>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td>{order.date_order.date()}</td>
+																						<td>{timezone.now().date()}</td>
+																					</tr>
+																					<tr>
+																						<td style="padding-top:15px">
+																							<strong>Новый статус заказа:</strong>
+																						</td>
+																						<td style="padding-top:15px">
+																							<strong>Источник</strong>
+																						</td>
+																					</tr>
+																					<tr>
+																						<td>{order.status}</td>
+																						<td>Читай-Летай</td>
+																					</tr>
+																				</tbody>
+																			</table>
+																		</div>
+																	</div>
+																</div>
+
+															</div>
+														</article>"""
 
 						# Добавление HTML-содержимого в сообщение
 						msg.attach(MIMEText(html, "html"))
 
 						# Отправка письма
-						smtp_server.sendmail("qweq95346@gmail.com", user, msg.as_string())
+						smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
 
 						# Закрытие соединения
 						smtp_server.quit()
@@ -278,89 +574,6 @@ def get_address(request):
 
 	return JsonResponse({"address": serializer.data})
 
-
-@api_view(['POST'])
-def send_message(request):
-	data = request.data
-
-	basket_additionals_list = data['basket_additionals_list']
-
-	order_id = data['order_id']
-	order1 = data['order1']
-	order1 = Order.objects.get(id=order1)
-	user = User.objects.get(id=data['user'])
-	import smtplib
-
-	smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
-	smtp_server.starttls()
-	smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
-
-	from email.mime.multipart import MIMEMultipart
-	from email.mime.text import MIMEText
-
-	# Создание объекта сообщения
-	msg = MIMEMultipart()
-
-	# Настройка параметров сообщения
-	msg["From"] = "qweq95346@gmail.com"
-	msg["To"] = user.email
-	msg["Subject"] = f"Заказ № {order_id}"
-
-	# Добавление текста в сообщение
-	# Создание HTML-содержимого письма
-	html = f"""
-				<!DOCTYPE html>
-				<html>
-				<head>
-				  <meta charset="UTF-8">
-				  <title>Чек на покупку книг</title>
-	  				<link rel="stylesheet" href="style.css">
-				</head>
-				<body>
-				  <div class="container">
-				    <h1>Чек на покупку книг</h1>
-				    <table>
-				      <thead>
-				        <tr>
-				          <th>Название книги</th>
-				          <th>Количество</th>
-				          <th>Сумма</th>
-				          <th>Изображение</th>
-				        </tr>
-				      </thead>
-				      <tbody>
-				       {' '.join([
-		f"""
-							<tr>
-							  <td>{book['name']}</td>
-							  <td>{book['count']}</td>
-							  <td>{book['all_price']:.2f} ₽</td>
-							  <td>
-							  <img class="p-2" style="height: 70px; width: 50px;" :src="require(`./frontend/src/assets/img/${book['book']}.jpg`).url" alt="Изображение">
-							  </td>
-							</tr>
-							"""
-		for book in basket_additionals_list
-	])}
-				      </tbody>
-				    </table>
-				    <div class="total">Итого: {order1.all_price} ₽</div>
-				    <div class="delivery-date">Ориентировочная дата доставки: {(order1.date_order + timezone.timedelta(days=10)).date()}</div>
-				    <div class="thank-you">Спасибо за покупку! Приятного чтения!</div>
-				  </div>
-				</body>
-				</html>
-				"""
-
-	# Добавление HTML-содержимого в сообщение
-	msg.attach(MIMEText(html, "html"))
-
-	# Отправка письма
-	smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
-
-	# Закрытие соединения
-	smtp_server.quit()
-	return Response({'message': 'Message send'}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def add_order(request):
@@ -451,35 +664,110 @@ def cancel_order(request):
 		msg = MIMEMultipart()
 
 		# Настройка параметров сообщения
-		msg["From"] = "qweq95346@gmail.com"
+		msg["From"] = "Читай-Летай"
 
 		msg["Subject"] = f"Заказ № {order.id}"
-		user = User.objects.get(id=order.user_id).email
-		msg["To"] = user
-		html = f"""
-			<!DOCTYPE html>
-			<html>
-			<head>
-			  <meta charset="UTF-8">
-			  <title>Заказ № {order.id}</title>
-				<link rel="stylesheet" href="style.css">
-			</head>
-			<body>
-			  <div class="container">
-			    <h1>Информация о вашем заказе № {order.id}</h1>
-			    <div class="total">Ваш заказ был отменен.</div>
-			      <br/>
-			    <div>Надеемся, что вы повторите свой заказ:)</div>
-			  </div>
-			</body>
-			</html>
-			"""
+		user = User.objects.get(id=order.user_id)
+		msg["To"] = user.email
+		html = f"""<article style="max-width: 622px;">
+									<div>
+										<div style="margin:0;padding:0">
+										<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+											<div style="margin:0 auto 0 auto;max-width:600px">
+												<div style="padding-top:50px">
+													<table style="width:100%">
+														<tbody>
+															<tr>
+																<td align="center">
+																	<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+
+												<div style="background-color:#ffffff;padding:30px">
+													<div style="line-height:24px;text-align:center">
+														<span style="font-size:18px;font-weight:bold">
+															Здравствуйте, {user.name}!
+														</span>
+														<br>
+														По вашей просьбе ваш заказ был отменен.
+											      		<br/>
+														Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+											      	</div>
+
+														<span style="font-size:35px;line-height:40px">
+															<strong>Номер заказа: <br>№
+																<span>{order.id}</span>
+															</strong>
+														</span>
+														<br>
+													</div>
+													<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+														<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+													</div>
+													<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+														<tbody>
+															<tr>
+																<th style="height:1px;width:50%"></th>
+																<th style="height:1px;width:50%"></th>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Номер заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Счет выставлен:</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	№<span>{order.id}</span>
+																</td>
+																<td>
+																	<span>{user.email}</span>
+																</td>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Дата заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Дата отмены заказы:</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>{order.date_order.date()}</td>
+																<td>{timezone.now().date()}</td>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Новый статус заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Источник</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>{order.status}</td>
+																<td>Читай-Летай</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</article>"""
+
 
 		# Добавление HTML-содержимого в сообщение
 		msg.attach(MIMEText(html, "html"))
 
 		# Отправка письма
-		smtp_server.sendmail("qweq95346@gmail.com", user, msg.as_string())
+		smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
 
 		# Закрытие соединения
 		smtp_server.quit()
@@ -506,35 +794,110 @@ def apply_order(request):
 		msg = MIMEMultipart()
 
 		# Настройка параметров сообщения
-		msg["From"] = "qweq95346@gmail.com"
+		msg["From"] = "Читай-Летай"
 
 		msg["Subject"] = f"Заказ № {order.id}"
-		user = User.objects.get(id=order.user_id).email
-		msg["To"] = user
-		html = f"""
-					<!DOCTYPE html>
-					<html>
-					<head>
-					  <meta charset="UTF-8">
-					  <title>Заказ № {order.id}</title>
-						<link rel="stylesheet" href="style.css">
-					</head>
-					<body>
-					  <div class="container">
-					    <h1>Информация о вашем заказе № {order.id}</h1>
-					    <div class="total">Ваш заказ был получен. Дата получения: {order.date_of_receiving.date()}</div>
-					      <br/>
-					    <div>Спасибо, что вы выбрали наш магазин, до скорых встреч!</div>
-					  </div>
-					</body>
-					</html>
-					"""
+		user = User.objects.get(id=order.user_id)
+		msg["To"] = user.email
+
+		html = f"""<article style="max-width: 622px;">
+									<div>
+										<div style="margin:0;padding:0">
+										<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+											<div style="margin:0 auto 0 auto;max-width:600px">
+												<div style="padding-top:50px">
+													<table style="width:100%">
+														<tbody>
+															<tr>
+																<td align="center">
+																	<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+
+												<div style="background-color:#ffffff;padding:30px">
+													<div style="line-height:24px;text-align:center">
+														<span style="font-size:18px;font-weight:bold">
+															Здравствуйте, {user.name}!
+														</span>
+														<br>
+														Ваш заказ был получен!
+											      		<br/>
+														Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+											      	</div>
+
+														<span style="font-size:35px;line-height:40px">
+															<strong>Номер заказа: <br>№
+																<span>{order.id}</span>
+															</strong>
+														</span>
+														<br>
+													</div>
+													<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+														<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+													</div>
+													<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+														<tbody>
+															<tr>
+																<th style="height:1px;width:50%"></th>
+																<th style="height:1px;width:50%"></th>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Номер заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Счет выставлен:</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	№<span>{order.id}</span>
+																</td>
+																<td>
+																	<span>{user.email}</span>
+																</td>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Дата заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Дата получения:</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>{order.date_order.date()}</td>
+																<td>{timezone.now().date()}</td>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Статус заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Источник</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>{order.status}</td>
+																<td>Читай-Летай</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</article>"""
 
 		# Добавление HTML-содержимого в сообщение
 		msg.attach(MIMEText(html, "html"))
 
 		# Отправка письма
-		smtp_server.sendmail("qweq95346@gmail.com", user, msg.as_string())
+		smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
 
 		# Закрытие соединения
 		smtp_server.quit()
@@ -560,129 +923,518 @@ def change_status(request):
 	msg = MIMEMultipart()
 
 	# Настройка параметров сообщения
-	msg["From"] = "qweq95346@gmail.com"
+	msg["From"] = "Читай-Летай"
 
 	msg["Subject"] = f"Заказ № {order.id}"
-	user = User.objects.get(id=order.user_id).email
-	msg["To"] = user
+	user = User.objects.get(id=order.user_id)
+	msg["To"] = user.email
 	if order.status == 'В пункте выдачи':
 		order.date_delivered = timezone.now()
+		html = f"""<article style="max-width: 622px;">
+																	<div>
+																		<div style="margin:0;padding:0">
+																		<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+																			<div style="margin:0 auto 0 auto;max-width:600px">
+																				<div style="padding-top:50px">
+																					<table style="width:100%">
+																						<tbody>
+																							<tr>
+																								<td align="center">
+																									<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																								</td>
+																							</tr>
+																						</tbody>
+																					</table>
+																				</div>
 
-		html = f"""
-					<!DOCTYPE html>
-					<html>
-					<head>
-					  <meta charset="UTF-8">
-					  <title>Заказ № {order.id}</title>
-						<link rel="stylesheet" href="style.css">
-					</head>
-					<body>
-					  <div class="container">
-					    <h1>Информация о вашем заказе № {order.id}</h1>
-					    <div class="total">Ваш заказ был доставлен в пункт выдачи. Дата доставки: {order.date_delivered.date()}</div>
-					    <div>
-						  Если вы не заберете заказ в течении<br>
-						  2-х недель, то он будет автоматически отменен!
-					      <br/>
-						  Если вы хотите продлить хранения заказа,<br>
-						  то необходимо связаться с оператором нашего магазина.
-					    </div>
-					      <br/>
-					    <div>Спасибо, что вы выбрали наш магазин, ждем вас с нетерпением!</div>
-					  </div>
-					</body>
-					</html>
-					"""
+																				<div style="background-color:#ffffff;padding:30px">
+																					<div style="line-height:24px;text-align:center">
+																						<span style="font-size:18px;font-weight:bold">
+																							Здравствуйте, {user.name}!
+																						</span>
+																						<br>
+																						Ваш заказ был доставлен в пункт выдачи.
+																			      		<br/>
+																						Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+																			      	</div>
+
+																						<span style="font-size:35px;line-height:40px">
+																							<strong>Номер заказа: <br>№
+																								<span>{order.id}</span>
+																							</strong>
+																						</span>
+																						<br>
+																					</div>
+																					<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+																						<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+																					</div>
+																					<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+																						<tbody>
+																							<tr>
+																								<th style="height:1px;width:50%"></th>
+																								<th style="height:1px;width:50%"></th>
+																							</tr>
+																							<tr>
+																								<td style="padding-top:15px">
+																									<strong>Номер заказа:</strong>
+																								</td>
+																								<td style="padding-top:15px">
+																									<strong>Счет выставлен:</strong>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>
+																									№<span>{order.id}</span>
+																								</td>
+																								<td>
+																									<span>{user.email}</span>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td style="padding-top:15px">
+																									<strong>Дата заказа:</strong>
+																								</td>
+																								<td style="padding-top:15px">
+																									<strong>Дата доставки в пункт выдачи:</strong>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>{order.date_order.date()}</td>
+																								<td>{order.date_delivered.date()}</td>
+																							</tr>
+																							<tr>
+																								<td style="padding-top:15px">
+																									<strong>Новый статус заказа:</strong>
+																								</td>
+																								<td style="padding-top:15px">
+																									<strong>Источник</strong>
+																								</td>
+																							</tr>
+																							<tr>
+																								<td>{order.status}</td>
+																								<td>Читай-Летай</td>
+																							</tr>
+																						</tbody>
+																					</table>
+
+																					<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
+																						<tbody>
+																							<tr>
+																								<td style="padding-top:15px;text-align:center">										
+																								<br>
+																									В пункте выдачи заказ хранится 14 дней, если в течение 14 дней вы не получите заказ,
+																									то он автоматически отменится. Если вы не успеваете его получить, то следует обратиться в службу поддержки.
+																									Срок хранения заказа смогут продлить до 28 дней.
+																								</td>
+																								</tr>
+																						</tbody>
+																					</table>
+																				</div>
+																			</div>
+																		</div>
+
+																	</div>
+																</article>"""
 
 		# Добавление HTML-содержимого в сообщение
 
 	if order.status == 'Завершен':
 		order.date_of_receiving = timezone.now()
-		html = f"""
-							<!DOCTYPE html>
-							<html>
-							<head>
-							  <meta charset="UTF-8">
-							  <title>Заказ № {order.id}</title>
-								<link rel="stylesheet" href="style.css">
-							</head>
-							<body>
-							  <div class="container">
-							    <h1>Информация о вашем заказе № {order.id}</h1>
-							    <div class="total">Ваш заказ был получен. Дата получения: {order.date_of_receiving.date()}</div>
-							      <br/>
-							    <div>Спасибо, что вы выбрали наш магазин, до скорых встреч!</div>
-							  </div>
-							</body>
-							</html>
-							"""
+		html = f"""<article style="max-width: 622px;">
+											<div>
+												<div style="margin:0;padding:0">
+												<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+													<div style="margin:0 auto 0 auto;max-width:600px">
+														<div style="padding-top:50px">
+															<table style="width:100%">
+																<tbody>
+																	<tr>
+																		<td align="center">
+																			<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+
+														<div style="background-color:#ffffff;padding:30px">
+															<div style="line-height:24px;text-align:center">
+																<span style="font-size:18px;font-weight:bold">
+																	Здравствуйте, {user.name}!
+																</span>
+																<br>
+																Ваш заказ был получен!
+													      		<br/>
+																Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+													      	</div>
+
+																<span style="font-size:35px;line-height:40px">
+																	<strong>Номер заказа: <br>№
+																		<span>{order.id}</span>
+																	</strong>
+																</span>
+																<br>
+															</div>
+															<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+																<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+															</div>
+															<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+																<tbody>
+																	<tr>
+																		<th style="height:1px;width:50%"></th>
+																		<th style="height:1px;width:50%"></th>
+																	</tr>
+																	<tr>
+																		<td style="padding-top:15px">
+																			<strong>Номер заказа:</strong>
+																		</td>
+																		<td style="padding-top:15px">
+																			<strong>Счет выставлен:</strong>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>
+																			№<span>{order.id}</span>
+																		</td>
+																		<td>
+																			<span>{user.email}</span>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td style="padding-top:15px">
+																			<strong>Дата заказа:</strong>
+																		</td>
+																		<td style="padding-top:15px">
+																			<strong>Дата получения:</strong>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>{order.date_order.date()}</td>
+																		<td>{timezone.now().date()}</td>
+																	</tr>
+																	<tr>
+																		<td style="padding-top:15px">
+																			<strong>Статус заказа:</strong>
+																		</td>
+																		<td style="padding-top:15px">
+																			<strong>Источник</strong>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td>{order.status}</td>
+																		<td>Читай-Летай</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+
+											</div>
+										</article>"""
+
+
+
+
+
 	if order.status == 'В пути':
-		html = f"""
-							<!DOCTYPE html>
-							<html>
-							<head>
-							  <meta charset="UTF-8">
-							  <title>Заказ № {order.id}</title>
-								<link rel="stylesheet" href="style.css">
-							</head>
-							<body>
-							  <div class="container">
-							    <h1>Информация о вашем заказе № {order.id}</h1>
-							    <div class="total">Ваш заказ был передан в доставку.</div>
-							    <div>
-								 	Планируемая дата доставки: {order.date_order.date() + timedelta(days=10)}
-							    </div>
-							      <br/>
-							    <div>Спасибо, что вы выбрали наш магазин!</div>
-							  </div>
-							</body>
-							</html>
-							"""
+		html = f"""<article style="max-width: 622px;">
+																				<div>
+																					<div style="margin:0;padding:0">
+																					<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+																						<div style="margin:0 auto 0 auto;max-width:600px">
+																							<div style="padding-top:50px">
+																								<table style="width:100%">
+																									<tbody>
+																										<tr>
+																											<td align="center">
+																												<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																											</td>
+																										</tr>
+																									</tbody>
+																								</table>
+																							</div>
+
+																							<div style="background-color:#ffffff;padding:30px">
+																								<div style="line-height:24px;text-align:center">
+																									<span style="font-size:18px;font-weight:bold">
+																										Здравствуйте, {user.name}!
+																									</span>
+																									<br>
+																									Ваш заказ был передан в доставку.
+																						      		<br/>
+																									Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+																						      	</div>
+
+																									<span style="font-size:35px;line-height:40px">
+																										<strong>Номер заказа: <br>№
+																											<span>{order.id}</span>
+																										</strong>
+																									</span>
+																									<br>
+																								</div>
+																								<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+																									<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+																								</div>
+																								<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+																									<tbody>
+																										<tr>
+																											<th style="height:1px;width:50%"></th>
+																											<th style="height:1px;width:50%"></th>
+																										</tr>
+																										<tr>
+																											<td style="padding-top:15px">
+																												<strong>Номер заказа:</strong>
+																											</td>
+																											<td style="padding-top:15px">
+																												<strong>Счет выставлен:</strong>
+																											</td>
+																										</tr>
+																										<tr>
+																											<td>
+																												№<span>{order.id}</span>
+																											</td>
+																											<td>
+																												<span>{user.email}</span>
+																											</td>
+																										</tr>
+																										<tr>
+																											<td style="padding-top:15px">
+																												<strong>Дата заказа:</strong>
+																											</td>
+																											<td style="padding-top:15px">
+																												<strong>Планируемая дата доставки:</strong>
+																											</td>
+																										</tr>
+																										<tr>
+																											<td>{order.date_order.date()}</td>
+																											<td>{order.date_order.date() + timedelta(days=10)}</td>
+																										</tr>
+																										<tr>
+																											<td style="padding-top:15px">
+																												<strong>Новый статус заказа:</strong>
+																											</td>
+																											<td style="padding-top:15px">
+																												<strong>Источник</strong>
+																											</td>
+																										</tr>
+																										<tr>
+																											<td>{order.status}</td>
+																											<td>Читай-Летай</td>
+																										</tr>
+																									</tbody>
+																								</table>
+
+																								<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
+																									<tbody>
+																										<tr>
+																											<td style="padding-top:15px;text-align:center">										
+																											<br>
+																												В пункте выдачи заказ хранится 14 дней, если в течение 14 дней вы не получите заказ,
+																												то он автоматически отменится. Если вы не успеваете его получить, то следует обратиться в службу поддержки.
+																												Срок хранения заказа смогут продлить до 28 дней.
+																											</td>
+																											</tr>
+																									</tbody>
+																								</table>
+																							</div>
+																						</div>
+																					</div>
+
+																				</div>
+																			</article>"""
 	if order.status == "Не выкуплен":
-		html = f"""
-								<!DOCTYPE html>
-								<html>
-								<head>
-								  <meta charset="UTF-8">
-								  <title>Заказ № {order.id}</title>
-									<link rel="stylesheet" href="style.css">
-								</head>
-								<body>
-								  <div class="container">
-								    <h1>Информация о вашем заказе № {order.id}</h1>
-								    <div class="total">К сожалению, так как вы не забрали свой заказ\n
-								      в течение 14 дней с момента покупки, книги были отправлены на склад.</div>
-								      <br/>
-								    <div>Надеемся, что вы повторите свой заказ:)</div>
-								  </div>
-								</body>
-								</html>
-								"""
+		html = f"""<article style="max-width: 622px;">
+									<div>
+										<div style="margin:0;padding:0">
+										<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+											<div style="margin:0 auto 0 auto;max-width:600px">
+												<div style="padding-top:50px">
+													<table style="width:100%">
+														<tbody>
+															<tr>
+																<td align="center">
+																	<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+
+												<div style="background-color:#ffffff;padding:30px">
+													<div style="line-height:24px;text-align:center">
+														<span style="font-size:18px;font-weight:bold">
+															Здравствуйте, {user.name}!
+														</span>
+														<br>
+														К сожалению, так как вы не забрали свой заказ\n
+											      		в течение 14 дней с момента покупки, книги были отправлены на склад.
+											      		<br/>
+														Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+											      	</div>
+
+														<span style="font-size:35px;line-height:40px">
+															<strong>Номер заказа: <br>№
+																<span>{order.id}</span>
+															</strong>
+														</span>
+														<br>
+													</div>
+													<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+														<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+													</div>
+													<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+														<tbody>
+															<tr>
+																<th style="height:1px;width:50%"></th>
+																<th style="height:1px;width:50%"></th>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Номер заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Счет выставлен:</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	№<span>{order.id}</span>
+																</td>
+																<td>
+																	<span>{user.email}</span>
+																</td>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Дата заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Дата отмены заказы:</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>{order.date_order.date()}</td>
+																<td>{timezone.now().date()}</td>
+															</tr>
+															<tr>
+																<td style="padding-top:15px">
+																	<strong>Новый статус заказа:</strong>
+																</td>
+																<td style="padding-top:15px">
+																	<strong>Источник</strong>
+																</td>
+															</tr>
+															<tr>
+																<td>{order.status}</td>
+																<td>Читай-Летай</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</article>"""
 	if order.status == "Отменен":
-		html = f"""
-					<!DOCTYPE html>
-					<html>
-					<head>
-					  <meta charset="UTF-8">
-					  <title>Заказ № {order.id}</title>
-						<link rel="stylesheet" href="style.css">
-					</head>
-					<body>
-					  <div class="container">
-					    <h1>Информация о вашем заказе № {order.id}</h1>
-					    <div class="total">Ваш заказ был отменен.</div>
-					      <br/>
-					    <div>Надеемся, что вы повторите свой заказ:)</div>
-					  </div>
-					</body>
-					</html>
-					"""
+		html = f"""<article style="max-width: 622px;">
+				<div>
+					<div style="margin:0;padding:0">
+						<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+							<div style="margin:0 auto 0 auto;max-width:600px">
+								<div style="padding-top:50px">
+									<table style="width:100%">
+										<tbody>
+											<tr>
+												<td align="center">
+													<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+	
+								<div style="background-color:#ffffff;padding:30px">
+									<div style="line-height:24px;text-align:center">
+										<span style="font-size:18px;font-weight:bold">
+											Здравствуйте, {user.name}!
+										</span>
+										<br>
+										По вашей просьбе ваш заказ был отменен.
+										<br/>
+										Благодарим вас за покупку в магазине «Читай-Летай».<br>	
+									</div>
+	
+										<span style="font-size:35px;line-height:40px">
+											<strong>Номер заказа: <br>№
+												<span>{order.id}</span>
+											</strong>
+										</span>
+										<br>
+									</div>
+									<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+										<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+									</div>
+									<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+										<tbody>
+											<tr>
+												<th style="height:1px;width:50%"></th>
+												<th style="height:1px;width:50%"></th>
+											</tr>
+											<tr>
+												<td style="padding-top:15px">
+													<strong>Номер заказа:</strong>
+												</td>
+												<td style="padding-top:15px">
+													<strong>Счет выставлен:</strong>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													№<span>{order.id}</span>
+												</td>
+												<td>
+													<span>{user.email}</span>
+												</td>
+											</tr>
+											<tr>
+												<td style="padding-top:15px">
+													<strong>Дата заказа:</strong>
+												</td>
+												<td style="padding-top:15px">
+													<strong>Дата отмены заказы:</strong>
+												</td>
+											</tr>
+											<tr>
+												<td>{order.date_order.date()}</td>
+												<td>{timezone.now().date()}</td>
+											</tr>
+											<tr>
+												<td style="padding-top:15px">
+													<strong>Новый статус заказа:</strong>
+												</td>
+												<td style="padding-top:15px">
+													<strong>Источник</strong>
+												</td>
+											</tr>
+											<tr>
+												<td>{order.status}</td>
+												<td>Читай-Летай</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</article>"""
 	if order:
 		order.save()
 		msg.attach(MIMEText(html, "html"))
 
 		# Отправка письма
-		smtp_server.sendmail("qweq95346@gmail.com", user, msg.as_string())
+		smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
 
 		# Закрытие соединения
 		smtp_server.quit()
@@ -709,11 +1461,11 @@ def order_renewal_date(request):
 	msg = MIMEMultipart()
 
 	# Настройка параметров сообщения
-	msg["From"] = "qweq95346@gmail.com"
+	msg["From"] = "Читай-Летай"
 
 	msg["Subject"] = f"Заказ № {order.id}"
-	user = User.objects.get(id=order.user_id).email
-	msg["To"] = user
+	user = User.objects.get(id=order.user_id)
+	msg["To"] = user.email
 	if order:
 		order.save()
 		html = f"""
@@ -737,10 +1489,204 @@ def order_renewal_date(request):
 		msg.attach(MIMEText(html, "html"))
 
 		# Отправка письма
-		smtp_server.sendmail("qweq95346@gmail.com", user, msg.as_string())
+		smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
 
 		# Закрытие соединения
 		smtp_server.quit()
 		return Response({'message': 'Order edit status successfully'}, status=status.HTTP_200_OK)
 	else:
 		return Response({'message': 'Order edit status not successfully'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def send_message(request):
+	data = request.data
+
+	basket_additionals_list = data['basket_additionals_list']
+
+	order_id = data['order_id']
+	order1 = data['order1']
+	order1 = Order.objects.get(id=order1)
+	user = User.objects.get(id=data['user'])
+	import smtplib
+
+	smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+	smtp_server.starttls()
+	smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
+
+	from email.mime.multipart import MIMEMultipart
+	from email.mime.text import MIMEText
+
+	# Создание объекта сообщения
+	msg = MIMEMultipart()
+
+	# Настройка параметров сообщения
+	msg["From"] = "Читай-Летай"
+	msg["To"] = user.email
+	msg["Subject"] = f"Заказ № {order_id}"
+
+	# Добавление текста в сообщение
+	# Создание HTML-содержимого письма
+
+	html = f"""<article style="max-width: 622px;">
+		<div>
+			<div style="margin:0;padding:0">
+			<div style="background-color:#f1f1f1;color:#313131;font-family:'arial' , 'helvetica' , sans-serif;font-size:14px;min-width:300px;width:100%">
+				<div style="margin:0 auto 0 auto;max-width:600px">
+					<div style="padding-top:50px">
+						<table style="width:100%">
+							<tbody>
+								<tr>
+									<td align="center">
+										<a href="https://imgbb.com/"><img src="https://i.ibb.co/q1DkZ5K/school-40dp-FILL0-wght400-GRAD0-opsz40.png" alt="school-40dp-FILL0-wght400-GRAD0-opsz40" border="0" /></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+		
+					<div style="background-color:#ffffff;padding:30px">
+						<div style="line-height:24px;text-align:center">
+							<span style="font-size:18px;font-weight:bold">
+								Здравствуйте, {user.name}!
+							</span>
+							<br>
+							Благодарим вас за покупку в магазине «Читай-Летай».<br><br>
+							<span style="font-size:35px;line-height:40px">
+								<strong>Номер заказа: <br>№
+									<span>{order_id}</span>
+								</strong>
+							</span>
+							<br>
+						</div>
+						<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+							<strong>ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
+						</div>
+						<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+							<tbody>
+								<tr>
+									<th style="height:1px;width:50%"></th>
+									<th style="height:1px;width:50%"></th>
+								</tr>
+								<tr>
+									<td style="padding-top:15px">
+										<strong>Номер заказа:</strong>
+									</td>
+									<td style="padding-top:15px">
+										<strong>Счет выставлен:</strong>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										№<span>{order_id}</span>
+									</td>
+									<td>
+										<span>{user.email}</span>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding-top:15px">
+										<strong>Дата заказа:</strong>
+									</td>
+									<td style="padding-top:15px">
+										<strong>Источник:</strong>
+									</td>
+								</tr>
+								<tr>
+									<td>{order1.date_order.date()}</td>
+									<td>Читай-Летай</td>
+								</tr>
+							</tbody>
+						</table>
+		
+		
+						<div style="color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
+							<strong>СОДЕРЖИМОЕ ВАШЕГО ЗАКАЗА:</strong>
+						</div>
+						<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;margin-bottom:20px;width:100%">
+							<tbody>
+								<tr style="background-color:#f1f1f1">
+									<th style="min-width:100px;padding:10px 0 10px 10px;text-align:left;vertical-align:top">Название книги:</th>
+									<th style="min-width:80px;padding:10px 0 10px 10px;text-align:left;vertical-align:top">Количество:</th>
+									<th style="padding:10px 10px 10px 0;text-align:right;vertical-align:top">Сумма:</th>
+								</tr>
+								<tbody>
+									{' '.join([
+										f"""
+											<tr>
+											  <td style="padding-left:10px;padding-top:15px;word-break:break-all">{book['name']}</td>
+											  <td style="padding-left:10px;padding-top:15px;word-break:break-all">{book['count']}</td>
+											  <td style="padding-left:10px;padding-top:15px;word-break:break-all">{book['all_price']:.2f} ₽</td>
+											</tr>
+										"""
+										for book in basket_additionals_list
+									])}
+				      			</tbody>
+							</tbody>
+						</table>
+						<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;text-align:right;width:100%">
+							<tbody>
+							<tr>
+								<th></th>
+								<th style="width:1%"></th>
+							</tr>
+							<tr>
+								<td style="padding-top:15px">
+									<span style="color:#b2b2b2;font-weight:bold;text-transform:uppercase">ИТОГО:</span>
+								</td>
+								<td style="padding:15px 10px 0 10px">
+									<span style="font-weight:bold">₽{order1.all_price}&nbsp;RUB</span>
+								</td>
+							</tr>
+							<tr><td colspan="2" style="padding-top:15px;text-align:center"></td></tr>
+							</tbody>
+						</table>
+		
+		
+						<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
+							<tbody>
+								<tr>
+									<th></th>
+								</tr>
+								<tr>
+									<td style="padding-top:15px;text-align:center">Советуем сохранить копию данного чека для отчетности.</td>
+								</tr>
+								<tr>
+									<td style="padding-top:15px;text-align:center">
+										<a href="http://localhost:5173/profile/{user.id}">Посмотреть все свои заказы</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		
+						<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
+							<tbody>
+								<tr>
+									<th></th>
+								</tr>
+								<tr>
+									<td style="padding-top:15px;text-align:center">
+										<div class="delivery-date">Ориентировочная дата доставки: {(order1.date_order + timezone.timedelta(days=10)).date()}</div>
+										<br>
+										В пункте выдачи заказ хранится 14 дней, если в течение 14 дней вы не получите заказ,
+										то он автоматически отменится. Если вы не успеваете его получить, то следует обратиться в службу поддержки.
+										Срок хранения заказа смогут продлить до 28 дней.
+									</td>
+									</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+	
+		</div>
+	</article>"""
+
+	# Добавление HTML-содержимого в сообщение
+	msg.attach(MIMEText(html, "html"))
+
+	# Отправка письма
+	smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
+
+	# Закрытие соединения
+	smtp_server.quit()
+	return Response({'message': 'Message send'}, status=status.HTTP_200_OK)
