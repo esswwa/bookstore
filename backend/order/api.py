@@ -696,8 +696,51 @@ def order_renewal_date(request):
 	order = Order.objects.get(id=data['order_id'])
 	date = data['date']
 	order.date_order_renewal_end_date = order.date_delivered + timezone.timedelta(days=(int(date) + 14))
+
+	import smtplib
+	smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+	smtp_server.starttls()
+	smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
+
+	from email.mime.multipart import MIMEMultipart
+	from email.mime.text import MIMEText
+
+	# Создание объекта сообщения
+	msg = MIMEMultipart()
+
+	# Настройка параметров сообщения
+	msg["From"] = "qweq95346@gmail.com"
+
+	msg["Subject"] = f"Заказ № {order.id}"
+	user = User.objects.get(id=order.user_id).email
+	msg["To"] = user
 	if order:
 		order.save()
+		html = f"""
+							<!DOCTYPE html>
+							<html>
+							<head>
+							  <meta charset="UTF-8">
+							  <title>Заказ № {order.id}</title>
+								<link rel="stylesheet" href="style.css">
+							</head>
+							<body>
+							  <div class="container">
+							    <h1>Информация о вашем заказе № {order.id}</h1>
+							    <div class="total">По вашей просьбе срок хранения заказа был продлен. \n Новый срок хранения заказа до: {order.date_order_renewal_end_date.date()}</div>
+							      <br/>
+							    <div>Спасибо, что вы выбрали наш магазин!</div>
+							  </div>
+							</body>
+							</html>
+							"""
+		msg.attach(MIMEText(html, "html"))
+
+		# Отправка письма
+		smtp_server.sendmail("qweq95346@gmail.com", user, msg.as_string())
+
+		# Закрытие соединения
+		smtp_server.quit()
 		return Response({'message': 'Order edit status successfully'}, status=status.HTTP_200_OK)
 	else:
 		return Response({'message': 'Order edit status not successfully'}, status=status.HTTP_400_BAD_REQUEST)

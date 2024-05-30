@@ -20,8 +20,12 @@
                                   <p class="text-gray-700 text-base">Контактная информация покупателя: {{ order.user.email }}</p>
 
               <p class="text-gray-700 text-base" v-if="order.date_order">Дата оформления заказа: {{new Date(order.date_order).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
-                    <p class="text-gray-700 text-base" v-if="order.status === 'В пункте выдачи'">Дата прибытия в пункт выдачи: {{new Date(order.date_delivered).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
-                    <p class="text-gray-700 text-base" v-if="order.status === 'Оформлен' || order.status ==='В пути'">Планируемая дата выдачи: {{new Date(new Date(order.date_order).getTime() + 10 * 24 * 60 * 60 * 1000).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+
+              <p class="text-gray-700 text-base" v-if="order.status === 'В пункте выдачи'">Дата прибытия в пункт выдачи: {{new Date(order.date_delivered).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+              <p class="text-gray-700 text-base" v-if="order.status === 'В пункте выдачи'">Заказ будет храниться по: {{new Date(new Date(order.date_delivered).getTime() + 14 * 24 * 60 * 60 * 1000).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
+              <p class="text-gray-700 text-base" v-if="order.date_order_renewal_end_date">По вашей просьбе срок хранения заказа был увеличен, заказ будет храниться по: {{order.date_order_renewal_end_date}}</p>
+
+              <p class="text-gray-700 text-base" v-if="order.status === 'Оформлен' || order.status ==='В пути'">Планируемая дата выдачи: {{new Date(new Date(order.date_order).getTime() + 10 * 24 * 60 * 60 * 1000).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
 
                     <p class="text-gray-700 text-base" v-if="order.status === 'Завершен'">Заказ был получен: {{new Date(order.date_of_receiving).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}}</p>
 
@@ -47,7 +51,7 @@
           </div>
   </div>
   <div class="flex flex-wrap">
-                     <div v-for="helperOrder in helperOrders" :key="helperOrder.id" class="w-1/3 p-2 min-w-max">
+                     <div v-for="helperOrder in helperOrders" :key="helperOrder.id" class="w-1/5 p-2 min-w-max">
                            <div class="max-w-s rounded-2xl overflow-hidden bg-white shadow-lg text-center min-w-max">
                               <div class="flex justify-center text-center">
                     <div class="h-48 lg:h-auto lg: flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden" title="Перейти на книгу">
