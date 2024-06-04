@@ -33,28 +33,27 @@ def get_order(request):
 
 	order_archive = Order.objects.filter(user=user, status='Завершен')
 
-	import smtplib
-
-	smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
-	smtp_server.starttls()
-	smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
-
-	from email.mime.multipart import MIMEMultipart
-	from email.mime.text import MIMEText
-
-	# Создание объекта сообщения
-	msg = MIMEMultipart()
-
-	# Настройка параметров сообщения
-	msg["From"] = "Читай-Летай"
-
 	for order in order_active:
 		if order.status == 'В пункте выдачи':
-			msg["Subject"] = f"Заказ № {order.id}"
-			user = User.objects.get(id=order.user_id)
-			msg["To"] = user.email
 			if order.date_order_renewal_end_date is None:
 				if order.date_delivered < timezone.now() - timedelta(weeks=2):
+					import smtplib
+
+					smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+					smtp_server.starttls()
+					smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
+
+					from email.mime.multipart import MIMEMultipart
+					from email.mime.text import MIMEText
+
+					# Создание объекта сообщения
+					msg = MIMEMultipart()
+
+					# Настройка параметров сообщения
+					msg["From"] = "Читай-Летай"
+					msg["Subject"] = f"Заказ № {order.id}"
+					user = User.objects.get(id=order.user_id)
+					msg["To"] = user.email
 					order.status = 'Не выкуплен'
 					if order:
 						order.save()
@@ -162,6 +161,23 @@ def get_order(request):
 						smtp_server.quit()
 			else:
 				if order.date_order_renewal_end_date <= timezone.now():
+					import smtplib
+
+					smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+					smtp_server.starttls()
+					smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
+
+					from email.mime.multipart import MIMEMultipart
+					from email.mime.text import MIMEText
+
+					# Создание объекта сообщения
+					msg = MIMEMultipart()
+
+					# Настройка параметров сообщения
+					msg["From"] = "Читай-Летай"
+					msg["Subject"] = f"Заказ № {order.id}"
+					user = User.objects.get(id=order.user_id)
+					msg["To"] = user.email
 					order.status = 'Не выкуплен'
 					if order:
 						html = f"""<article style="max-width: 622px;">
@@ -268,6 +284,11 @@ def get_order(request):
 						smtp_server.quit()
 						order.save()
 
+	order_all = order_all.order_by('-' +'date_order')
+	order_active = order_active.order_by('-' +'date_order')
+	order_canceled = order_canceled.order_by('-' +'date_order')
+	order_archive = order_archive.order_by('-' +'date_order')
+
 	order_all = OrderSerializer(order_all, many=True)
 	order_active = OrderSerializer(order_active, many=True)
 	order_canceled = OrderSerializer(order_canceled, many=True)
@@ -296,7 +317,7 @@ def admin_orders(request, page):
 		start_index = (page - 1) * 12
 		end_index = start_index + 12
 		if request.data['search_input'] != '':
-			orders = orders.filter(id__in=request.data['search_input'])
+			orders = orders.filter(id=request.data['search_input'])
 			count = orders.count()
 			start_index = (page - 1) * 12
 			end_index = start_index + 12
@@ -320,6 +341,9 @@ def admin_orders(request, page):
 		if request.data['sort_order'] != 'Без сортировки':
 			orders = orders.order_by('-' + request.data['sort_order'])
 
+	if (request.data['sort_order'] == 'Без сортировки'):
+		orders = orders.order_by('-' +'date_order')
+
 	orders = orders[start_index:end_index]
 
 	serializer = OrderSerializer(orders, many=True)
@@ -327,28 +351,30 @@ def admin_orders(request, page):
 
 	order_active = Order.objects.filter(status='В пункте выдачи')
 
-	import smtplib
 
-	smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
-	smtp_server.starttls()
-	smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
-
-	from email.mime.multipart import MIMEMultipart
-	from email.mime.text import MIMEText
-
-	# Создание объекта сообщения
-	msg = MIMEMultipart()
-
-	# Настройка параметров сообщения
-	msg["From"] = "Читай-Летай"
 
 	for order in order_active:
 		if order.status == 'В пункте выдачи':
-			msg["Subject"] = f"Заказ № {order.id}"
-			user = User.objects.get(id=order.user_id)
-			msg["To"] = user.email
 			if order.date_order_renewal_end_date is None:
 				if order.date_delivered < timezone.now() - timedelta(weeks=2):
+					import smtplib
+
+					smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+					smtp_server.starttls()
+					smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
+
+					from email.mime.multipart import MIMEMultipart
+					from email.mime.text import MIMEText
+
+					# Создание объекта сообщения
+					msg = MIMEMultipart()
+
+					# Настройка параметров сообщения
+					msg["From"] = "Читай-Летай"
+
+					msg["Subject"] = f"Заказ № {order.id}"
+					user = User.objects.get(id=order.user_id)
+					msg["To"] = user.email
 					order.status = 'Не выкуплен'
 					if order:
 						order.save()
@@ -456,6 +482,24 @@ def admin_orders(request, page):
 						smtp_server.quit()
 			else:
 				if order.date_order_renewal_end_date <= timezone.now():
+					import smtplib
+
+					smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
+					smtp_server.starttls()
+					smtp_server.login("qweq95346@gmail.com", "ynksrgyjulrewmbl")
+
+					from email.mime.multipart import MIMEMultipart
+					from email.mime.text import MIMEText
+
+					# Создание объекта сообщения
+					msg = MIMEMultipart()
+
+					# Настройка параметров сообщения
+					msg["From"] = "Читай-Летай"
+
+					msg["Subject"] = f"Заказ № {order.id}"
+					user = User.objects.get(id=order.user_id)
+					msg["To"] = user.email
 					order.status = 'Не выкуплен'
 					if order:
 						html = f"""<article style="max-width: 622px;">
@@ -907,6 +951,22 @@ def change_status(request):
 	data = request.data
 	order = Order.objects.get(id=data['order_id'])
 	order.status = data['status']
+	if order.status == 'В пункте выдачи':
+		order.date_delivered = timezone.now()
+	if order.status == 'Завершен':
+		order.date_of_receiving = timezone.now()
+	if order:
+		order.save()
+		return Response({'message': 'Order edit status successfully'}, status=status.HTTP_200_OK)
+	else:
+		return Response({'message': 'Order edit status not successfully'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def change_status_send_email(request):
+	data = request.data
+	order = Order.objects.get(id=data['order_id'])
+	order.status = data['status']
 	import smtplib
 	smtp_server = smtplib.SMTP("smtp.gmail.com", 587)
 	smtp_server.starttls()
@@ -1032,7 +1092,7 @@ def change_status(request):
 			</div>
 		</article>"""
 
-		# Добавление HTML-содержимого в сообщение
+	# Добавление HTML-содержимого в сообщение
 
 	if order.status == 'Завершен':
 		order.date_of_receiving = timezone.now()
@@ -1128,10 +1188,6 @@ def change_status(request):
 
 			</div>
 		</article>"""
-
-
-
-
 
 	if order.status == 'В пути':
 		html = f"""<article style="max-width: 622px;">
@@ -1350,7 +1406,7 @@ def change_status(request):
 										</tbody>
 									</table>
 								</div>
-	
+
 								<div style="background-color:#ffffff;padding:30px">
 									<div style="line-height:24px;text-align:center">
 										<span style="font-size:18px;font-weight:bold">
@@ -1361,7 +1417,7 @@ def change_status(request):
 										<br/>
 										Благодарим вас за покупку в магазине «Читай-Летай».<br>	
 									</div>
-	
+
 										<span style="font-size:35px;line-height:40px">
 											<strong>Номер заказа: <br>№
 												<span>{order.id}</span>
@@ -1425,19 +1481,15 @@ def change_status(request):
 						</div>
 					</div>
 				</article>"""
-	if order:
-		order.save()
-		msg.attach(MIMEText(html, "html"))
 
-		# Отправка письма
-		smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
+	msg.attach(MIMEText(html, "html"))
 
-		# Закрытие соединения
-		smtp_server.quit()
-		return Response({'message': 'Order edit status successfully'}, status=status.HTTP_200_OK)
-	else:
-		return Response({'message': 'Order edit status not successfully'}, status=status.HTTP_400_BAD_REQUEST)
+	# Отправка письма
+	smtp_server.sendmail("qweq95346@gmail.com", user.email, msg.as_string())
 
+	# Закрытие соединения
+	smtp_server.quit()
+	return Response({'message': 'Email send'}, status=status.HTTP_200_OK)
 @api_view(['POST'])
 def order_renewal_date(request):
 	data = request.data

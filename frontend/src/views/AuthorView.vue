@@ -172,7 +172,7 @@ export default {
       searchInput: '',
       total: 0, // Устанавливаем начальное значение total
       perPage: 12,
-      currentPage: 1,
+      currentPage: this.$route.params.page,
       basket: [],
       baskets: [],
       sortOrder: 'rating',
@@ -220,7 +220,7 @@ export default {
         }
       },
     changePage(page) {
-      this.$router.push({ path: `/all_books/${page}/` });
+      this.$router.push({ path: `/author_books/${this.$route.params.author}/${page}/` });
     },
     goToBook(bookId) {
      axios
@@ -331,12 +331,14 @@ export default {
       console.log('selected', this.selectedGenres)
         this.getBook();
       this.isOpen = false
+      this.$router.push({ path: `/author_books/${this.$route.params.author}/1/` });
     },
     resetFilters(){
       this.selectedGenres = null;
       this.sortOrder = 'rating'
       this.searchInput = ''
       this.getBook();
+      this.$router.push({ path: `/author_books/${this.$route.params.author}/1/` });
     },
     getViewedBooks(){
       axios

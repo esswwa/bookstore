@@ -165,7 +165,7 @@ export default {
       searchInput: '',
       total: 0, // Устанавливаем начальное значение total
       perPage: 12,
-      currentPage: 1,
+      currentPage: this.$route.params.page,
       basket: [],
       baskets: [],
       sortOrder: 'rating',
@@ -313,12 +313,16 @@ export default {
       console.log('selected', this.selectedGenres)
         this.getBook();
       this.isOpen = false
+      this.$router.push({ path: `/all_books/1/` });
+      this.currentPage = 1
     },
     resetFilters(){
       this.selectedGenres = null;
       this.sortOrder = 'rating'
       this.searchInput = ''
       this.getBook();
+      this.$router.push({ path: `/all_books/1/` });
+      this.currentPage = 1
     },
     getViewedBooks(){
       axios

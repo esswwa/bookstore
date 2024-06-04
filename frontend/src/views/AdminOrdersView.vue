@@ -14,10 +14,9 @@
             </div>
          <div class="mt-4 ml-2">
               <select v-model="sortOrder" class="flex flex-col max-w-sm rounded-lg py-4 mb-4 p-4 overflow-hidden shadow-lg focus:outline-none focus:shadow-outline">
-                <option value="Без сортировки">Без сортировки</option>
+                <option value="Без сортировки">По дате оформления заказа</option>
                 <option value="all_price">По цене</option>
                 <option value="status">По статусу</option>
-                <option value="date_order">По дате оформления заказа</option>
               </select>
             </div>
         <div class="flex items-center">
@@ -163,7 +162,7 @@ export default {
       searchInput: '',
       total: 0, // Устанавливаем начальное значение total
       perPage: 12,
-      currentPage: 1,
+      currentPage: this.$route.params.page,
       sortOrder: 'Без сортировки',
       isOpen: false,
       pizza: null,
@@ -316,6 +315,17 @@ export default {
             .post('/api/order/change_status/', {'status': status, 'order_id': orderId})
             .then(response => {
                 this.getOrder()
+              this.statusSendEmail(status, orderId)
+            })
+            .catch(error=>{
+              console.log('error', error)
+            })
+    },
+    statusSendEmail(status, orderId){
+      axios
+            .post('/api/order/change_status_send_email/', {'status': status, 'order_id': orderId})
+            .then(response => {
+              console.log('email send')
             })
             .catch(error=>{
               console.log('error', error)
@@ -341,6 +351,7 @@ export default {
     saveOptions(){
       console.log('selected', this.selectedFilter)
         this.getOrder();
+      this.$router.push({ path: `/admin_orders/1/` });
       this.isOpen = false
     },
     resetFilters(){
@@ -348,6 +359,7 @@ export default {
       this.sortOrder = 'Без сортировки'
       this.searchInput = ''
       this.getOrder();
+      this.$router.push({ path: `/admin_orders/1/` });
     },
   },
 

@@ -14,6 +14,7 @@ urlpatterns = [
 	path('apply_order/', api.apply_order, name='apply_order'),
 	path('change_status/', api.change_status, name='change_status'),
 	path('send_message/', api.send_message, name='send_message'),
+	path('change_status_send_email/', api.change_status_send_email, name='change_status_send_email'),
 	path('order_renewal_date/', api.order_renewal_date, name='order_renewal_date'),
 	path('admin_orders/<int:page>/', api.admin_orders, name='admin_orders'),
 

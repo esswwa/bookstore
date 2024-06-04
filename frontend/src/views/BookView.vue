@@ -263,7 +263,7 @@ export default {
             },
           total: 0, // Устанавливаем начальное значение total
           perPage: 5,
-          currentPage: 1,
+          currentPage: this.$route.params.page,
           viewedBooks: [],
             books_similar: [],
           showReview: false,
