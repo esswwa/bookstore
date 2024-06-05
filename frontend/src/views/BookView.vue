@@ -88,7 +88,7 @@
   <div class="max-w-7xl mx-auto" v-if="books_similar.length > 0">
         <div class="main-center col-span-3 space-y-4">
           <div class="text-center mb-2 text-black py-4 px-6">
-              <h1 class="text-4xl font-bold">Похожие книги</h1>
+              <h1 class="text-4xl font-bold">Рекомендуемые книги</h1>
           </div>
         </div>
     </div>
