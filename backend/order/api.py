@@ -1809,9 +1809,9 @@ def send_message(request):
 									{' '.join([
 										f"""
 											<tr>
-											  <td style="padding-left:10px;padding-top:15px;word-break:break-all">{book['name']}</td>
-											  <td style="padding-left:10px;padding-top:15px;word-break:break-all">{book['count']}</td>
-											  <td style="padding-left:10px;padding-top:15px;word-break:break-all">{book['all_price']:.2f} ₽</td>
+											  <td style="max-width:200px;padding-left:10px;padding-top:15px;word-break:break-all">{book['name']}</td>
+											  <td style="padding-left:10px; text-align:center; padding-top:15px;word-break:break-all">{book['count']}</td>
+											  <td style="padding-left:10px; text-align:center;padding-top:15px;word-break:break-all">{book['all_price']:.2f} ₽</td>
 											</tr>
 										"""
 										for book in basket_additionals_list
@@ -1830,7 +1830,7 @@ def send_message(request):
 									<span style="color:#b2b2b2;font-weight:bold;text-transform:uppercase">ИТОГО:</span>
 								</td>
 								<td style="padding:15px 10px 0 10px">
-									<span style="font-weight:bold">₽{order1.all_price}&nbsp;RUB</span>
+									<span style="font-weight:bold">{order1.all_price}&nbsp;RUB</span>
 								</td>
 							</tr>
 							<tr><td colspan="2" style="padding-top:15px;text-align:center"></td></tr>
