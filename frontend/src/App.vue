@@ -5,16 +5,16 @@
             <div class="flex items-center justify-between">
                 <div class="menu-left">
 
-                  <RouterLink v-if="userStore.user.superuser === true" to="/admin_orders/1/" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-4 size-6">
+                  <RouterLink v-if="userStore.user.superuser === true" to="/admin_orders/1/" class="text-2xl p-4 hover:bg-gray-100 hover:rounded-full duration-200 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-4 size-8">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
 
                             </svg>
                     ЧИТАЙ-ЛЕТАЙ
                     </RouterLink>
-                    <RouterLink v-else to="/books" class="text-xl p-4 hover:bg-gray-100 hover:rounded-full duration-200  flex items-center">
+                    <RouterLink v-else to="/books" class="text-2xl p-4 hover:bg-gray-100 hover:rounded-full duration-200  flex items-center">
 
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-4 size-6">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-4 size-8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
                       </svg>
                       ЧИТАЙ-ЛЕТАЙ
@@ -23,13 +23,13 @@
 
                 <div class="menu-center flex space-x-12" v-if="this.userStore.user.isAuthenticated && userStore.user.superuser !== true">
                     <RouterLink to="/books" class="text-blue-700 p-4 hover:bg-gray-100 hover:rounded-full duration-200" title="Основная страница с рекомендациями книг">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 ">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                         </svg>
                     </RouterLink>
 
                     <RouterLink to="/all_books/1/" class="p-4 hover:bg-gray-100 hover:rounded-full duration-200" title="Все книги">
-                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
                         </svg>
 
@@ -37,29 +37,29 @@
 
                     <RouterLink to="/favourite/1/" class=" flex items-center p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Избранные книги">
 
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                         </svg>
                       <p>{{this.countFavourite}}</p>
                     </RouterLink>
 
                     <RouterLink to="/basket" class=" flex items-center p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Корзина">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" class="w-8 h-8">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                             </svg>
                       <p>{{this.countBasket}}</p>
                     </RouterLink>
 
                     <RouterLink :to="{name: 'profile', params:{'id': this.userStore.user.id}}" class="p-4 hover:bg-gray-100 hover:rounded-full duration-200"  title="Профиль">
-                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                        </svg>
                     </RouterLink>
                 </div>
                 <div class="flex items-center space-x-12" v-if="this.userStore.user.isAuthenticated && userStore.user.superuser === true">
                   <div v-if="this.userStore.user.isAuthenticated && userStore.user.superuser === true">
-                      <button @click="recreate_similar_books()" class="py-4 px-6 bg-blue-200 text-white rounded-full hover:bg-gray-200 hover:rounded-full  duration-200">
-                          Пересоздать похожие книги
+                      <button @click="recreate_similar_books()" class="py-4 px-6 bg-blue-400 text-white rounded-lg hover:bg-gray-200 duration-200">
+                          Обновить "Рекомендованные книги"
                       </button>
                    </div>
                 </div>
@@ -76,10 +76,10 @@
                     </svg>
                      {{userStore.user.name}}
                    </div>
-                  <template  v-else>
-                    <RouterLink to="/signin" class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg">Войти</RouterLink>
-                    <RouterLink to="/signup" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Зарегистрироваться</RouterLink>
-                  </template>
+        <template v-else>
+          <RouterLink to="/signin" class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg">Войти</RouterLink>
+          <RouterLink to="/signup" class="py-4 px-6 bg-blue-400 text-white rounded-lg">Зарегистрироваться</RouterLink>
+        </template>
                 </div>
             </div>
         </div>

@@ -80,13 +80,12 @@ def get_order(request):
 													Здравствуйте, {user.name}!
 												</span>
 												<br>
-												К сожалению, так как вы не забрали свой заказ\n
-									      		в течение 14 дней с момента покупки, книги были отправлены на склад.
-									      		<br/>
-												Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-									      	</div>
-									      		
-												<span style="font-size:35px;line-height:40px">
+												<span style="font-size:18px">
+													К сожалению, так как вы не забрали свой заказ\n
+									      			в течение 14 дней с момента покупки, книги отправлены на склад.\n
+									      			Благодарим вас за обращение в магазин «Читай-Летай», обращайтесь еще.<br><br>
+												</span>
+												<span style="font-size:35px;line-height:40px;text-align:center">
 													<strong>Номер заказа: <br>№
 														<span>{order.id}</span>
 													</strong>
@@ -149,6 +148,11 @@ def get_order(request):
 								</div>
 
 							</div>
+							<div style="background-color:#f1f1f1;">
+								<br>
+								<br>
+								<br>
+							</div>
 						</article>"""
 
 						# Добавление HTML-содержимого в сообщение
@@ -203,13 +207,12 @@ def get_order(request):
 													Здравствуйте, {user.name}!
 												</span>
 												<br>
-												К сожалению, так как вы не забрали свой заказ\n
-									      		в течение 14 дней с момента покупки, книги были отправлены на склад.
-									      		<br/>
-												Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-									      	</div>
-
-												<span style="font-size:35px;line-height:40px">
+												<span style="font-size:18px">
+													К сожалению, так как вы не забрали свой заказ\n
+									      			в течение 14 дней с момента покупки, книги отправлены на склад.\n
+									      			Благодарим вас за обращение в магазин «Читай-Летай», обращайтесь еще.<br><br>
+												</span>
+												<span style="font-size:35px;line-height:40px;text-align:center">
 													<strong>Номер заказа: <br>№
 														<span>{order.id}</span>
 													</strong>
@@ -272,6 +275,11 @@ def get_order(request):
 								</div>
 
 							</div>
+							<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
+					</div>
 						</article>"""
 
 						# Добавление HTML-содержимого в сообщение
@@ -401,13 +409,12 @@ def admin_orders(request, page):
 													Здравствуйте, {user.name}!
 												</span>
 												<br>
-												К сожалению, так как вы не забрали свой заказ\n
-									      		в течение 14 дней с момента покупки, книги были отправлены на склад.
-									      		<br/>
-												Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-									      	</div>
-
-												<span style="font-size:35px;line-height:40px">
+												<span style="font-size:18px">
+													К сожалению, так как вы не забрали свой заказ\n
+									      			в течение 14 дней с момента покупки, книги отправлены на склад.\n
+									      			Благодарим вас за обращение в магазин «Читай-Летай», обращайтесь еще.<br><br>
+												</span>
+												<span style="font-size:35px;line-height:40px;text-align:center">
 													<strong>Номер заказа: <br>№
 														<span>{order.id}</span>
 													</strong>
@@ -470,6 +477,11 @@ def admin_orders(request, page):
 								</div>
 
 							</div>
+							<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
+					</div>
 						</article>"""
 
 						# Добавление HTML-содержимого в сообщение
@@ -525,13 +537,12 @@ def admin_orders(request, page):
 													Здравствуйте, {user.name}!
 												</span>
 												<br>
-												К сожалению, так как вы не забрали свой заказ\n
-									      		в течение 14 дней с момента покупки, книги были отправлены на склад.
-									      		<br/>
-												Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-									      	</div>
-
-												<span style="font-size:35px;line-height:40px">
+												<span style="font-size:18px">
+													К сожалению, так как вы не забрали свой заказ\n
+									      			в течение 14 дней с момента покупки, книги отправлены на склад.\n
+									      			Благодарим вас за обращение в магазин «Читай-Летай», обращайтесь еще.<br><br>
+												</span>
+												<span style="font-size:35px;line-height:40px;text-align:center">
 													<strong>Номер заказа: <br>№
 														<span>{order.id}</span>
 													</strong>
@@ -594,6 +605,11 @@ def admin_orders(request, page):
 								</div>
 
 							</div>
+							<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
+					</div>
 						</article>"""
 
 						# Добавление HTML-содержимого в сообщение
@@ -734,12 +750,11 @@ def cancel_order(request):
 									Здравствуйте, {user.name}!
 								</span>
 								<br>
-								По вашей просьбе ваш заказ был отменен.
-					      		<br/>
-								Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-					      	</div>
-
-								<span style="font-size:35px;line-height:40px">
+								<span style="font-size:18px">
+									По вашей просьбе ваш заказ был отменен.\n
+									Благодарим вас за обращение в магазин «Читай-Летай», обращайтесь еще.<br><br>
+								</span>
+								<span style="font-size:35px;line-height:40px;text-align:center">
 									<strong>Номер заказа: <br>№
 										<span>{order.id}</span>
 									</strong>
@@ -749,7 +764,7 @@ def cancel_order(request):
 							<div style="background-color:#ffffff;padding:30px;color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
 								<strong style="margin-left:30px">ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
 							</div>
-							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;width:100%;word-break:break-word;word-wrap:break-word">
 								<tbody>
 									<tr>
 										<th style="height:1px;width:50%"></th>
@@ -802,6 +817,11 @@ def cancel_order(request):
 				</div>
 
 			</div>
+			<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
+					</div>
 		</article>"""
 
 
@@ -864,11 +884,11 @@ def apply_order(request):
 									Здравствуйте, {user.name}!
 								</span>
 								<br>
-								Ваш заказ был получен!
-					      		<br/>
-								Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-					      	</div>
-								<span style="font-size:35px;line-height:40px">
+								<span style="font-size:18px">
+									Ваш заказ был выдан!\n
+									Благодарим вас за покупку в магазине «Читай-Летай».<br><br>
+								</span>
+								<span style="font-size:35px;line-height:40px;text-align:center">
 									<strong>Номер заказа: <br>№
 										<span>{order.id}</span>
 									</strong>
@@ -878,7 +898,7 @@ def apply_order(request):
 							<div style="background-color:#ffffff;padding:30px;color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
 								<strong style="margin-left:30px">ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
 							</div>
-							<table style="background-color:#ffffff;padding:30px; border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+							<table style="background-color:#ffffff;padding:30px; border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;width:100%;word-break:break-word;word-wrap:break-word">
 								<tbody>
 									<tr>
 										<th style="height:1px;width:50%"></th>
@@ -931,7 +951,13 @@ def apply_order(request):
 				</div>
 
 			</div>
-		</article>"""
+			
+		</article>
+		<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
+					</div>"""
 
 		# Добавление HTML-содержимого в сообщение
 		msg.attach(MIMEText(html, "html"))
@@ -1009,12 +1035,11 @@ def change_status_send_email(request):
 									Здравствуйте, {user.name}!
 								</span>
 								<br>
-								Ваш заказ был доставлен в пункт выдачи.
-					      		<br/>
-								Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-					      	</div>
-
-								<span style="font-size:35px;line-height:40px">
+								<span style="font-size:18px">
+									Ваш заказ был доставлен в пункт выдачи.
+								</span>
+					      		<br><br>
+								<span style="font-size:35px;line-height:40px;text-align:center">
 									<strong>Номер заказа: <br>№
 										<span>{order.id}</span>
 									</strong>
@@ -1024,7 +1049,7 @@ def change_status_send_email(request):
 							<div style="background-color:#ffffff;padding:30px;color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
 								<strong style="margin-left:30px">ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
 							</div>
-							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;width:100%;word-break:break-word;word-wrap:break-word">
 								<tbody>
 									<tr>
 										<th style="height:1px;width:50%"></th>
@@ -1073,19 +1098,27 @@ def change_status_send_email(request):
 								</tbody>
 							</table>
 
-							<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
+							<table style="background-color:#ffffff;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;width:100%">
 								<tbody>
 									<tr>
-										<td style="padding-top:15px;text-align:center">										
-										<br>
-											В пункте выдачи заказ хранится 14 дней, если в течение 14 дней вы не получите заказ,
+										<th></th>
+									</tr>
+									<tr>
+										<td style="padding-top:15px;text-align:center">
+											В пункте выдачи заказ хранится 14 дней, если в течение 14 дней не получить заказ,
 											то он автоматически отменится. Если вы не успеваете его получить, то следует обратиться в службу поддержки.
 											Срок хранения заказа смогут продлить до 28 дней.
+											<br><br>
 										</td>
-										</tr>
+									</tr>
 								</tbody>
 							</table>
 						</div>
+					</div>
+					<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
 					</div>
 				</div>
 
@@ -1119,12 +1152,11 @@ def change_status_send_email(request):
 									Здравствуйте, {user.name}!
 								</span>
 								<br>
-								Ваш заказ был получен!
-					      		<br/>
-								Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-					      	</div>
-
-								<span style="font-size:35px;line-height:40px">
+								<span style="font-size:18px">
+									Ваш заказ был выдан!\n
+									Благодарим вас за покупку в магазине «Читай-Летай».<br><br>
+								</span>
+								<span style="font-size:35px;line-height:40px;text-align:center">
 									<strong>Номер заказа: <br>№
 										<span>{order.id}</span>
 									</strong>
@@ -1134,7 +1166,7 @@ def change_status_send_email(request):
 							<div style="background-color:#ffffff;padding:30px;color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
 								<strong style="margin-left:30px">ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
 							</div>
-							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;width:100%;word-break:break-word;word-wrap:break-word">
 								<tbody>
 									<tr>
 										<th style="height:1px;width:50%"></th>
@@ -1187,6 +1219,11 @@ def change_status_send_email(request):
 				</div>
 
 			</div>
+			<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
+					</div>
 		</article>"""
 
 	if order.status == 'В пути':
@@ -1213,12 +1250,11 @@ def change_status_send_email(request):
 									Здравствуйте, {user.name}!
 								</span>
 								<br>
-								Ваш заказ был передан в доставку.
-					      		<br/>
-								Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-					      	</div>
-
-								<span style="font-size:35px;line-height:40px">
+								<span style="font-size:18px">
+									Ваш заказ был передан в доставку.
+								</span>
+					      		<br><br>
+								<span style="font-size:35px;line-height:40px;text-align:center">
 									<strong>Номер заказа: <br>№
 										<span>{order.id}</span>
 									</strong>
@@ -1228,7 +1264,7 @@ def change_status_send_email(request):
 							<div style="background-color:#ffffff;padding:30px;color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
 								<strong style="margin-left:30px">ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
 							</div>
-							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;width:100%;word-break:break-word;word-wrap:break-word">
 								<tbody>
 									<tr>
 										<th style="height:1px;width:50%"></th>
@@ -1277,19 +1313,27 @@ def change_status_send_email(request):
 								</tbody>
 							</table>
 
-							<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
+							<table style="background-color:#ffffff;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;width:100%">
 								<tbody>
-									<tr>
-										<td style="padding-top:15px;text-align:center">										
-										<br>
-											В пункте выдачи заказ хранится 14 дней, если в течение 14 дней вы не получите заказ,
-											то он автоматически отменится. Если вы не успеваете его получить, то следует обратиться в службу поддержки.
-											Срок хранения заказа смогут продлить до 28 дней.
-										</td>
-										</tr>
-								</tbody>
+								<tr>
+									<th></th>
+								</tr>
+								<tr>
+									<td style="padding-top:15px;text-align:center">
+										В пункте выдачи заказ хранится 14 дней, если в течение 14 дней не получить заказ,
+										то он автоматически отменится. Если вы не успеваете его получить, то следует обратиться в службу поддержки.
+										Срок хранения заказа смогут продлить до 28 дней.
+										<br><br>
+									</td>
+								</tr>
+							</tbody>
 							</table>
 						</div>
+					</div>
+					<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
 					</div>
 				</div>
 
@@ -1319,13 +1363,12 @@ def change_status_send_email(request):
 									Здравствуйте, {user.name}!
 								</span>
 								<br>
-								К сожалению, так как вы не забрали свой заказ\n
-					      		в течение 14 дней с момента покупки, книги были отправлены на склад.
-					      		<br/>
-								Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-					      	</div>
-
-								<span style="font-size:35px;line-height:40px">
+								<span style="font-size:18px">
+									К сожалению, так как вы не забрали свой заказ\n
+									в течение 14 дней с момента покупки, книги отправлены на склад.\n
+								Благодарим вас за обращение в магазин «Читай-Летай», обращайтесь еще.<br><br>
+								</span>
+								<span style="font-size:35px;line-height:40px;text-align:center">
 									<strong>Номер заказа: <br>№
 										<span>{order.id}</span>
 									</strong>
@@ -1388,6 +1431,11 @@ def change_status_send_email(request):
 				</div>
 
 			</div>
+			<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
+					</div>
 		</article>"""
 	if order.status == "Отменен":
 		html = f"""<article style="max-width: 622px;">
@@ -1413,12 +1461,11 @@ def change_status_send_email(request):
 											Здравствуйте, {user.name}!
 										</span>
 										<br>
-										По вашей просьбе ваш заказ был отменен.
-										<br/>
-										Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-									</div>
-
-										<span style="font-size:35px;line-height:40px">
+										<span style="font-size:18px">
+											По вашей просьбе ваш заказ был отменен.\n
+											Благодарим вас за обращение в магазин «Читай-Летай», обращайтесь еще.<br><br>
+										</span>
+										<span style="font-size:35px;line-height:40px;text-align:center">
 											<strong>Номер заказа: <br>№
 												<span>{order.id}</span>
 											</strong>
@@ -1428,7 +1475,7 @@ def change_status_send_email(request):
 									<div style="background-color:#ffffff;padding:30px;color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
 										<strong style="margin-left:30px">ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
 									</div>
-									<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+									<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;width:100%;word-break:break-word;word-wrap:break-word">
 										<tbody>
 											<tr>
 												<th style="height:1px;width:50%"></th>
@@ -1479,6 +1526,11 @@ def change_status_send_email(request):
 								</div>
 							</div>
 						</div>
+					</div>
+					<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
 					</div>
 				</article>"""
 
@@ -1540,12 +1592,11 @@ def order_renewal_date(request):
 									Здравствуйте, {user.name}!
 								</span>
 								<br>
-								По вашей просьбе срок хранения заказа был продлен.
-					      		<br/>
-								Благодарим вас за покупку в магазине «Читай-Летай».<br>	
-					      	</div>
-
-								<span style="font-size:35px;line-height:40px">
+								<span style="font-size:18px">
+									По вашей просьбе срок хранения заказа был продлен.
+								</span>
+					      		<br><br>
+								<span style="font-size:35px;line-height:40px;text-align:center">
 									<strong>Номер заказа: <br>№
 										<span>{order.id}</span>
 									</strong>
@@ -1555,7 +1606,7 @@ def order_renewal_date(request):
 							<div style="background-color:#ffffff;padding:30px;color:#b2b2b2;line-height:21px;padding:5px 0 5px 0">
 								<strong style="margin-left:30px">ИНФОРМАЦИЯ О ВАШЕМ ЗАКАЗЕ:</strong>
 							</div>
-							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;margin-bottom:20px;width:100%;word-break:break-word;word-wrap:break-word">
+							<table style="background-color:#ffffff;padding:30px;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;font-size:16px;line-height:24px;width:100%;word-break:break-word;word-wrap:break-word">
 								<tbody>
 									<tr>
 										<th style="height:1px;width:50%"></th>
@@ -1604,19 +1655,27 @@ def order_renewal_date(request):
 								</tbody>
 							</table>
 
-							<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
+							<table style="background-color:#ffffff;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;width:100%">
 								<tbody>
 									<tr>
-										<td style="padding-top:15px;text-align:center">										
-										<br>
-											В пункте выдачи заказ хранится 14 дней, если в течение 14 дней вы не получите заказ,
+										<th></th>
+									</tr>
+									<tr>
+										<td style="padding-top:15px;text-align:center">
+											В пункте выдачи заказ хранится 14 дней, если в течение 14 дней не получить заказ,
 											то он автоматически отменится. Если вы не успеваете его получить, то следует обратиться в службу поддержки.
 											Срок хранения заказа смогут продлить до 28 дней.
+											<br><br>
 										</td>
-										</tr>
+									</tr>
 								</tbody>
 							</table>
 						</div>
+					</div>
+					<div style="background-color:#f1f1f1;">
+						<br>
+						<br>
+						<br>
 					</div>
 				</div>
 
@@ -1688,7 +1747,7 @@ def send_message(request):
 							</span>
 							<br>
 							Благодарим вас за покупку в магазине «Читай-Летай».<br><br>
-							<span style="font-size:35px;line-height:40px">
+							<span style="font-size:35px;line-height:40px;text-align:center">
 								<strong>Номер заказа: <br>№
 									<span>{order_id}</span>
 								</strong>
@@ -1795,7 +1854,7 @@ def send_message(request):
 							</tbody>
 						</table>
 		
-						<table style="border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
+						<table style="background-color:#ffffff;border-spacing:0;border-top-color:#e2e3e4;border-top-style:solid;border-top-width:1px;line-height:26px;margin-bottom:20px;width:100%">
 							<tbody>
 								<tr>
 									<th></th>
@@ -1804,17 +1863,22 @@ def send_message(request):
 									<td style="padding-top:15px;text-align:center">
 										<div class="delivery-date">Ориентировочная дата доставки: {(order1.date_order + timezone.timedelta(days=10)).date()}</div>
 										<br>
-										В пункте выдачи заказ хранится 14 дней, если в течение 14 дней вы не получите заказ,
+										В пункте выдачи заказ хранится 14 дней, если в течение 14 дней не получить заказ,
 										то он автоматически отменится. Если вы не успеваете его получить, то следует обратиться в службу поддержки.
 										Срок хранения заказа смогут продлить до 28 дней.
 									</td>
-									</tr>
+								</tr>
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
 	
+		</div>
+		<div style="background-color:#f1f1f1;">
+			<br>
+			<br>
+			<br>
 		</div>
 	</article>"""
 

@@ -3,7 +3,7 @@
            <div class="max-w-7xl mx-auto">
         <div class="main-center col-span-3 space-y-4">
           <div class="text-center text-black py-4 px-6">
-              <h1 class="text-4xl">ВCЕ КНИГИ ПО АВТОРУ:</h1>
+              <h1 class="text-4xl whitespace-nowrap">ВCЕ КНИГИ ПО АВТОРУ:</h1>
               <h1 class="text-4xl font-bold">{{this.author}}</h1>
           </div>
         </div>
