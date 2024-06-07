@@ -66,7 +66,7 @@
                 </div>
               </div>
           </div>
-         <div v-else-if="allOrders.length > 0 && this.isLoading === false">
+         <div v-else-if="allOrders.length === 0 && this.isLoading === false">
             Все заказы отсутствуют
          </div>
          <div v-else class="grid grid-cols-4 gap-4">
@@ -114,7 +114,7 @@
                 </div>
               </div>
           </div>
-           <div v-else-if="activeOrders.length > 0 && this.isLoading === false">
+           <div v-else-if="activeOrders.length === 0 && this.isLoading === false">
 
           Активные заказы отсутствуют
          </div>
@@ -161,7 +161,7 @@
                 </div>
               </div>
           </div>
-              <div v-else-if="archiveOrders.length > 0 && this.isLoading === false">
+              <div v-else-if="archiveOrders.length === 0 && this.isLoading === false">
 
           Архив заказов пуст. Самое время это исправить:)
          </div>
@@ -207,7 +207,7 @@
                 </div>
               </div>
           </div>
-             <div v-else-if="archiveOrders.length > 0 && this.isLoading === false">
+             <div v-else-if="archiveOrders.length === 0 && this.isLoading === false">
 
           Отмененных заказов нет. Спасибо за доверие:)
          </div>
