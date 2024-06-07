@@ -395,6 +395,7 @@ def same_books(book):
 
 @api_view(['GET'])
 def resulting_similar_books(request):
+    SimilarBook.objects.all().delete()
     reviews = Review.objects.all()
     data = [review_to_dict(review) for review in reviews]
     df = pd.DataFrame(data)
