@@ -30,12 +30,6 @@ def get_book(request, id):
 
 @api_view(['GET'])
 def books_the_best(request):
-    # можно посмотреть количество рейтинга у книг, сравнить с
-    # другими, затем смотреть, чтобы рейтинг был выше 4.6, и можно еще добавить
-    # сравнение, чтобы у пользователей было много рецензий и все они были разными
-    # и так вывести топ 10 лучших
-
-
     books = Book.objects.filter(status='В наличии')
     books_rating = []
     for book in books:
@@ -50,12 +44,6 @@ def books_the_best(request):
 
 @api_view(['GET'])
 def books_new_items(request):
-    # task
-    # можно искать новые книги, которые были выпущены в течении 3-х месяцев
-    # но от авторов или издательств, у которых общая сумма рейтинга их книг
-    # составляла хороший рейтинг и при этом было по 0 рецензий на данную книгу
-
-
     books = Book.objects.filter(status='В наличии', date_of_create=2024)
     books_rating1 = []
     for book in books:
@@ -87,11 +75,6 @@ def books_new_items(request):
 
 @api_view(['GET'])
 def books_popular(request):
-    # можно посмотреть количество рейтинга у книг, сравнить с
-    # другими, затем смотреть, чтобы рейтинг был выше 4.6, и можно еще добавить
-    # сравнение, чтобы у пользователей было много рецензий и все они были разными
-    # и так вывести топ 10 лучших, но все это с фильтром 2024 года
-
     books = Book.objects.filter(status='В наличии', date_of_create=2024)
     books_rating = []
     for book in books:
@@ -195,26 +178,6 @@ def add_view(request):
     user_id = data['user']
     user = User.objects.get(id=user_id)
     book = Book.objects.get(id=bookId)
-    # viewed_book = ViewedBook.objects.get(book=book, user=user)
-    # # if viewed_book:
-    # #     return Response({'message': 'Book already viewed'}, status=status.HTTP_200_OK)
-    # # else:
-    # #     viewed_book = ViewedBook.objects.create(book=book, user=user)
-    # #     if viewed_book:
-    # #         viewed_book.save()
-    # #         return Response({'message': 'Book viewed added'}, status=status.HTTP_200_OK)
-    # #     else:
-    # #         return JsonResponse({'message': 'Book viewed dont added'}, status=status.HTTP_400_BAD_REQUEST)
-    # try:
-    #     viewed_book = ViewedBook.objects.get(book=book, user=user)
-    #     return Response({'message': 'Book already viewed'}, status=status.HTTP_200_OK)
-    # except ViewedBook.DoesNotExist:
-    #     viewed_book = ViewedBook.objects.create(book=book, user=user)
-    #     if viewed_book:
-    #         viewed_book.save()
-    #         return Response({'message': 'Book viewed added'}, status=status.HTTP_200_OK)
-    #     else:
-    #         return JsonResponse({'message': 'Book viewed dont added'}, status=status.HTTP_400_BAD_REQUEST)
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
@@ -291,98 +254,6 @@ def book_to_dict(instance):
         if f.name in ['id', 'name', 'rating']:  # Укажите нужные поля
             data[f.name] = f.value_from_object(instance)
     return data
-
-# не рабочий вариант с find_similar_movies
-# @api_view(['GET'])
-# def resulting_similar_books(request):
-#     reviews = Review.objects.all()
-#     data = [review_to_dict(review) for review in reviews]
-#     df = pd.DataFrame(data)
-#     new_df = df[df['user'].map(df['user'].value_counts()) >= 0]
-#     users_pivot = new_df.pivot_table(index=["user"], columns=["book"], values="rating")
-#     users_pivot.fillna(0, inplace=True)
-#     from sklearn.metrics.pairwise import cosine_similarity
-#
-#     books = Book.objects.all()
-#     data2 = [book_to_dict(book) for book in books]
-#     books = pd.DataFrame(data2)
-#
-#     # метод для определения похожих фильмов по определенному
-#     from scipy.sparse import csr_matrix
-#     from sklearn.neighbors import NearestNeighbors
-#     movie_df_matrix = csr_matrix(users_pivot.values)
-#
-#     def find_similar_movies(movie_name, num_neighbors=1000):
-#         # Инициализируем модель ближайших соседей
-#         model_knn = NearestNeighbors(metric='cosine', algorithm='brute')
-#         model_knn.fit(movie_df_matrix)
-#
-#         # Находим индекс входной книги
-#         movie_index = users_pivot.columns.get_loc(movie_name)
-#
-#         # Поиск ближайших соседей
-#         distances, indices = model_knn.kneighbors(movie_df_matrix[movie_index],
-#                                                   n_neighbors=min(num_neighbors + 1, movie_df_matrix.shape[0]))
-#         # Исключение первого индекса (которым является сам входной фильм)
-#         similar_indices = indices[0][1:]
-#
-#         # Получаем название похожих фильмов на основе индексов
-#         list_similar_movies = [users_pivot.columns[idx] for idx in similar_indices]
-#         similar_movies = pd.DataFrame({"id": list_similar_movies})
-#         return similar_movies
-#
-#
-#
-#     for i in books['id']:
-#         print(find_similar_movies(i))
-#         data = find_similar_movies(i)
-#         print(data)
-#         for j in data['id']:
-#             bookI = Book.objects.get(id=i)
-#             bookJ = Book.objects.get(id=j)
-#             similar_book, created = SimilarBook.objects.get_or_create(book_id=bookI.id, book_for_similar_id=bookJ.id)
-#             similar_book.save()
-#     return Response({'message': 'OK'}, status=status.HTTP_200_OK)
-
-
-
-# не рабочий вариант с same_movies
-# @api_view(['GET'])
-# def resulting_similar_books(request):
-#     reviews = Review.objects.all()
-#     data = [review_to_dict(review) for review in reviews]
-#     df = pd.DataFrame(data)
-#     new_df = df[df['user'].map(df['user'].value_counts()) >= 0]
-#     users_pivot = new_df.pivot_table(index=["user"], columns=["book"], values="rating")
-#     users_pivot.fillna(0, inplace=True)
-#     from sklearn.metrics.pairwise import cosine_similarity
-#
-#     books = Book.objects.all()
-#     data2 = [book_to_dict(book) for book in books]
-#     books = pd.DataFrame(data2)
-#
-#     def same_books(book):
-#         users_vote_film = users_pivot[book]
-#         similar_with = users_pivot.corrwith(users_vote_film)
-#         similar_with = pd.DataFrame(similar_with, columns=['correlation'])
-#         print(similar_with)
-#         df = similar_with.sort_values('correlation',ascending=False).head(10)
-#         print(df)
-#         df_sort = df[df['correlation'] > 0.8]
-#         return df_sort
-#     for i in books['id']:
-#         print(same_books(i))
-#         break
-#         data = same_books(i)
-#         print(data)
-#         for j in data:
-#             bookI = Book.objects.get(id=i)
-#             bookJ = Book.objects.get(id=j[0])
-#             similar_book, created = SimilarBook.objects.get_or_create(book_id=bookI.id, book_for_similar_id=bookJ.id)
-#             similar_book.save()
-#     return Response({'message': 'OK'}, status=status.HTTP_200_OK)
-
-#рабочий вариант с  косинусовым сходством
 def same_books(book):
     users_vote_film=users_pivot[book]
     similar_with=users_pivot.corrwith(users_vote_film)

@@ -22,9 +22,6 @@ def book_favourite(request):
     books = Book.objects.filter(id__in=book_ids)
     serializer = BookSerializer(books, many=True)
     return JsonResponse({"favourites": serializer.data})
-
-
-
 @api_view(['POST'])
 def add_to_favourite(request):
     data = request.data
@@ -53,8 +50,6 @@ def add_to_favourite(request):
     if message != 'success':
         message = 'error'
         return JsonResponse({'message': message})
-
-
 @api_view(['POST'])
 def get_count_favourite(request):
     data = request.data
@@ -65,8 +60,6 @@ def get_count_favourite(request):
         return Response({'message': 'favoruites exist', 'count': count}, status=status.HTTP_200_OK)
     else:
         return Response({'message': 'favoruites not exist'}, status=status.HTTP_404_NOT_FOUND)
-
-
 @api_view(['POST'])
 def delete_favourite(request):
     data = request.data
@@ -81,8 +74,6 @@ def delete_favourite(request):
         return Response({'message': 'Favourite deleted successfully'}, status=status.HTTP_200_OK)
     else:
         return Response({'message': 'Favourite not found'}, status=status.HTTP_404_NOT_FOUND)
-
-
 @api_view(['POST'])
 def get_pagination(request, page):
     favourite = Favourite.objects.filter(user_id=request.user)

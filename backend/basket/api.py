@@ -23,9 +23,6 @@ from .serializers import BasketSerializer, BasketAdditionalSerializer
 @api_view(['POST'])
 def get_basket(request):
 	basket = Basket
-	# for i in Basket.objects.all():
-	# 	if i.user.id == request.user.id:
-	# 		basket = i
 	user = User.objects.get(id=request.data['user'])
 	basket = Basket.objects.get(id=user.id)
 	basket_additionals = BasketAdditional.objects.filter(basket=basket)
